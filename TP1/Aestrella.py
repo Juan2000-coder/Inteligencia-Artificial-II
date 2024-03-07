@@ -1,7 +1,6 @@
 import pygame
 import heapq
 import time
-#Probando Fran
 
 # Tamaño del tablero
 # Se define el tamaño del tablero. En este caso de 17x16

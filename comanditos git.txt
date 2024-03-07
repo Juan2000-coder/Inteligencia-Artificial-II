@@ -1,0 +1,16 @@
+git init
+git status
+git add
+git commit -m "message"
+git log
+dit add .
+git checkout
+git branch
+git merge
+git remote add origin link
+git remote -v
+git push -u origin master
+git pull origin master
+git checkout -b branchname
+git push -u origin branchname
+

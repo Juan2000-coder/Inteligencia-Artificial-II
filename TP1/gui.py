@@ -8,14 +8,15 @@ class Interfaz:
         self.HEIGHT = None
         self.COLS = None
         self.ROWS = None
-        self.CELL_SIZE = (10, 10)
+        self.CELL_SIZE = (20, 20)
 
         self.UNIT_MATRIX = [
-            ["0", "0", "0"],
-            ["0", "1", "1"],
-            ["0", "1", "1"],
-            ["0", "1", "1"],
-            ["0", "1", "1"]
+            ["0", "0", "0", "0"],
+            ["0", "1", "1", "0"],
+            ["0", "1", "1", "0"],
+            ["0", "1", "1", "0"],
+            ["0", "1", "1", "0"],
+            ["0", "0", "0", "0"]
         ]
 
 
@@ -29,10 +30,10 @@ class Interfaz:
 
     def draw_grid(self, screen, rows, cols):
         # Dibujar cuadrícula
-        for x in range(0, self.WIDTH, self.CELL_SIZE[0]):
-            pygame.draw.line(screen, self.GRAY, (x, 0), (x, self.HEIGHT))
-        for y in range(0, self.HEIGHT, self.CELL_SIZE[1]):
-            pygame.draw.line(screen, self.GRAY, (0, y), (self.WIDTH, y))
+        for x in range(0, rows, self.CELL_SIZE[0]):
+            pygame.draw.line(screen, self.GRAY, (x, 0), (x, rows))
+        for y in range(0, cols, self.CELL_SIZE[1]):
+            pygame.draw.line(screen, self.GRAY, (0, y), (cols, y))
 
 
     def draw_start_and_end(self,screen, start, end):
@@ -103,10 +104,10 @@ class Interfaz:
             except ValueError:
                 print("Ingrese un número válido.")
 
-        self.COLS = units_x * len(self.UNIT_MATRIX[0]) + 1
-        self.ROWS = units_y * len(self.UNIT_MATRIX) + 1
-        self.WIDTH = self.COLS * 10
-        self.HEIGHT = self.ROWS * 10
+        self.ROWS = units_y * len(self.UNIT_MATRIX)
+        self.COLS = units_x * len(self.UNIT_MATRIX[0])
+        self.WIDTH = self.COLS * self.CELL_SIZE[0]
+        self.HEIGHT = self.ROWS * self.CELL_SIZE[1]
 
         pygame.init()
         screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
@@ -116,7 +117,7 @@ class Interfaz:
 
         while running:
             screen.fill(self.WHITE)
-            self.draw_board(screen, self.ROWS, self.COLS)
+            self.draw_board(screen, units_x, units_y)
             self.draw_grid(screen, self.ROWS, self.COLS)
             self.draw_start_and_end(screen, start, end)
 

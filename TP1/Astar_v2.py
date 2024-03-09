@@ -1,19 +1,29 @@
+#----------------------IMPORTS-------------------------#
 import pygame
 import heapq
 from rich.console import Console
-from rich.panel import Panel
+from rich.panel   import Panel
+from Enviroment   import Position, Space
+from Problem      import Problem
 
-# Clase para representar al agente
-class Agent:
-    def __init__(self):
-        self.position = (4, 0)
 
-    def move(self, new_position):
-        self.position = new_position
 
-# Función para calcular la distancia de Manhattan
-def manhattan_distance(p1, p2):
-    return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+#----------------------Clase Node----------------------#
+class Node:
+    def __init__(self, position: Position, g:int, h:int):
+        self.position   = position
+        self.g          = g
+        self.h          = h
+        self.parent     = None # A definir
+        self.sons       = []   # A definir
+
+#----------------------Clase A_star--------------------#
+class A_star:
+    def __init__(self, problem:Problem):
+        self.problem    = problem
+        self.open_list  = []
+    def solve(self):
+        
 
 # Algoritmo de búsqueda A*
 def a_star(start, goal):

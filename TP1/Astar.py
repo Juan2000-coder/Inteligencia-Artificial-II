@@ -53,39 +53,6 @@ class A_star:
                 f_score                  = tentative_g_score + self.problem.enviroment.manhattan(neighbor, self.problem.goal)
                 heapq.heappush(self.open_list, (f_score, neighbor))
 
-# Inicializar el contador de estantes
-counter = 1
-
-# Iterar sobre las posiciones en las que se dibujarán los números
-for i in range(1, width + 1, 3):
-    for j in range(1, heigth + 1, 5):
-        # Verificar si la posición actual está en las paredes
-        if (i, j) in WALLS:
-            # Agregar la posición al diccionario de estantes
-            estante_a_coordenadas[counter] = (i, j)
-            counter += 1
-        if (i + 1, j) in WALLS:
-            estante_a_coordenadas[counter] = (i + 1, j)
-            counter += 1
-        if (i, j + 1) in WALLS:
-            estante_a_coordenadas[counter] = (i, j + 1)
-            counter += 1
-        if (i + 1, j + 1) in WALLS:
-            estante_a_coordenadas[counter] = (i + 1, j + 1)
-            counter += 1
-        if (i, j + 2) in WALLS:
-            estante_a_coordenadas[counter] = (i, j + 2)
-            counter += 1
-        if (i + 1, j + 2) in WALLS:
-            estante_a_coordenadas[counter] = (i + 1, j + 2)
-            counter += 1
-        if (i, j + 3) in WALLS:
-            estante_a_coordenadas[counter] = (i, j + 3)
-            counter += 1
-        if (i + 1, j + 3) in WALLS:
-            estante_a_coordenadas[counter] = (i + 1, j + 3)
-            counter += 1
-
 #print(estante_a_coordenadas)
 
 #Le preguntamos al usuario el alamcen que quiere

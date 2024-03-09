@@ -1,88 +1,57 @@
-#----------------------IMPORTS-------------------------#
+#-----------------------------IMPORTS---------------------------#
 import pygame
 import heapq
 from rich.console import Console
-from rich.panel   import Panel
-from Enviroment   import Position, Space
-from Problem      import Problem
+from rich.panel import Panel
+from Problem import Problem
+
+#-----------------------------AGENTE---------------------------#
+class Agent:
+    def __init__(self, initial:tuple):
+        self.position = initial
+
+    def move(self, new_position):
+        self.position = new_position
 
 
-
-#----------------------Clase Node----------------------#
-class Node:
-    def __init__(self, position: Position, g:int, h:int):
-        self.position   = position
-        self.g          = g
-        self.h          = h
-        self.parent     = None # A definir
-        self.sons       = []   # A definir
-
-#----------------------Clase A_star--------------------#
+#----------------------------CLASE A_star---------------------#
 class A_star:
     def __init__(self, problem:Problem):
         self.problem    = problem
-        self.open_list  = []
-    def solve(self):
-        
+        self.open_list  = [(0, self.problem.start)]
+        self.parent_of  = {}
+        self.g_score    = {(x, y): float('inf') for x in range(self.problem.enviroment.width) for y in range(self.problem.enviroment.heigth)}
+        self.g_score[self.problem.start] = 0
 
-# Algoritmo de búsqueda A*
-def a_star(start, goal):
-    open_list = [(0, start)]
-    came_from = {}
-    g_score = {(x, y): float('inf') for x in range(width) for y in range(heigth)}
-    g_score[start] = 0
-
-    while open_list:
-        current = heapq.heappop(open_list)[1]
-
-        if current == goal:
-            path = []
-            while current in came_from:
-                path.insert(0, current)
-                current = came_from[current]
-            return path
-
-        for dx, dy in [(0, 1), (0, -1), (1, 0), (-1, 0)]:
-            neighbor = (current[0] + dx, current[1] + dy)
-
-            if 0 <= neighbor[0] < width and 0 <= neighbor[1] < heigth and neighbor not in WALLS:
-                tentative_g_score = g_score[current] + 1
-
-                if tentative_g_score < g_score[neighbor]:
-                    came_from[neighbor] = current
-                    g_score[neighbor] = tentative_g_score
-                    f_score = tentative_g_score + manhattan_distance(neighbor, goal)
-                    heapq.heappush(open_list, (f_score, neighbor))
-
-almacen = 8
-# Tamaño del tablero
-width = 3*(almacen//2)+1
-heigth = 5*(almacen//2)+1
-
-# Colores
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-VIOLET = (255, 0, 200)
-RED = (255, 0, 0)
-BLUE = (0, 0, 255)
-
-# Definir las celdas de la pared
-WALLS = {(1,1)}  # Paredes en las posiciones de los números
-
-for i in range(1, (width+ 1), 3):
-    for j in range(1, (heigth+1), 5):
-        WALLS.add((i,j))
-        WALLS.add((i,j+1))
-        WALLS.add((i,j+2))
-        WALLS.add((i,j+3))
-        WALLS.add((i+1,j))
-        WALLS.add((i+1,j+1))
-        WALLS.add((i+1,j+2))
-        WALLS.add((i+1,j+3))
+    def goal_test(self, current:tuple):
+        return current == self.problem.goal
     
+    def get_path(self):
+        path    = []
+        current = self.problem.goal
+        while current in self.parent_of:
+            path.insert(0, current)
+            current = self.parent_of[current]
+        return path
+    
+    def solve(self):
+        while self.open_list:
+            current = heapq.heappop(self.open_list)[1]
 
-# Crear un diccionario para mapear el número de estante a sus coordenadas
-estante_a_coordenadas = {}
+            if self.goal_test(current):
+                return self.get_path()
+
+            self.expand(current)
+
+    def expand(self, current:tuple):
+        for neighbor in self.problem.enviroment.neighbors(current):
+            tentative_g_score = self.g_score[current] + 1
+
+            if tentative_g_score < self.g_score[neighbor]:
+                self.parent_of[neighbor] = current
+                self.g_score[neighbor]   = tentative_g_score
+                f_score                  = tentative_g_score + self.problem.enviroment.manhattan(neighbor, self.problem.goal)
+                heapq.heappush(self.open_list, (f_score, neighbor))
 
 # Inicializar el contador de estantes
 counter = 1

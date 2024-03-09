@@ -1,7 +1,7 @@
-from Enviroment import Space, Position
+from Enviroment import Enviroment
 
 class Problem:
-    def __init__(self, space:Space, start:Position, goal:Position):
-        self.space = space
-        self.start = start
-        self.goal  = goal
+    def __init__(self, enviroment: Enviroment, start:tuple, goal:tuple):
+        self.start      = start
+        self.goal       = goal
+        self.enviroment = enviroment # Probablemente el numpy array

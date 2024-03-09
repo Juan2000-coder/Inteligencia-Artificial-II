@@ -11,12 +11,42 @@ class Enviroment:
         self.data               = self.get_enviroment()
     
     def get_enviroment(self):
-        shifth = np.array[]
-        for i in self.shelves_width:
-            for j in self.shelves_heigth:
-                np.array[]
-    def neighbors(self, p:tuple):
+        shelf = np.arange(1, 9).reshape(4, 2)
+        for j in range(self.shelves_width):
+            shift = shelf + self.shelves_heigth*8*j
 
+            for i in range(self.shelves_heigth):
+                block = shift + 8*i
+                block = np.hstack((np.zeros((4, 1)), block))
+                block = np.vstack((np.zeros((1, 3)), block))
+
+                if i == 0:
+                    column = block
+                else:
+                    np.vstack((column, block))
+
+            if j == 0:
+                data = column
+            else:
+                np.hstack((data, column))
+
+        return data
+    
+    def neighbors(self, p:tuple):
+        neighbors_list = []
+        for step in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+            pos = p + step
+            if self.is_in(pos):
+                if not self.is_shelf(pos):
+                    neighbors_list.append(pos)
+        return neighbors_list
+    
+    def is_in(self, p:tuple):
+        return (0 <= p[0] < self.heigth) and (0 <= p[1] < self.width)
+
+    def is_shelf(self, p:tuple):
+        return self.data[p] != 0
+    
     def manhattan(self, p1, p2):
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
@@ -26,41 +56,3 @@ BLACK  = (0, 0, 0)
 VIOLET = (255, 0, 200)
 RED    = (255, 0, 0)
 BLUE   = (0, 0, 255)
-
-    
-
-# Crear un diccionario para mapear el número de estante a sus coordenadas
-shelf_2_coordinate = {}
-
-# Inicializar el contador de estantes
-counter = 1
-
-# Iterar sobre las posiciones en las que se dibujarán los números
-for i in range(1, width + 1, 3):
-    for j in range(1, heigth + 1, 5):
-        # Verificar si la posición actual está en las paredes
-        if (i, j) in WALLS:
-            # Agregar la posición al diccionario de estantes
-            estante_a_coordenadas[counter] = (i, j)
-            counter += 1
-        if (i + 1, j) in WALLS:
-            estante_a_coordenadas[counter] = (i + 1, j)
-            counter += 1
-        if (i, j + 1) in WALLS:
-            estante_a_coordenadas[counter] = (i, j + 1)
-            counter += 1
-        if (i + 1, j + 1) in WALLS:
-            estante_a_coordenadas[counter] = (i + 1, j + 1)
-            counter += 1
-        if (i, j + 2) in WALLS:
-            estante_a_coordenadas[counter] = (i, j + 2)
-            counter += 1
-        if (i + 1, j + 2) in WALLS:
-            estante_a_coordenadas[counter] = (i + 1, j + 2)
-            counter += 1
-        if (i, j + 3) in WALLS:
-            estante_a_coordenadas[counter] = (i, j + 3)
-            counter += 1
-        if (i + 1, j + 3) in WALLS:
-            estante_a_coordenadas[counter] = (i + 1, j + 3)
-            counter += 1

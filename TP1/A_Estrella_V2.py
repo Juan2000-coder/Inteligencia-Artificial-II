@@ -117,7 +117,7 @@ console = Console()
 # Definir el contenido que deseas mostrar
 contenido = f"Se buscara el almacen numero: \n[bold]{almacen_in}[/bold]"
 # Crear un panel con el contenido
-panel = Panel.fit(contenido, title="ALMACEN LOS MECAPIBE", border_style="green")
+panel = Panel.fit(contenido, title="ALMACEN LOS MECAPIBES", border_style="green")
 # Imprimir el panel
 console.print(panel)
 

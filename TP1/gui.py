@@ -1,3 +1,4 @@
+import numpy as np
 import pygame
 import sys
 
@@ -9,13 +10,14 @@ class Interfaz:
         self.COLS = None
         self.ROWS = None
         self.CELL_SIZE = (20, 20)
+        
 
         self.UNIT_MATRIX = [
             ["0", "0", "0", "0"],
-            ["0", "1", "1", "0"],
-            ["0", "1", "1", "0"],
-            ["0", "1", "1", "0"],
-            ["0", "1", "1", "0"],
+            ["0", "1", "2", "0"],
+            ["0", "3", "4", "0"],
+            ["0", "5", "6", "0"],
+            ["0", "7", "8", "0"],
             ["0", "0", "0", "0"]
         ]
 
@@ -30,10 +32,10 @@ class Interfaz:
 
     def draw_grid(self, screen, rows, cols):
         # Dibujar cuadrícula
-        for x in range(0, rows, self.CELL_SIZE[0]):
-            pygame.draw.line(screen, self.GRAY, (x, 0), (x, rows))
-        for y in range(0, cols, self.CELL_SIZE[1]):
-            pygame.draw.line(screen, self.GRAY, (0, y), (cols, y))
+        for x in range(0, self.WIDTH, self.CELL_SIZE[0]):
+            pygame.draw.line(screen, self.GRAY, (x, 0), (x, self.HEIGHT))
+        for y in range(0, self.HEIGHT, self.CELL_SIZE[1]):
+            pygame.draw.line(screen, self.GRAY, (0, y), (self.WIDTH, y))
 
 
     def draw_start_and_end(self,screen, start, end):
@@ -61,14 +63,19 @@ class Interfaz:
         return matrix
 
 
-    def multiply_matrix(self, matrix, rows, cols, units_x, units_y):
-        # Multiplicar la matriz básica por la cantidad de unidades en filas y columnas
-        multiplied_matrix = []
-        for _ in range(units_y):
-            for row in matrix:
-                multiplied_matrix.append(row * units_x)
+    def multiply_matrix(self, _matrix, _units_x, _units_y):
+        # Convertir la matriz de entrada a un array de numpy
+        np_matrix = np.array(_matrix)
         
-        return multiplied_matrix
+        # Crear una lista para almacenar las matrices multiplicadas
+        multiplied_matrices = []
+        
+        # Repetir la matriz y multiplicarla por un valor que cambia en cada iteración
+        for i in range(1, _units_x * _units_y + 1):
+            multiplied_matrix = i * np_matrix
+            multiplied_matrices.append(multiplied_matrix.tolist())
+        
+        return multiplied_matrices
 
     def draw_basic_unit(self, screen, x, y):
         # Dibujar una unidad básica en la posición (x, y) del tablero
@@ -81,8 +88,7 @@ class Interfaz:
         # Dibujar el tablero completo
         for j in range(units_y):
             for i in range(units_x):
-                self.draw_basic_unit(screen, i * len(self.UNIT_MATRIX[0]), j * len(self.UNIT_MATRIX[0]))
-
+                self.draw_basic_unit(screen, i * len(self.UNIT_MATRIX[0]), j * len(self.UNIT_MATRIX))
 
     def main(self):
         units_x = None
@@ -146,7 +152,7 @@ class Interfaz:
         pygame.quit()
         matrix = self.print_matrix(start, end)
         filas, columnas = len(matrix), len(matrix[0])
-        multiplied_matrix = self.multiply_matrix(self.UNIT_MATRIX, filas, columnas, units_x, units_y)
+        multiplied_matrix = self.multiply_matrix(self.UNIT_MATRIX, units_x, units_y)
         return multiplied_matrix, (start, end)
 
 

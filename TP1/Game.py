@@ -39,12 +39,12 @@ class Game():
         for goal in goals:
             pygame.draw.rect(self.screen, RED, (goal[1] * self.cell_size, goal[0] * self.cell_size, self.cell_size, self.cell_size))  # Posición de fin
 
-    def run(self, path1:list, path2:list, agent1:Agent, agent2:Agent):
+    def run(self, agent1:Agent, agent2:Agent):
         running = True
         clock   = pygame.time.Clock()
 
         move_event = pygame.USEREVENT + 1
-        pygame.time.set_timer(move_event, 1000)
+        pygame.time.set_timer(move_event, 500)
 
         first = True
         while running:
@@ -53,20 +53,20 @@ class Game():
                     running = False
                 elif event.type == move_event:
                     if first:
-                        if path1:
-                            position = path1.pop(0)
-                            pygame.draw.rect(self.screen, VIOLET, (position[1] * self.cell_size, position[0] * self.cell_size, self.cell_size, self.cell_size))
-                            # Actualizar posición del agente
+                        if agent1.path:
+                            pygame.draw.rect(self.screen, VIOLET, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                            position = agent1.path.pop(0)
                             agent1.move(position)
-                            #pygame.draw.rect(screen, BLUE, (agent.position[1] * cell_size, agent.position[0] * cell_size, cell_size, cell_size))
+                            # Actualizar posición del agente
+                            pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
                         first = not first
                     else:
-                        if path2:
-                            position = path2.pop(0)
-                            pygame.draw.rect(self.screen, VIOLET, (position[1] * self.cell_size, position[0] * self.cell_size, self.cell_size, self.cell_size))
-                            # Actualizar posición del agente
+                        if agent2.path:
+                            pygame.draw.rect(self.screen, RED, (agent2.position[1] * self.cell_size, agent2.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                            position = agent2.path.pop(0)
                             agent2.move(position)
-                            #pygame.draw.rect(screen, BLUE, (agent.position[1] * cell_size, agent.position[0] * cell_size, cell_size, cell_size))
+                            # Actualizar posición del agente
+                            pygame.draw.rect(self.screen, BLACK, (agent2.position[1] * self.cell_size, agent2.position[0] * self.cell_size, self.cell_size, self.cell_size))
                         first = not first
                     pygame.display.flip()
             clock.tick(30)

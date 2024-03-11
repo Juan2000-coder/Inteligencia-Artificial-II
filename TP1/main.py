@@ -32,8 +32,11 @@ if __name__ == '__main__':
     agent2            = Agent(start2, problem2)
 
     # Realizar búsqueda A*
-    agent1.path = agent1.a_star.solve()
-    agent2.path = agent2.a_star.solve()
+    agent1.path       = agent1.a_star.solve()
+    agent2.path       = agent2.a_star.solve()
 
+    enviroment.ocupied.append(agent1.position)
+    enviroment.ocupied.append(agent2.position)
+    
     game              = Game(enviroment)
     game.run(agent1, agent2)

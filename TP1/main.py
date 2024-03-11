@@ -1,6 +1,6 @@
 from Problem import Problem
 from Enviroment import Enviroment
-from Astar import A_star, Agent
+from Agent import Agent
 from Game import Game
 
 #---------------------------MAIN---------------------------#
@@ -27,15 +27,13 @@ if __name__ == '__main__':
 
     problem1          = Problem(enviroment, start1, goal1)
     problem2          = Problem(enviroment, start2, goal2)
-    a_star1            = A_star(problem1)
-    a_star2            = A_star(problem2)
 
-    agent1             = Agent(start1)
-    agent2             = Agent(start2)
+    agent1            = Agent(start1, problem1)
+    agent2            = Agent(start2, problem2)
 
     # Realizar búsqueda A*
-    path1              = a_star1.solve()
-    path2              = a_star2.solve()
+    agent1.path = agent1.a_star.solve()
+    agent2.path = agent2.a_star.solve()
 
-    game              = Game(problem1, problem2)
-    game.run(path1, path2, agent1, agent2)
+    game              = Game(enviroment)
+    game.run(agent1, agent2)

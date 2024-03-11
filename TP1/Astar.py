@@ -1,15 +1,5 @@
-#-----------------------------IMPORTS---------------------------#
 import heapq
 from Problem import Problem
-
-#-----------------------------AGENTE---------------------------#
-class Agent:
-    def __init__(self, initial:tuple):
-        self.position = initial
-
-    def move(self, new_position):
-        self.position = new_position
-
 
 #----------------------------CLASE A_star---------------------#
 class A_star:

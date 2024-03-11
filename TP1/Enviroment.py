@@ -9,6 +9,7 @@ class Enviroment:
         self.width              = 3*(shelves_columns) + 1
         self.heigth             = 5*(shelves_rows)    + 1
         self.data               = self.get_enviroment()
+        self.ocupied            = []
     
     def get_enviroment(self):
         shelf = np.arange(1, 9).reshape(4, 2)
@@ -38,9 +39,8 @@ class Enviroment:
         neighbors_list = []
         for step in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
             pos = tuple(x + y for x, y in zip(p, step))
-            if self.is_in(pos):
-                if not self.is_shelf(pos):
-                    neighbors_list.append(pos)
+            if self.is_available(pos):
+                neighbors_list.append(pos)
         return neighbors_list
     
     def is_in(self, p:tuple):
@@ -48,6 +48,9 @@ class Enviroment:
 
     def is_shelf(self, p:tuple):
         return self.data[p] != 0
+    
+    def is_available(self, p:tuple):
+        return self.is_in(p) and not self.is_shelf(p) and p not in self.ocupied
     
     def get_goalcell(self, start:tuple, shelf_goal:int):
         coordinate       = np.where(self.data == shelf_goal)

@@ -44,7 +44,18 @@ def a_star(start, goal):
                     f_score = tentative_g_score + manhattan_distance(neighbor, goal)
                     heapq.heappush(open_list, (f_score, neighbor))
 
+
+# Se le pregunta al usuario la cantidad de almacenes
+#while True:
+#    almacen = int(input("Ingrese la cantidad de almacenes que tiene el depósito (par): "))
+#    if almacen % 2 == 0 and almacen != 0:
+#        break
+#    else:
+#        print("El número ingresado no es par. Por favor, ingrese un número par.")
+
 almacen = 8
+
+
 # Tamaño del tablero
 width = 3*(almacen//2)+1
 heigth = 5*(almacen//2)+1
@@ -109,7 +120,7 @@ for i in range(1, width + 1, 3):
 
 #print(estante_a_coordenadas)
 
-#Le preguntamos al usuario el alamcen que quiere
+#Le preguntamos al usuario el almacen que quiere
 almacen_in = int(input("Ingrese el número de estante que desea buscar: "))
 
 # Crear una instancia de la consola

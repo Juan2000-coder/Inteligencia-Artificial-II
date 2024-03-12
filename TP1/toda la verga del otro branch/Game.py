@@ -8,6 +8,7 @@ BLACK  = (0, 0, 0)
 VIOLET = (255, 0, 200)
 RED    = (255, 0, 0)
 BLUE   = (0, 0, 255)
+GREEN  = (0, 255, 0)
 
 class Game():
     def __init__(self, enviroment:Enviroment):
@@ -66,8 +67,36 @@ class Game():
                             position = agent2.path.pop(0)
                             agent2.move(position)
                             # Actualizar posición del agente
-                            pygame.draw.rect(self.screen, BLACK, (agent2.position[1] * self.cell_size, agent2.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                            pygame.draw.rect(self.screen, GREEN, (agent2.position[1] * self.cell_size, agent2.position[0] * self.cell_size, self.cell_size, self.cell_size))
                         first = not first
                     pygame.display.flip()
             clock.tick(30)
         pygame.quit()
+
+    def run2(self):
+        running = True
+        clock   = pygame.time.Clock()
+
+        start_positions = []
+        goal_positions = []
+
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    cell_x, cell_y = mouse_x // self.cell_size, mouse_y // self.cell_size
+                    if len(start_positions) < 2:  # Solo permitir dos posiciones de inicio
+                        start_positions.append((cell_x, cell_y))
+                        #print(f"Posicion de inicio seleccionada: {cell_x}, {cell_y}")
+                        pygame.draw.rect(self.screen, BLUE, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                    elif len(goal_positions) < 2:  # Solo permitir dos posiciones de llegada
+                        goal_positions.append((cell_x, cell_y))
+                        #print(f"Posicion de llegada seleccionada: {cell_x}, {cell_y}")
+                        pygame.draw.rect(self.screen, RED, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                    pygame.display.flip()
+            clock.tick(30)
+        pygame.quit()
+
+        return start_positions, goal_positions

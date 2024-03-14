@@ -56,9 +56,9 @@ class Enviroment:
         flag = 0
         for step in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
             pos = tuple(x + y for x, y in zip(p, step))
-            if self.data(pos) == 0:
+            if self.is_in(pos) and self.data[pos] == 0:
                 flag += 1
-        return flag == 4
+        return flag >= 3
         
     def get_goalcell(self, start:tuple, coordinate:tuple):
         shelf_neighbors  = self.neighbors((coordinate[0], coordinate[1]))

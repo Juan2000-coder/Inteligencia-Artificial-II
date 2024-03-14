@@ -9,6 +9,7 @@ VIOLET = (255, 0, 200)
 RED    = (255, 0, 0)
 BLUE   = (0, 0, 255)
 GREEN  = (0, 255, 0)
+YELLOW = (255, 255, 0)
 
 class Game():
     def __init__(self, enviroment:Enviroment):
@@ -58,7 +59,7 @@ class Game():
                         first = not first
                     else:
                         if agent2.path:
-                            pygame.draw.rect(self.screen, RED, (agent2.position[1] * self.cell_size, agent2.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                            pygame.draw.rect(self.screen, YELLOW, (agent2.position[1] * self.cell_size, agent2.position[0] * self.cell_size, self.cell_size, self.cell_size))
                             position = agent2.path.pop(0)
                             agent2.move(position)
                             # Actualizar posición del agente
@@ -84,9 +85,12 @@ class Game():
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     cell_x, cell_y = mouse_x // self.cell_size, mouse_y // self.cell_size
                     if len(start_positions) < 2:  # Solo permitir dos posiciones de inicio
-                        start_positions.append((cell_x, cell_y))
-                        #print(f"Posicion de inicio seleccionada: {cell_x}, {cell_y}")
-                        pygame.draw.rect(self.screen, BLUE, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                        if len(start_positions) == 0:
+                            start_positions.append((cell_x, cell_y))
+                            pygame.draw.rect(self.screen, BLUE, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                        else:
+                            start_positions.append((cell_x, cell_y))
+                            pygame.draw.rect(self.screen, GREEN, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
                     elif len(goal_positions) < 2:  # Solo permitir dos posiciones de llegada
                         goal_positions.append((cell_x, cell_y))
                         #print(f"Posicion de llegada seleccionada: {cell_x}, {cell_y}")

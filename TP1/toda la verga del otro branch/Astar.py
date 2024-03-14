@@ -6,10 +6,6 @@ class A_star:
     def __init__(self, problem:Problem):
         self.problem    = problem
         self.settings()
-        '''self.open_list  = [(0, self.problem.start)]
-        self.parent_of  = {}
-        self.g_score    = {(x, y): float('inf') for x in range(self.problem.enviroment.heigth) for y in range(self.problem.enviroment.width)}
-        self.g_score[self.problem.start] = 0'''
     
     def settings(self):
         self.open_list  = [(0, self.problem.start)]
@@ -42,7 +38,8 @@ class A_star:
             self.expand(current)
 
     def expand(self, current:tuple):
-        for neighbor in self.problem.enviroment.neighbors(current):
+        neighbors = self.problem.enviroment.neighbors(current)
+        for neighbor in neighbors:
             tentative_g_score = self.g_score[current] + 1
 
             if tentative_g_score < self.g_score[neighbor]:

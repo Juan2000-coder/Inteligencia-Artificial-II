@@ -33,12 +33,7 @@ class Game():
                     pygame.draw.rect(self.screen, BLACK, (j * self.cell_size, i * self.cell_size, self.cell_size, self.cell_size))
                     number_text = self.font.render(str(element), True, WHITE)
                     self.screen.blit(number_text, (j * self.cell_size + 10, i * self.cell_size + 10))
-
-    def checkpoints(self, starts, goals):
-        for start in starts:
-            pygame.draw.rect(self.screen, BLUE, (start[1]*self.cell_size, start[0]*self.cell_size, self.cell_size, self.cell_size))   # Posición de inicio
-        for goal in goals:
-            pygame.draw.rect(self.screen, RED, (goal[1] * self.cell_size, goal[0] * self.cell_size, self.cell_size, self.cell_size))  # Posición de fin
+        pygame.display.flip()
 
     def run(self, agent1:Agent, agent2:Agent):
         running = True
@@ -73,14 +68,15 @@ class Game():
             clock.tick(30)
         pygame.quit()
 
-    def run2(self):
+    def get_checkpoints(self):
         running = True
         clock   = pygame.time.Clock()
 
         start_positions = []
         goal_positions = []
+        full = False
 
-        while running:
+        while running and (not full):
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -95,8 +91,8 @@ class Game():
                         goal_positions.append((cell_x, cell_y))
                         #print(f"Posicion de llegada seleccionada: {cell_x}, {cell_y}")
                         pygame.draw.rect(self.screen, RED, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                    else:
+                        full = True
                     pygame.display.flip()
             clock.tick(30)
-        pygame.quit()
-
         return start_positions, goal_positions

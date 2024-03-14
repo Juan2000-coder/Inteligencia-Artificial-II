@@ -4,4 +4,4 @@ class Problem:
     def __init__(self, enviroment: Enviroment, start:tuple, goal:tuple):
         self.start      = start
         self.goal       = goal
-        self.enviroment = enviroment # Probablemente el numpy array
+        self.enviroment = enviroment 

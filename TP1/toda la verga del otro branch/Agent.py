@@ -6,7 +6,6 @@ class Agent:
         self.position   = initial
         self.problem    = problem
         self.a_star     = A_star(self.problem)
-        #self.problem.enviroment.ocupied.append(initial)
         self.path       = []
 
     def check_move(self, position):

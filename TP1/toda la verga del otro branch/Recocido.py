@@ -2,43 +2,38 @@ import math
 import random
 
 class Recocido:
-# Función de enfriamiento
-    def __init__(self):
-        self.T = 200
-        self.estado_inicial = [22 , 30, 1, 4]
 
-    def esquema_enfriamiento(self, temperatura, enfriamiento):
-        return temperatura * enfriamiento
+    def __init__(self,_casilla_partida):
+        self.T = 200
+        self.T_min = 0.5
+        self.partida = _casilla_partida
+        self.estado_inicial = [22 , 30, 1, 4]
+        self.L = math.factorial(len(self.estado_inicial))//2
+
+    def esquema_enfriamiento(self, temperatura):
+        return temperatura * 0.2
 
     # Función para generar una solución vecina (perturbación)
-    def generar_vecino(solucion_actual, rango_perturbacion):
-        return solucion_actual + random.uniform(-rango_perturbacion, rango_perturbacion)
+    def generar_vecino(self, solucion_actual):
+        return random.shuffle(solucion_actual)
+    def energia(self ,estado):
 
+        pass
     # Algoritmo de recocido simulado
-    def recocido_simulado(self, funcion_objetivo, temperatura_inicial, enfriamiento, iteraciones, rango_perturbacion):
-        solucion_actual = random.uniform(-10, 10)  # Solución inicial aleatoria
-        mejor_solucion = solucion_actual
-        temperatura = temperatura_inicial
+    def recocido_simulado(self):
+        solucion_actual = self.estado_inicial  # Solución inicial aleatoria
+        temperatura = self.T
+        energia_actual = self.energia(solucion_actual) 
 
-        for i in range(iteraciones):
-            vecino = self.generar_vecino(solucion_actual, rango_perturbacion)
-            diferencia = funcion_objetivo(vecino) - funcion_objetivo(solucion_actual)
+        while temperatura>self.T_min:
+            for i in range(self.L):
+                vecino = self.generar_vecino(solucion_actual)
+                energia_vecino = self.energia(vecino)
+                d_E = energia_actual-energia_vecino
 
-            # Si el vecino es mejor, aceptarlo siempre
-            if diferencia < 0:
-                solucion_actual = vecino
-                if funcion_objetivo(vecino) < funcion_objetivo(mejor_solucion):
-                    mejor_solucion = vecino
-            # Si el vecino es peor, aceptarlo con cierta probabilidad
-            else:
-                probabilidad_aceptacion = math.exp(-diferencia / temperatura)
-                if random.random() < probabilidad_aceptacion:
+                if random.random()<math.exp(d_E/temperatura)
                     solucion_actual = vecino
-
-            # Actualizar la temperatura
-            temperatura = self.esquema_enfriamiento(temperatura, enfriamiento)
-
-        return mejor_solucion, funcion_objetivo(mejor_solucion)
+            temperatura = self.esquema_enfriamiento(temperatura)
 
     # Parámetros del algoritmo
     #temperatura_inicial = 100

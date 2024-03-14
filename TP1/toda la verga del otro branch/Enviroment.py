@@ -51,17 +51,32 @@ class Enviroment:
     
     def is_available(self, p:tuple):
         return self.is_in(p) and not self.is_shelf(p) and p not in self.ocupied
-      
+
+    def is_vertix(self, p:tuple):
+        flag = 0
+        for step in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
+            pos = tuple(x + y for x, y in zip(p, step))
+            if self.data(pos) == 0
+                flag += 1
+        return flag == 4
+        
     def get_goalcell(self, start:tuple, coordinate:tuple):
         shelf_neighbors  = self.neighbors((coordinate[0], coordinate[1]))
-
-        min = None
+        if len(shelf_neighbors) >  1:
+            # sera 2
+            if (coordinate[0], coordinate[1]) == (shelf_neighbors[0][0], shelf_neighbors[1][1]):
+                return (shelf_neighbors[1][0], shelf_neighbors[0][1])
+            else:
+                return (shelf_neighbors[0][0], shelf_neighbors[1][1])
+        else:
+            return shelf_neighbors.pop(0)
+        '''min = None
         for neighbor in shelf_neighbors:
             dist = self.manhattan(start, neighbor)
             if min is None or dist < min:
                 min     = dist
-                nearest = neighbor
-        return nearest
+                nearest = neighbor'''
+        #return nearest
     
 
     def manhattan(self, p1, p2):

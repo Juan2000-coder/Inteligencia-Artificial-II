@@ -85,16 +85,17 @@ class Game():
                     mouse_x, mouse_y = pygame.mouse.get_pos()
                     cell_x, cell_y = mouse_x // self.cell_size, mouse_y // self.cell_size
                     if len(start_positions) < 2:  # Solo permitir dos posiciones de inicio
-                        if len(start_positions) == 0:
-                            start_positions.append((cell_x, cell_y))
-                            pygame.draw.rect(self.screen, BLUE, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
-                        else:
-                            start_positions.append((cell_x, cell_y))
-                            pygame.draw.rect(self.screen, GREEN, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                        if not self.enviroment.is_shelf((cell_y, cell_x)):
+                            if len(start_positions) == 0:
+                                start_positions.append((cell_x, cell_y))
+                                pygame.draw.rect(self.screen, BLUE, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                            else:
+                                start_positions.append((cell_x, cell_y))
+                                pygame.draw.rect(self.screen, GREEN, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
                     elif len(goal_positions) < 2:  # Solo permitir dos posiciones de llegada
-                        goal_positions.append((cell_x, cell_y))
-                        #print(f"Posicion de llegada seleccionada: {cell_x}, {cell_y}")
-                        pygame.draw.rect(self.screen, RED, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                        if self.enviroment.is_shelf((cell_y, cell_x)):
+                            goal_positions.append((cell_x, cell_y))
+                            pygame.draw.rect(self.screen, RED, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
                     else:
                         full = True
                     pygame.display.flip()

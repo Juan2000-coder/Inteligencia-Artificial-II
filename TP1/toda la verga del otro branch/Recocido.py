@@ -3,10 +3,10 @@ import random
 
 class Recocido:
 
-    def __init__(self):
+    def __init__(self,_casilla_partida):
         self.T = 200
         self.T_min = 0.5
-        
+        self.partida = _casilla_partida
         self.estado_inicial = [22 , 30, 1, 4]
         self.L = math.factorial(len(self.estado_inicial))//2
 
@@ -17,7 +17,7 @@ class Recocido:
     def generar_vecino(self, solucion_actual):
         return random.shuffle(solucion_actual)
     def energia(self ,estado):
-        
+
         pass
     # Algoritmo de recocido simulado
     def recocido_simulado(self):

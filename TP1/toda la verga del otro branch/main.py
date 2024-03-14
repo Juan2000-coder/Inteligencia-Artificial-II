@@ -35,7 +35,11 @@ if __name__ == '__main__':
 
     # Realizar búsqueda A*
     agent1.path       = agent1.a_star.solve()
+    if enviroment.is_vertix(goal1):
+        agent1.path.pop()
     agent2.path       = agent2.a_star.solve()
+    if enviroment.is_vertix(goal2):
+        agent2.path.pop()
 
     enviroment.ocupied.append(agent1.position)
     enviroment.ocupied.append(agent2.position)

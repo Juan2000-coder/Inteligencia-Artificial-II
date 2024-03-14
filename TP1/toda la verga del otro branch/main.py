@@ -11,8 +11,9 @@ if __name__ == '__main__':
 
     enviroment        = Enviroment(shelves_rows, shelves_columns)
 
-    game1             = Game(enviroment)
-    start_pos, goal_pos = game1.run2()
+    game1               = Game(enviroment)
+    start_pos, goal_pos = game1.get_checkpoints()
+
     start1 = (start_pos[0][1], start_pos[0][0])
     start2 = (start_pos[1][1], start_pos[1][0])
 
@@ -21,27 +22,8 @@ if __name__ == '__main__':
 
     #print(start1, goal1, start2, goal2)
 
-    #start_row1        = int(input("Ingrese la fila de partida: "))
-    #start_column1     = int(input("Ingrese la columna de partida: "))
-
-    #start_row2        = int(input("Ingrese la fila de partida: "))
-    #start_column2     = int(input("Ingrese la columna de partida: "))
-
-    #start1            = (start_row1, start_column1)
-    #start2            = (start_row2, start_column2)
-
-    #print(start1, start2)
-
-    #shelf_goal1       = int(input("Ingrese el número de estante que desea buscar: "))
-    #shelf_goal2       = int(input("Ingrese el número de estante que desea buscar: "))
-
-
-    #enviroment        = Enviroment(shelves_rows, shelves_columns)
-    #goal1             = enviroment.get_goalcell(start1, shelf_goal1)
-    #goal2             = enviroment.get_goalcell(start2, shelf_goal2)
-
-    goal1             = enviroment.get_goalcell2(start1, goal1)
-    goal2             = enviroment.get_goalcell2(start2, goal2)
+    goal1             = enviroment.get_goalcell(start1, goal1)
+    goal2             = enviroment.get_goalcell(start2, goal2)
 
     #print(goal1, goal2)
 
@@ -58,5 +40,5 @@ if __name__ == '__main__':
     enviroment.ocupied.append(agent1.position)
     enviroment.ocupied.append(agent2.position)
     
-    game              = Game(enviroment)
-    game.run(agent1, agent2)
+    #game              = Game(enviroment)
+    game1.run(agent1, agent2)

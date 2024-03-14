@@ -46,3 +46,5 @@ if __name__ == '__main__':
     
     #game              = Game(enviroment)
     game1.run(agent1, agent2)
+
+    #xd

@@ -56,7 +56,7 @@ class Enviroment:
         flag = 0
         for step in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
             pos = tuple(x + y for x, y in zip(p, step))
-            if self.data(pos) == 0
+            if self.data(pos) == 0:
                 flag += 1
         return flag == 4
         

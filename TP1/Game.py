@@ -118,3 +118,60 @@ class Game():
                     pygame.display.flip()
             clock.tick(30)
         return start_positions, goal_positions
+    
+
+
+#############################VALENTIN AGREGADO#############################
+    def get_checkpoints_list(self):
+        running = True
+        clock   = pygame.time.Clock()
+
+        start_position = []
+        goals_positions = []        # Cambio de nombre para que sea más descriptivo
+        full = False
+
+        while running and (not full):
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    cell_x, cell_y = mouse_x // self.cell_size, mouse_y // self.cell_size
+                    if len(start_position) < 1:  # Solo permitir una posicion de inicio
+                        if not self.enviroment.is_shelf((cell_y, cell_x)):
+                            start_position.append((cell_y, cell_x))
+                            pygame.draw.rect(self.screen, BLUE, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                    elif self.enviroment.is_shelf((cell_y, cell_x)):
+                        goals_positions.append((cell_y, cell_x))
+                        pygame.draw.rect(self.screen, RED, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_RETURN:    # Al presiona la tecla "Enter", se detiene el bucle
+                        full = True
+                pygame.display.flip()
+            clock.tick(30)
+        return start_position, goals_positions
+    
+
+    def run_ej3(self, agent1:Agent):
+        running = True
+        clock   = pygame.time.Clock()
+
+        move_event = pygame.USEREVENT + 1
+        pygame.time.set_timer(move_event, 200)
+
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                elif event.type == move_event:
+                    if agent1.path:
+                        pygame.draw.rect(self.screen, VIOLET, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                        position = agent1.path.pop(0)
+                        agent1.move(position)
+                        # Actualizar posición del agente
+                        pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                    pygame.display.flip()
+            clock.tick(30)
+        pygame.quit()
+    
+#############################################################################

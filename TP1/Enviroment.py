@@ -43,9 +43,6 @@ class Enviroment:
                 neighbors_list.append(pos)
         return neighbors_list
     
-    def is_neighbor(self, neigh:tuple, p:tuple):
-        return neigh in self.neighbors(p)
-    
     def is_in(self, p:tuple):
         return (0 <= p[0] < self.heigth) and (0 <= p[1] < self.width)
 
@@ -61,22 +58,6 @@ class Enviroment:
             if self.is_in(pos) and self.is_shelf(pos):
                 return False
         return True
-    
-    def get_goalcell(self, shelf):
-        if isinstance(shelf, int):
-            coordinate      = np.where(self.data == shelf)
-        else:
-            coordinate      = shelf
-            
-        shelf_neighbors  = self.neighbors((coordinate[0], coordinate[1]))
-        if len(shelf_neighbors) >  1:
-            # sera 2
-            if (coordinate[0], coordinate[1]) == (shelf_neighbors[0][0], shelf_neighbors[1][1]):
-                return (shelf_neighbors[1][0], shelf_neighbors[0][1])
-            else:
-                return (shelf_neighbors[0][0], shelf_neighbors[1][1])
-        else:
-            return shelf_neighbors.pop(0)
     
     def manhattan(self, p1, p2):
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])

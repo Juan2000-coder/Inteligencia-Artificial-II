@@ -42,7 +42,7 @@ class Game():
         clock   = pygame.time.Clock()
 
         move_event = pygame.USEREVENT + 1
-        pygame.time.set_timer(move_event, 500)
+        pygame.time.set_timer(move_event, 200)
 
         first     = True
         reversed1 = False
@@ -61,7 +61,9 @@ class Game():
                             pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
                         elif not reversed1:
                             reversed1 = True
-                            agent1.problem.reverse()
+                            agent1.problem.goal_shelf = None
+                            agent1.problem.start = agent1.position
+                            agent1.problem.goal  = agent1.problem.first_start
                             agent1.a_star.re_init(agent1.problem)
                             agent1.path = agent1.a_star.solve()
                         first = not first
@@ -74,7 +76,9 @@ class Game():
                             pygame.draw.rect(self.screen, GREEN, (agent2.position[1] * self.cell_size, agent2.position[0] * self.cell_size, self.cell_size, self.cell_size))
                         elif not reversed2:
                             reversed2 = True
-                            agent2.problem.reverse()
+                            agent2.problem.goal_shelf = None
+                            agent2.problem.start = agent2.position
+                            agent2.problem.goal  = agent2.problem.first_start
                             agent2.a_star.re_init(agent2.problem)
                             agent2.path = agent2.a_star.solve()
                         first = not first

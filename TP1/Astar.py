@@ -6,10 +6,6 @@ class A_star:
     def __init__(self, problem:Problem):
         self.problem    = problem
         self.settings()
-        '''self.open_list  = [(0, self.problem.start)]
-        self.parent_of  = {}
-        self.g_score    = {(x, y): float('inf') for x in range(self.problem.enviroment.heigth) for y in range(self.problem.enviroment.width)}
-        self.g_score[self.problem.start] = 0'''
     
     def settings(self):
         self.open_list  = [(0, self.problem.start)]
@@ -17,8 +13,8 @@ class A_star:
         self.g_score    = {(x, y): float('inf') for x in range(self.problem.enviroment.heigth) for y in range(self.problem.enviroment.width)}
         self.g_score[self.problem.start] = 0
 
-    def re_init(self, start:tuple):
-        self.problem.start = start
+    def re_init(self, problem:Problem):
+        self.problem       = problem
         self.settings()
 
     def goal_test(self, current:tuple):
@@ -37,12 +33,20 @@ class A_star:
             current = heapq.heappop(self.open_list)[1]
 
             if self.goal_test(current):
-                return self.get_path()
-
+                path = self.get_path()
+                if self.problem.goal_shelf is not None:
+                    if self.problem.enviroment.is_vertix(self.problem.goal):
+                        if self.problem.enviroment.is_neighbor(path[-2], self.problem.goal_shelf):
+                            path.pop()
+                        else:
+                            path.append(self.problem.enviroment.neighbors(self.problem.goal_shelf).pop())
+                        self.problem.goal = path[-1]
+                return path
             self.expand(current)
 
     def expand(self, current:tuple):
-        for neighbor in self.problem.enviroment.neighbors(current):
+        neighbors = self.problem.enviroment.neighbors(current)
+        for neighbor in neighbors:
             tentative_g_score = self.g_score[current] + 1
 
             if tentative_g_score < self.g_score[neighbor]:

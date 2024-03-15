@@ -24,7 +24,7 @@ if __name__ == '__main__':
     #print(goal1, goal2)
  
     recocido = rc(enviroment)
-    mejor_solucion = recocido.ejecuctar_recocido()
+    mejor_solucion = recocido.ejecutar_recocido()
     print(mejor_solucion)
     
 

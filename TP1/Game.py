@@ -36,6 +36,7 @@ class Game():
                     self.screen.blit(number_text, (j * self.cell_size + 10, i * self.cell_size + 10))
         pygame.display.flip()
 
+
     def run(self, agent1:Agent, agent2:Agent):
         running = True
         clock   = pygame.time.Clock()
@@ -87,14 +88,14 @@ class Game():
                     if len(start_positions) < 2:  # Solo permitir dos posiciones de inicio
                         if not self.enviroment.is_shelf((cell_y, cell_x)):
                             if len(start_positions) == 0:
-                                start_positions.append((cell_x, cell_y))
+                                start_positions.append((cell_y, cell_x))
                                 pygame.draw.rect(self.screen, BLUE, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
                             else:
-                                start_positions.append((cell_x, cell_y))
+                                start_positions.append((cell_y, cell_x))
                                 pygame.draw.rect(self.screen, GREEN, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
                     elif len(goal_positions) < 2:  # Solo permitir dos posiciones de llegada
                         if self.enviroment.is_shelf((cell_y, cell_x)):
-                            goal_positions.append((cell_x, cell_y))
+                            goal_positions.append((cell_y, cell_x))
                             pygame.draw.rect(self.screen, RED, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
                     else:
                         full = True

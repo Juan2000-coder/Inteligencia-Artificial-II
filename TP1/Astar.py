@@ -13,8 +13,8 @@ class A_star:
         self.g_score    = {(x, y): float('inf') for x in range(self.problem.enviroment.heigth) for y in range(self.problem.enviroment.width)}
         self.g_score[self.problem.start] = 0
 
-    def re_init(self, start:tuple):
-        self.problem.start = start
+    def re_init(self, problem:Problem):
+        self.problem       = problem
         self.settings()
 
     def goal_test(self, current:tuple):

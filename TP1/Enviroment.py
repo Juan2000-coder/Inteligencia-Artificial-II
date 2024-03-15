@@ -60,7 +60,12 @@ class Enviroment:
                 flag += 1
         return flag >= 3
         
-    def get_goalcell(self, start:tuple, coordinate:tuple):
+    def get_goalcell(self, shelf):
+        if isinstance(shelf, int):
+            coordinate      = np.where(self.data == shelf)
+        else:
+            coordinate      = shelf
+            
         shelf_neighbors  = self.neighbors((coordinate[0], coordinate[1]))
         if len(shelf_neighbors) >  1:
             # sera 2
@@ -70,14 +75,6 @@ class Enviroment:
                 return (shelf_neighbors[0][0], shelf_neighbors[1][1])
         else:
             return shelf_neighbors.pop(0)
-        '''min = None
-        for neighbor in shelf_neighbors:
-            dist = self.manhattan(start, neighbor)
-            if min is None or dist < min:
-                min     = dist
-                nearest = neighbor'''
-        #return nearest
     
-
     def manhattan(self, p1, p2):
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])

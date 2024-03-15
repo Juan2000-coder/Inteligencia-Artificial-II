@@ -26,5 +26,4 @@ if __name__ == '__main__':
 
     enviroment.ocupied.append(agent1.position)
     enviroment.ocupied.append(agent2.position)
-
     game1.run(agent1, agent2)

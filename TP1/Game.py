@@ -44,7 +44,9 @@ class Game():
         move_event = pygame.USEREVENT + 1
         pygame.time.set_timer(move_event, 500)
 
-        first = True
+        first     = True
+        reversed1 = False
+        reversed2 = False
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -57,6 +59,11 @@ class Game():
                             agent1.move(position)
                             # Actualizar posición del agente
                             pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                        elif not reversed1:
+                            reversed1 = True
+                            agent1.problem.reverse()
+                            agent1.a_star.re_init(agent1.problem)
+                            agent1.path = agent1.a_star.solve()
                         first = not first
                     else:
                         if agent2.path:
@@ -65,6 +72,11 @@ class Game():
                             agent2.move(position)
                             # Actualizar posición del agente
                             pygame.draw.rect(self.screen, GREEN, (agent2.position[1] * self.cell_size, agent2.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                        elif not reversed2:
+                            reversed2 = True
+                            agent2.problem.reverse()
+                            agent2.a_star.re_init(agent2.problem)
+                            agent2.path = agent2.a_star.solve()
                         first = not first
                     pygame.display.flip()
             clock.tick(30)

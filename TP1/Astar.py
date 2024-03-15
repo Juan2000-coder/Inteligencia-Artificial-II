@@ -34,12 +34,14 @@ class A_star:
 
             if self.goal_test(current):
                 path = self.get_path()
-                if self.problem.enviroment.is_vertix(self.problem.goal):
-                    if self.problem.enviroment.is_neighbor(path[-2], self.problem.goal_shelf):
-                        path.pop()
-                    else:
-                        path.append(self.problem.enviroment.neighbors(self.problem.goal_shelf).pop())
-                    return path
+                if self.problem.goal_shelf is not None:
+                    if self.problem.enviroment.is_vertix(self.problem.goal):
+                        if self.problem.enviroment.is_neighbor(path[-2], self.problem.goal_shelf):
+                            path.pop()
+                        else:
+                            path.append(self.problem.enviroment.neighbors(self.problem.goal_shelf).pop())
+                        self.problem.goal = path[-1]
+                return path
             self.expand(current)
 
     def expand(self, current:tuple):

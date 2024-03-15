@@ -14,22 +14,15 @@ if __name__ == '__main__':
     game1               = Game(enviroment)
     start_pos, goal_pos = game1.get_checkpoints()
 
-    goal1             = enviroment.get_goalcell(goal_pos[0])
-    goal2             = enviroment.get_goalcell(goal_pos[1])
-
-    problem1          = Problem(enviroment, start_pos[0], goal1)
-    problem2          = Problem(enviroment, start_pos[1], goal2)
+    problem1          = Problem(enviroment, start_pos[0], goal_pos[0])
+    problem2          = Problem(enviroment, start_pos[1], goal_pos[1])
 
     agent1            = Agent(problem1)
     agent2            = Agent(problem2)
 
     # Realizar búsqueda A*
     agent1.path       = agent1.a_star.solve()
-    if enviroment.is_vertix(goal1):
-        agent1.path.pop()
     agent2.path       = agent2.a_star.solve()
-    if enviroment.is_vertix(goal2):
-        agent2.path.pop()
 
     enviroment.ocupied.append(agent1.position)
     enviroment.ocupied.append(agent2.position)

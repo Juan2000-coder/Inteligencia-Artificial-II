@@ -43,6 +43,9 @@ class Enviroment:
                 neighbors_list.append(pos)
         return neighbors_list
     
+    def is_neighbor(self, neigh:tuple, p:tuple):
+        return neigh in self.neighbors(p)
+    
     def is_in(self, p:tuple):
         return (0 <= p[0] < self.heigth) and (0 <= p[1] < self.width)
 

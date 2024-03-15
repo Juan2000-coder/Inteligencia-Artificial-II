@@ -33,8 +33,13 @@ class A_star:
             current = heapq.heappop(self.open_list)[1]
 
             if self.goal_test(current):
-                return self.get_path()
-
+                path = self.get_path()
+                if self.problem.enviroment.is_vertix(self.problem.goal):
+                    if self.problem.enviroment.is_neighbor(path[-2], self.problem.goal_shelf):
+                        path.pop()
+                    else:
+                        path.append(self.problem.enviroment.neighbors(self.problem.goal_shelf).pop())
+                    return path
             self.expand(current)
 
     def expand(self, current:tuple):

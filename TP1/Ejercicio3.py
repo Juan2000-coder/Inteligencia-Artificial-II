@@ -14,7 +14,7 @@ if __name__ == '__main__':
     enviroment        = Enviroment(shelves_rows, shelves_columns)
 
     game1               = Game(enviroment)
-    start_pos, _        = game1.get_checkpoints(True)
+    start_pos, _        = game1.get_checkpoints()
 
     start = start_pos.pop()
 
@@ -24,5 +24,5 @@ if __name__ == '__main__':
     #print(goal1, goal2)
  
     recocido = rc(enviroment)
-    mejor_solucion = recocido.ejecuctar_recocido()
+    mejor_solucion = recocido.ejecutar_recocido()
     print(mejor_solucion)

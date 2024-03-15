@@ -32,6 +32,7 @@ if __name__ == '__main__':
         enviroment.ocupied.append(agent1.position)
         print("start_pos: ", start_pos)
         print("goal_pos: ", goals_pos)
-        print(f"Trayecto {i}: ", agent1.path)
+        print(f"Trayecto {i+1}: ", agent1.path)
         start_pos[0] = goals_pos[i]
+        
         #game1.run_ej3(agent1)

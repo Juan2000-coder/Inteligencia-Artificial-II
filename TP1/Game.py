@@ -13,7 +13,7 @@ YELLOW = (255, 255, 0)
 
 class Game():
     def __init__(self, enviroment: Enviroment):
-        self.enviroment     = enviroment    # El tablero de juevo
+        self.enviroment     = enviroment    # El tablero de juego
         self.cell_size      = int(40 // (enviroment.number_of_shelves * 0.15))  # Calcula el tamaño de la celda en función del número de estantes
         pygame.init()                       # Inicializa pygame
         pygame.display.set_caption("Búsqueda A*")           # Establece el título de la ventana
@@ -142,3 +142,70 @@ class Game():
                     pygame.display.flip()       # Actualiza la pantalla del juego
             clock.tick(30)                      # Controla la velocidad del bucle
         return start_positions, goal_positions  # Retorna las posiciones de inicio y llegada seleccionadas
+    
+
+
+
+
+##############################AGREGADO VALENTIN EJ3############################################
+    def run_ej3(self, agent1: Agent):
+            '''Sumulación del recorrido del montacargas'''
+            running = True
+            clock   = pygame.time.Clock()
+
+            move_event  = pygame.USEREVENT + 1       # Evento de movimiento del
+            pygame.time.set_timer(move_event, 200)  # Configura un temporizador para controlar el movimiento del agente
+
+            while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:   # Se cierra la ventana
+                        running = False
+                    elif event.type == move_event:  # Es un turno de movimiento
+                        # Dibuja el agente 1 en su posición actual antes de moverlo
+                        pygame.draw.rect(self.screen, VIOLET, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                        # Mueve al agente 1 a la siguiente posición en su camino
+                        position = agent1.path.pop(0)
+                        agent1.move(position)                    
+                        # Dibuja al agente 1 en su nueva posición después de moverlo
+                        pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+
+                        pygame.display.flip()  # Actualiza la pantalla del juego
+                clock.tick(30)  # Controla la velocidad del bucle
+            pygame.quit()       # Cierra pygame y sale del juego
+
+
+    def get_checkpoints_list(self):
+        '''Método para obtener la posicion de inicio y las de las distintas llegadas seleccionadas por el usuario'''
+        running = True
+        clock   = pygame.time.Clock()   # Para control de tiempos
+
+        start_position       = []    # Lista para almacenar la posicion de inicio seleccionada
+        goals_positions      = []    # Lista para almacenar las posiciones de llegadas seleccionadas
+        full                 = False # Bandera para indicar si se han seleccionado todas las posiciones necesarias
+
+        while running and (not full):  # Ciclo principal para interactuar con el usuario y seleccionar las posiciones
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:   # El usuario cierra la ventana
+                    running = False
+                elif event.type == pygame.MOUSEBUTTONDOWN:     # El usuario presiona el click derecho del mouse
+                    mouse_x, mouse_y = pygame.mouse.get_pos()  # Obtiene la posición del mouse
+                    cell_x, cell_y = mouse_x // self.cell_size, mouse_y // self.cell_size   # Coordenadas x,y de la celda
+                    # Las posiciones en el np.array se usan con los indices invertidos.
+
+                    if len(start_position) < 1:               # Solo permite una posiciones de inicio
+                        if not self.enviroment.is_shelf((cell_y, cell_x)):  # Verifica que la celda no sea un estante
+                            start_position.append((cell_y, cell_x))
+                            pygame.draw.rect(self.screen, BLUE, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                            # Dibuja un rectángulo azul en la celda para indicar la posición de inicio
+                    elif self.enviroment.is_shelf((cell_y, cell_x)):  # Verifica que la celda sí sea un estante
+                        goals_positions.append((cell_y, cell_x))
+                        pygame.draw.rect(self.screen, RED, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                        # Dibuja un rectángulo rojo en la celda para indicar la posición de llegada
+                elif event.type == pygame.KEYDOWN:  # El usuario presiona una tecla
+                    if event.key == pygame.K_RETURN: # El usuario presiona la tecla "Enter"
+                        full = True             # Se han seleccionado todas las posiciones necesarias
+                pygame.display.flip()       # Actualiza la pantalla del juego
+            clock.tick(30)                      # Controla la velocidad del bucle
+        return start_position, goals_positions  # Retorna la posicion de inicio y las de llegada seleccionadas
+
+##############################AGREGADO VALENTIN EJ3############################################    

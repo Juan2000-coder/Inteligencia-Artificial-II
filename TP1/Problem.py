@@ -6,7 +6,7 @@ class Problem:
         self.goal_shelf  = goal_shelf
         self.first_start = start
         self.start       = start
-        self.goal        = enviroment.get_goalcell(self.goal_shelf)
+        self.goal        = goal_shelf
     def reverse(self):
         start            = self.goal
         self.goal_shelf  = None

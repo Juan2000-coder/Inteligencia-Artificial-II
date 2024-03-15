@@ -22,3 +22,4 @@ class Agent:
             self.a_star.re_init(self.problem)
             self.path          = self.a_star.solve()
             self.position      = self.path.pop(0)
+        self.problem.enviroment.ocupied.append(self.position)

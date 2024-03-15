@@ -2,10 +2,11 @@ import math
 import random
 from Problem import Problem
 from Astar import A_star
+from Enviroment import Enviroment
 
 class Recocido:
 
-    def __init__(self,_enviroment):
+    def __init__(self,_enviroment:Enviroment):
         self.T = 200
         self.T_min = 0.5
         self.estado_inicial = [22 , 30, 1, 4]
@@ -22,13 +23,13 @@ class Recocido:
         return random.shuffle(solucion_actual)
     def energia(self ,estado):
         self.pb.start = (0,0)
-        self.pb.goal = self.entorno.get_goalcell2(estado[0])
+        self.pb.goal = self.entorno.shelf2coor(estado[0])
         self.estrella.re_init(self.pb)
         E = len(self.estrella.solve())
         
         for i in range(len(estado)-1):
-            self.pb.start = self.entorno.get_goalcell2(estado[i])
-            self.pb.goal = self.entorno.get_goalcell2(estado[i+1])
+            self.pb.start = self.entorno.shelf2coor(estado[i])
+            self.pb.goal = self.entorno.shelf2coor(estado[i+1])
             self.estrella.re_init(self.pb)
             E = E + len(self.estrella.solve())
 

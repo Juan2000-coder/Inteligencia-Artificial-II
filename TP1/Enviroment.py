@@ -52,5 +52,8 @@ class Enviroment:
     def is_available(self, p:tuple):
         return self.is_in(p) and not self.is_shelf(p) and p not in self.ocupied
     
+    def shelf2coor(self, shelf):
+        return np.where(self.data == shelf)
+    
     def manhattan(self, p1, p2):
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])

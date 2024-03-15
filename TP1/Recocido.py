@@ -34,7 +34,7 @@ class Recocido:
 
         return E
     # Algoritmo de recocido simulado
-    def ejecuctar_recocido(self):
+    def ejecutar_recocido(self):
         solucion_actual = self.estado_inicial  # Solución inicial aleatoria
         temperatura = self.T
         energia_actual = self.energia(solucion_actual) 

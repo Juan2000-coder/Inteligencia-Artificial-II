@@ -1,14 +1,18 @@
 import math
 import random
+from Problem import Problem
+from Astar import A_star
 
 class Recocido:
 
-    def __init__(self,_casilla_partida):
+    def __init__(self,_enviroment):
         self.T = 200
         self.T_min = 0.5
-        self.partida = _casilla_partida
         self.estado_inicial = [22 , 30, 1, 4]
         self.L = math.factorial(len(self.estado_inicial))//2
+        self.entorno = _enviroment
+        self.pb = Problem(self.entorno,(0,0),(1,1))
+        self.estrella = A_star(self.pb)
 
     def esquema_enfriamiento(self, temperatura):
         return temperatura * 0.2
@@ -17,10 +21,20 @@ class Recocido:
     def generar_vecino(self, solucion_actual):
         return random.shuffle(solucion_actual)
     def energia(self ,estado):
+        self.pb.start = (0,0)
+        self.pb.goal = self.entorno.get_goalcell2(estado[0])
+        self.estrella.re_init(self.pb)
+        E = len(self.estrella.solve())
+        
+        for i in range(len(estado)-1):
+            self.pb.start = self.entorno.get_goalcell2(estado[i])
+            self.pb.goal = self.entorno.get_goalcell2(estado[i+1])
+            self.estrella.re_init(self.pb)
+            E = E + len(self.estrella.solve())
 
-        pass
+        return E
     # Algoritmo de recocido simulado
-    def recocido_simulado(self):
+    def ejecuctar_recocido(self):
         solucion_actual = self.estado_inicial  # Solución inicial aleatoria
         temperatura = self.T
         energia_actual = self.energia(solucion_actual) 
@@ -31,9 +45,10 @@ class Recocido:
                 energia_vecino = self.energia(vecino)
                 d_E = energia_actual-energia_vecino
 
-                if random.random()<math.exp(d_E/temperatura)
+                if random.random()<math.exp(d_E/temperatura):
                     solucion_actual = vecino
             temperatura = self.esquema_enfriamiento(temperatura)
+        return solucion_actual
 
     # Parámetros del algoritmo
     #temperatura_inicial = 100

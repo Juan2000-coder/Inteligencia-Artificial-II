@@ -18,11 +18,14 @@ class A_star:
         self.settings()
 
     def goal_test(self, current:tuple):
-        return current == self.problem.goal
+        if self.problem.goal_shelf is None:
+            return current == self.problem.goal
+        else:
+            return self.problem.enviroment.manhattan(current, self.problem.goal) == 1
     
-    def get_path(self):
+    def get_path(self, current:tuple):
         path    = []
-        current = self.problem.goal
+        current = current
         while current in self.parent_of:
             path.insert(0, current)
             current = self.parent_of[current]
@@ -31,16 +34,8 @@ class A_star:
     def solve(self):
         while self.open_list:
             current = heapq.heappop(self.open_list)[1]
-
             if self.goal_test(current):
-                path = self.get_path()
-                if self.problem.goal_shelf is not None:
-                    if self.problem.enviroment.is_vertix(self.problem.goal):
-                        if self.problem.enviroment.is_neighbor(path[-2], self.problem.goal_shelf):
-                            path.pop()
-                        else:
-                            path.append(self.problem.enviroment.neighbors(self.problem.goal_shelf).pop())
-                        self.problem.goal = path[-1]
+                path = self.get_path(current)
                 return path
             self.expand(current)
 

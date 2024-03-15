@@ -12,7 +12,7 @@ class Agent:
         # Inicializa el algoritmo A* con el problema dado
         self.a_star     = A_star(self.problem)
         # Inicializa una lista vacía para almacenar el camino del agente
-        self.path       = []
+        self.path:list       = []
 
     def check_move(self, position):
         '''Método para verificar si un movimiento es válido'''

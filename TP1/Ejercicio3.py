@@ -13,8 +13,8 @@ if __name__ == '__main__':
 
     enviroment           = Enviroment(shelves_rows, shelves_columns)
 
-    game1                = Game(enviroment)
-    start_pos, goals_pos = game1.get_checkpoints_list()
+    game                = Game(enviroment)
+    start_pos, goals_pos = game.get_checkpoints_list()
 
 
     """
@@ -24,21 +24,24 @@ if __name__ == '__main__':
     mejor_solucion = recocido.ejecutar_recocido()
     print(mejor_solucion)
     """
-
-    for i in range(len(goals_pos)):
-        problem1          = Problem(enviroment, start_pos[0], goals_pos[i])
-        agent1            = Agent(problem1)
-        agent1.path       = agent1.a_star.solve()
-        enviroment.ocupied.append(agent1.position)
-        print("start_pos: ", start_pos)
-        print("goal_pos: ", goals_pos)
-        print(f"Trayecto {i+1}: ", agent1.path)
+    for i, goal in enumerate(goals_pos):
+        if i == 0:
+            problem = Problem(enviroment, start_pos[0], goal)
+            agent   = Agent(problem)
+        else: 
+            agent.problem.start = agent.path[-1]
+            agent.problem.goal  = goal
+            agent.a_star.re_init(agent.problem)
+        agent.path       += agent.a_star.solve()
+        #enviroment.ocupied.append(agent.position)
+        '''print("start_pos: ", start_pos)
+        print("goal_pos: " , goals_pos)
+        print(f"Trayecto {i+1}: ", agent.path)'''
         
-        costo_trayecto = len(agent1.path)
-        print(f"Costo trayecto {i+1}: ", costo_trayecto)
+        costo_trayecto = len(agent.path)
+        print(f"Costo actual: ", costo_trayecto)
+        #start_pos[0] = goals_pos[i]
 
-        start_pos[0] = goals_pos[i]
-
-    
+    enviroment.ocupied.append(agent.position)
     # Chequear para que funque bien
-    #game1.run_ej3(agent1)
+    game.run_ej3(agent)

@@ -33,6 +33,12 @@ if __name__ == '__main__':
         print("start_pos: ", start_pos)
         print("goal_pos: ", goals_pos)
         print(f"Trayecto {i+1}: ", agent1.path)
-        start_pos[0] = goals_pos[i]
         
-        #game1.run_ej3(agent1)
+        costo_trayecto = len(agent1.path)
+        print(f"Costo trayecto {i+1}: ", costo_trayecto)
+
+        start_pos[0] = goals_pos[i]
+
+    
+    # Chequear para que funque bien
+    #game1.run_ej3(agent1)

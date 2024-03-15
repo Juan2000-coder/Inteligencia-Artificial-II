@@ -153,7 +153,7 @@ class Game():
             running = True
             clock   = pygame.time.Clock()
 
-            move_event  = pygame.USEREVENT + 1       # Evento de movimiento del
+            move_event  = pygame.USEREVENT + 1       # Evento de movimiento del montacargas
             pygame.time.set_timer(move_event, 200)  # Configura un temporizador para controlar el movimiento del agente
 
             while running:
@@ -161,15 +161,16 @@ class Game():
                     if event.type == pygame.QUIT:   # Se cierra la ventana
                         running = False
                     elif event.type == move_event:  # Es un turno de movimiento
-                        # Dibuja el agente 1 en su posición actual antes de moverlo
-                        pygame.draw.rect(self.screen, VIOLET, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
-                        # Mueve al agente 1 a la siguiente posición en su camino
-                        position = agent1.path.pop(0)
-                        agent1.move(position)                    
-                        # Dibuja al agente 1 en su nueva posición después de moverlo
-                        pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                        if agent1.path:
+                            # Dibuja el agente 1 en su posición actual antes de moverlo
+                            pygame.draw.rect(self.screen, VIOLET, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                            # Mueve al agente 1 a la siguiente posición en su camino
+                            position = agent1.path.pop(0)
+                            agent1.move(position)                    
+                            # Dibuja al agente 1 en su nueva posición después de moverlo
+                            pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
 
-                        pygame.display.flip()  # Actualiza la pantalla del juego
+                            pygame.display.flip()  # Actualiza la pantalla del juego
                 clock.tick(30)  # Controla la velocidad del bucle
             pygame.quit()       # Cierra pygame y sale del juego
 

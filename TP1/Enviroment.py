@@ -51,13 +51,6 @@ class Enviroment:
     
     def is_available(self, p:tuple):
         return self.is_in(p) and not self.is_shelf(p) and p not in self.ocupied
-
-    def is_vertix(self, p:tuple):
-        for step in [(-1, 0), (0, 1), (1, 0), (0, -1)]:
-            pos = tuple(x + y for x, y in zip(p, step))
-            if self.is_in(pos) and self.is_shelf(pos):
-                return False
-        return True
     
     def manhattan(self, p1, p2):
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])

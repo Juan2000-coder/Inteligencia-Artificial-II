@@ -44,6 +44,7 @@ class Recocido:
 		#-------APPENDEA EL CAMINO DE VUELTA-----------#
 		a_star.problem.start = path[-1]
 		a_star.problem.goal  = start_pos
+		a_star.problem.goal_shelf = None
 		a_star.re_init(a_star.problem)
 		path       	+= a_star.solve()
 		#----------------------------------------------#
@@ -56,7 +57,7 @@ class Recocido:
 		energia_actual, camino_actual = self.energia(solucion_actual)
 
 		while temperatura > self.T_min:
-			for i in range(self.L):
+			for _ in range(self.L):
 				vecino = self.generar_vecino(solucion_actual)
 				energia_vecino, camino_vecino = self.energia(vecino)
 				d_E = energia_actual - energia_vecino

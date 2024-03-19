@@ -14,7 +14,7 @@ class Recocido:
 
     # Funcion variación de la temperatura
 	def esquema_enfriamiento(self, temperatura):
-		return temperatura * 0.2
+		return temperatura * 0.14
 	
     # Función para generar una solución vecina (perturbación)
 	def generar_vecino(self, solucion_actual):

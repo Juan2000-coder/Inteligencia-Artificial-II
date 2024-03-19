@@ -16,7 +16,7 @@ if __name__ == '__main__':
     game                 = Game(enviroment)
     start_pos, goals_pos = game.get_checkpoints_list() 
 
-    recocido = rc(200, 0.5, 50, enviroment)
+    recocido = rc(5000, 0.5, 100, enviroment)
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(goals_pos)
 
     problema = Problem(enviroment, (0, 0), goals_pos[-1])

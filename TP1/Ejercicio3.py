@@ -24,4 +24,4 @@ if __name__ == '__main__':
     agent.path = camino_optimo
 
     enviroment.ocupied.append(agent.position)
-    game.run_ej3(agent)
+    game.run_ej3(agent, solucion_optima)

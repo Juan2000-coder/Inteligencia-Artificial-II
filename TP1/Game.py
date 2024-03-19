@@ -148,13 +148,16 @@ class Game():
 
 
 ##############################AGREGADO VALENTIN EJ3############################################
-    def run_ej3(self, agent1: Agent):
+    def run_ej3(self, agent1: Agent, solucion_optima:list):
             '''Sumulación del recorrido del montacargas'''
             running = True
             clock   = pygame.time.Clock()
 
             move_event  = pygame.USEREVENT + 1       # Evento de movimiento del montacargas
             pygame.time.set_timer(move_event, 200)  # Configura un temporizador para controlar el movimiento del agente
+
+            check = False
+            goal = solucion_optima.pop(0)
 
             while running:
                 for event in pygame.event.get():
@@ -166,6 +169,15 @@ class Game():
                             pygame.draw.rect(self.screen, VIOLET, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
                             # Mueve al agente 1 a la siguiente posición en su camino
                             position = agent1.path.pop(0)
+                            neighbors = agent1.problem.enviroment.neighbors(goal)
+
+                            if position in neighbors:
+                                if solucion_optima:
+                                    goal = solucion_optima.pop(0)
+                                pygame.time.set_timer(move_event, 500)
+                                check = True
+                            elif check:
+                                pygame.time.set_timer(move_event, 200)
                             agent1.move(position)                    
                             # Dibuja al agente 1 en su nueva posición después de moverlo
                             pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))

@@ -8,6 +8,6 @@ def obtener_numeros_sin_letra_p(archivo):
   return numeros_sin_p
 
 # Ejemplo de uso:
-archivo = 'tu_archivo.txt'
+archivo = 'ordenes.txt'
 numeros_sin_p = obtener_numeros_sin_letra_p(archivo)
 print(numeros_sin_p)

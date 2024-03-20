@@ -193,6 +193,7 @@ class Game():
                                     goal_coords = agent1.problem.enviroment.shelf2coor(goal)
                                     neighbors = agent1.problem.enviroment.neighbors(goal_coords)
                                     if position in neighbors:
+                                        number_text = self.font.render(str(i), True, BLACK)
                                         pygame.draw.rect(self.screen, GREEN, (goal_coords[1] * self.cell_size, goal_coords[0] * self.cell_size, self.cell_size, self.cell_size))
                                         self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size + 10))
                                         if solucion_optima:

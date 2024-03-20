@@ -102,7 +102,12 @@ class Game():
             clock.tick(30)  # Controla la velocidad del bucle
         pygame.quit()       # Cierra pygame y sale del juego
 
-
+    ###-----------DIBUJAR LOS ESTANTES CUANDO VIENEN DADOS COMO LISTA--------###
+    def paint_goals(self, lista):
+        for shelf in lista:
+            coord = self.enviroment.shelf2coor(shelf)
+            pygame.draw.rect(self.screen, RED, (coord[1] * self.cell_size, coord[0] * self.cell_size, self.cell_size, self.cell_size))
+        
     def get_checkpoints(self):
         '''Método para obtener las posiciones de inicio y llegada seleccionadas por el usuario'''
         running = True
@@ -169,12 +174,14 @@ class Game():
                             pygame.draw.rect(self.screen, VIOLET, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
                             # Mueve al agente 1 a la siguiente posición en su camino
                             position = agent1.path.pop(0)
-                            neighbors = agent1.problem.enviroment.neighbors(goal)
+                            #neighbors = agent1.problem.enviroment.neighbors(goal))
+                            neighbors = agent1.problem.enviroment.neighbors(agent1.problem.enviroment.shelf2coor(goal))
 
                             if position in neighbors:
                                 if solucion_optima:
                                     goal = solucion_optima.pop(0)
-                                    neighbors = agent1.problem.enviroment.neighbors(goal)
+                                    #neighbors = agent1.problem.enviroment.neighbors(goal)
+                                    neighbors = agent1.problem.enviroment.neighbors(agent1.problem.enviroment.shelf2coor(goal))
                                     if position in neighbors:
                                         if solucion_optima:
                                             goal = solucion_optima.pop(0)

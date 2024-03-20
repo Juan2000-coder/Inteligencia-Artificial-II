@@ -64,7 +64,8 @@ class Enviroment:
 
     def shelf2coor(self, shelf):
         '''Método para convertir un número de estante en coordenadas (fila, columna)'''
-        return np.where(self.data == shelf)
+        coords = np.where(self.data == shelf)
+        return (coords[0][0], coords[1][0])
 
     def manhattan(self, p1, p2):
         '''Método para calcular la distancia Manhattan entre dos puntos'''

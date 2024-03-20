@@ -29,14 +29,14 @@ class Recocido:
 		for i, goal in enumerate(estado):
 				if i == 0:
 					# Problema inicial desde la posición de inicio al primer objetivo
-						#problem  = Problem(self.enviroment, start_pos, self.enviroment.shelf2coor(goal))
-						problem  = Problem(self.enviroment, start_pos, goal)
+						problem  = Problem(self.enviroment, start_pos, self.enviroment.shelf2coor(goal))
+						#problem  = Problem(self.enviroment, start_pos, goal)
 						a_star   = A_star(problem)
 				else:
 					# Redefine el problema por cada objetivo
 						a_star.problem.start = path[-1]
-						#a_star.problem.goal  = self.enviroment.shelf2coor(goal)
-						a_star.problem.goal  = goal
+						a_star.problem.goal  = self.enviroment.shelf2coor(goal)
+						#a_star.problem.goal  = goal
 						a_star.re_init(a_star.problem)
 				# Actualiza el camino
 				path       += a_star.solve()

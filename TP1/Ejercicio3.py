@@ -3,22 +3,32 @@ from Enviroment import Enviroment
 from Agent import Agent
 from Game import Game
 from Recocido import Recocido as rc
+from Ordenes import Orden
 
 
 #---------------------------MAIN---------------------------#
 if __name__ == '__main__':
-    shelves_rows         = int(input("Indique la cantidad de filas de estanterías: "))
-    shelves_columns      = int(input("Indique la cantidad de columnas de estanterías: "))
+    orden                = Orden()
+    max_estante          = max(orden.estantes)
 
+    shelves_rows         = int(input("Indique la cantidad de filas de estanterías: "))
+    min_col = max_estante//8//shelves_rows + 1
+    shelves_columns = 0
+    while shelves_columns < min_col:
+        print(f"Debe ser un minimo de {min_col} columnas")
+        shelves_columns      = int(input("Indique la cantidad de columnas de estanterías: "))
     enviroment           = Enviroment(shelves_rows, shelves_columns)
 
     game                 = Game(enviroment)
-    start_pos, goals_pos = game.get_checkpoints_list() 
+    game.paint_goals(orden.estantes)
+    #start_pos, goals_pos = game.get_checkpoints_list()
 
     recocido = rc(5000, 0.5, 100, enviroment)
-    solucion_optima, camino_optimo = recocido.ejecutar_recocido(goals_pos)
+    #solucion_optima, camino_optimo = recocido.ejecutar_recocido(goals_pos)
+    solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
 
-    problema = Problem(enviroment, (0, 0), goals_pos[-1])
+    #problema = Problem(enviroment, (0, 0), goals_pos[-1])
+    problema = Problem(enviroment, (0, 0), orden.estantes[-1])
     agent = Agent(problema)
     agent.path = camino_optimo
 

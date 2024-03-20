@@ -174,7 +174,11 @@ class Game():
                             if position in neighbors:
                                 if solucion_optima:
                                     goal = solucion_optima.pop(0)
-                                pygame.time.set_timer(move_event, 500)
+                                    neighbors = agent1.problem.enviroment.neighbors(goal)
+                                    if position in neighbors:
+                                        if solucion_optima:
+                                            goal = solucion_optima.pop(0)
+                                pygame.time.set_timer(move_event, 800)
                                 check = True
                             elif check:
                                 pygame.time.set_timer(move_event, 200)

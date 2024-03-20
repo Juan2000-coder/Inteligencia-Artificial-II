@@ -3,7 +3,6 @@ from Enviroment import Enviroment
 from Agent import Agent
 from Game import Game
 from Recocido import Recocido as rc
-from Astar import A_star
 
 
 #---------------------------MAIN---------------------------#

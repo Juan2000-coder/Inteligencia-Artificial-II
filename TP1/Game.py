@@ -107,6 +107,8 @@ class Game():
         for shelf in lista:
             coord = self.enviroment.shelf2coor(shelf)
             pygame.draw.rect(self.screen, RED, (coord[1] * self.cell_size, coord[0] * self.cell_size, self.cell_size, self.cell_size))
+            pygame.display.flip()
+
         
     def get_checkpoints(self):
         '''Método para obtener las posiciones de inicio y llegada seleccionadas por el usuario'''
@@ -163,6 +165,7 @@ class Game():
 
             check = False
             goal = solucion_optima.pop(0)
+            i = 1
 
             while running:
                 for event in pygame.event.get():
@@ -175,16 +178,26 @@ class Game():
                             # Mueve al agente 1 a la siguiente posición en su camino
                             position = agent1.path.pop(0)
                             #neighbors = agent1.problem.enviroment.neighbors(goal))
-                            neighbors = agent1.problem.enviroment.neighbors(agent1.problem.enviroment.shelf2coor(goal))
+                            goal_coords = agent1.problem.enviroment.shelf2coor(goal)
+                            neighbors = agent1.problem.enviroment.neighbors(goal_coords)
 
                             if position in neighbors:
+                                number_text = self.font.render(str(i), True, BLACK)
+                                # Dibuja el número del estante en la celda
+                                pygame.draw.rect(self.screen, GREEN, (goal_coords[1] * self.cell_size, goal_coords[0] * self.cell_size, self.cell_size, self.cell_size))
+                                self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size + 10))
                                 if solucion_optima:
                                     goal = solucion_optima.pop(0)
+                                    i += 1
                                     #neighbors = agent1.problem.enviroment.neighbors(goal)
-                                    neighbors = agent1.problem.enviroment.neighbors(agent1.problem.enviroment.shelf2coor(goal))
+                                    goal_coords = agent1.problem.enviroment.shelf2coor(goal)
+                                    neighbors = agent1.problem.enviroment.neighbors(goal_coords)
                                     if position in neighbors:
+                                        pygame.draw.rect(self.screen, GREEN, (goal_coords[1] * self.cell_size, goal_coords[0] * self.cell_size, self.cell_size, self.cell_size))
+                                        self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size + 10))
                                         if solucion_optima:
                                             goal = solucion_optima.pop(0)
+                                            i += 1
                                 pygame.time.set_timer(move_event, 800)
                                 check = True
                             elif check:

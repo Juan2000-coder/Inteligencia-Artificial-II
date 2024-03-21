@@ -23,7 +23,7 @@ if __name__ == '__main__':
     game.paint_goals(orden.estantes)
     #start_pos, goals_pos = game.get_checkpoints_list()
 
-    recocido = rc(5000, 0.5, 100, enviroment)
+    recocido = rc(1000, 0.5, 10, enviroment)
     #solucion_optima, camino_optimo = recocido.ejecutar_recocido(goals_pos)
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
 

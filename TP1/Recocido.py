@@ -14,12 +14,21 @@ class Recocido:
 
     # Funcion variación de la temperatura
 	def esquema_enfriamiento(self, temperatura):
-		return temperatura * 0.14
+		return temperatura * 0.5
 	
     # Función para generar una solución vecina (perturbación)
-	def generar_vecino(self, solucion_actual):
+	def generar_vecino(self, solucion_actual, tam_bloque):
 		vecino = copy.deepcopy(solucion_actual)
-		random.shuffle(vecino)
+		
+		# Forma 1
+		#random.shuffle(vecino)
+		
+		# Forma 2
+		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+		random.shuffle(bloque)
+		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
+
 		return vecino
 	
 	def energia(self, estado):
@@ -57,8 +66,9 @@ class Recocido:
 		energia_actual, camino_actual = self.energia(solucion_actual)
 
 		while temperatura > self.T_min:
-			for _ in range(self.L):
-				vecino = self.generar_vecino(solucion_actual)
+			for _ in range(round(self.L)):
+				tam_bloque = len(solucion_actual) // 2
+				vecino = self.generar_vecino(solucion_actual, tam_bloque)
 				energia_vecino, camino_vecino = self.energia(vecino)
 				d_E = energia_actual - energia_vecino
 				
@@ -71,16 +81,7 @@ class Recocido:
 					camino_actual 	= camino_vecino
 					energia_actual 	= energia_vecino
 			temperatura = self.esquema_enfriamiento(temperatura)
+			self.L = self.L * 1.5
+
 		return solucion_actual, camino_actual
-
-  # Parámetros del algoritmo
-  #temperatura_inicial = 100
-  #enfriamiento = 0.95
-  #iteraciones = 1000
-  #rango_perturbacion = 0.1
-
-  # Ejecutar el algoritmo
-  #mejor_solucion, valor_objetivo = self.recocido_simulado(funcion_objetivo, temperatura_inicial, enfriamiento, iteraciones, rango_perturbacion)
-
-  #print("Mejor solución encontrada:", mejor_solucion)
-  #print("Valor objetivo de la mejor solución:", valor_objetivo)
+	

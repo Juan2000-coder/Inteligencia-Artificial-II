@@ -62,14 +62,10 @@ class Recocido:
 				energia_vecino, camino_vecino = self.energia(vecino)
 				d_E = energia_actual - energia_vecino
 				
-				if d_E > 0:
+				if d_E > 0 or (random.random() < math.exp(d_E / temperatura)):
 					solucion_actual = vecino
 					camino_actual = camino_vecino
 					energia_actual  = energia_vecino
-				elif random.random() < math.exp(d_E / temperatura):
-					solucion_actual = vecino
-					camino_actual 	= camino_vecino
-					energia_actual 	= energia_vecino
 			temperatura = self.esquema_enfriamiento(temperatura)
 		return solucion_actual, camino_actual
 

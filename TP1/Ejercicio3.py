@@ -25,7 +25,6 @@ if __name__ == '__main__':
     recocido = rc(1000, 0.5, 1, enviroment)
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
 
-    #problema = Problem(enviroment, (0, 0), goals_pos[-1])
     problema = Problem(enviroment, (0, 0), orden.estantes[-1])
     agent = Agent(problema)
     agent.path = camino_optimo

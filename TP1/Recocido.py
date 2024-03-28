@@ -9,12 +9,13 @@ class Recocido:
 	def __init__(self, T, T_min, L, enviroment:Enviroment):
 		self.T = T
 		self.T_min = T_min
-		self.L = L     #math.factorial(len(self.estado_inicial)) // 2
+		self.L = L
 		self.enviroment = enviroment
 
     # Funcion variación de la temperatura
 	def esquema_enfriamiento(self, temperatura):
-		return temperatura * 0.5
+		return (20 - 0.001 * (math.exp(temperatura/2)))
+		#return 0.5 * temperatura
 	
     # Función para generar una solución vecina (perturbación)
 	def generar_vecino(self, solucion_actual, tam_bloque):
@@ -61,13 +62,37 @@ class Recocido:
 	
     # Algoritmo de recocido simulado
 	def ejecutar_recocido(self, solucion_inicial: list):
-		solucion_actual = solucion_inicial
+		solucion_actual = copy.deepcopy(solucion_inicial)
+		solucion_propuesta = []
+		dist = []
+
+		for i in solucion_actual:
+			dist.append(self.enviroment.manhattan(self.enviroment.shelf2coor(i), (0, 0)))
+		solucion_actual.insert(0, solucion_actual.pop(dist.index(min(dist))))
+
+		l = len(solucion_actual)
+		for k in range(l):
+			dist = []
+
+			if k == 0:
+				solucion_propuesta = [solucion_actual.pop(0)]
+			else:
+				for j in solucion_actual:
+					i = solucion_propuesta[-1]
+					dist.append(self.enviroment.manhattan(self.enviroment.shelf2coor(i), self.enviroment.shelf2coor(j)))
+				
+				solucion_propuesta.append(solucion_actual.pop(dist.index(min(dist))))
+	
+		solucion_actual = solucion_propuesta
+
+
 		temperatura = self.T
 		energia_actual, camino_actual = self.energia(solucion_actual)
+		it = 0
 
 		while temperatura > self.T_min:
 			for _ in range(round(self.L)):
-				tam_bloque = len(solucion_actual) // 2
+				tam_bloque =  2 	#len(solucion_actual) // 2
 				vecino = self.generar_vecino(solucion_actual, tam_bloque)
 				energia_vecino, camino_vecino = self.energia(vecino)
 				d_E = energia_actual - energia_vecino
@@ -77,7 +102,8 @@ class Recocido:
 					camino_actual = camino_vecino
 					energia_actual  = energia_vecino
 			temperatura = self.esquema_enfriamiento(temperatura)
-			self.L = self.L * 1.5
+			self.L = 10 * math.log(it + 1)
+			it += 1
 
 		return solucion_actual, camino_actual
 	

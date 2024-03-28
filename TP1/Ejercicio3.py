@@ -21,10 +21,8 @@ if __name__ == '__main__':
 
     game                 = Game(enviroment)
     game.paint_goals(orden.estantes)
-    #start_pos, goals_pos = game.get_checkpoints_list()
 
-    recocido = rc(1000, 0.5, 10, enviroment)
-    #solucion_optima, camino_optimo = recocido.ejecutar_recocido(goals_pos)
+    recocido = rc(1000, 0.5, 1, enviroment)
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
 
     #problema = Problem(enviroment, (0, 0), goals_pos[-1])

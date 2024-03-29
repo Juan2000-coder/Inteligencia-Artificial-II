@@ -22,7 +22,7 @@ if __name__ == '__main__':
     game                 = Game(enviroment)
     game.paint_goals(orden.estantes)
 
-    recocido = rc(1000, 0.5, 1, enviroment)
+    recocido = rc(1000, 0.5, 10, enviroment)
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
 
     problema = Problem(enviroment, (0, 0), orden.estantes[-1])

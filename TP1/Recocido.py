@@ -12,25 +12,42 @@ class Recocido:
 		self.L = L
 		self.enviroment = enviroment
 
+
     # Funcion variación de la temperatura
 	def esquema_enfriamiento(self, temperatura):
-		#return (20 - 0.001 * (math.exp(temperatura/2)))
-		return 0.5 * temperatura
+		return (20 - 0.001 * round((math.exp(temperatura/2)), 2))
 	
+
     # Función para generar una solución vecina (perturbación)
 	def generar_vecino(self, solucion_actual, tam_bloque):
 		vecino = copy.deepcopy(solucion_actual)
 		
 		# Forma 1
-		#random.shuffle(vecino)
-		
+		#indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		#bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+		#random.shuffle(bloque)
+		#vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
+		#return vecino		
+
 		# Forma 2
 		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-		random.shuffle(bloque)
-		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-
-		return vecino
+		if abs(bloque[0] - bloque[1]) == 2:
+			while abs(bloque[0] - bloque[1]) == 2:
+				indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+				bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
+			return vecino	
+		elif abs(bloque[0] - bloque[1]) == 1:			
+			if random.random() > 0.5:
+				random.shuffle(bloque)
+				vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
+			return vecino
+		else:
+			random.shuffle(bloque)
+			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
+			return vecino
+		
 	
 	def energia(self, estado):
 		path:list = []
@@ -40,13 +57,11 @@ class Recocido:
 				if i == 0:
 					# Problema inicial desde la posición de inicio al primer objetivo
 						problem  = Problem(self.enviroment, start_pos, self.enviroment.shelf2coor(goal))
-						#problem  = Problem(self.enviroment, start_pos, goal)
 						a_star   = A_star(problem)
 				else:
 					# Redefine el problema por cada objetivo
 						a_star.problem.start = path[-1]
 						a_star.problem.goal  = self.enviroment.shelf2coor(goal)
-						#a_star.problem.goal  = goal
 						a_star.re_init(a_star.problem)
 				# Actualiza el camino
 				path       += a_star.solve()
@@ -60,11 +75,13 @@ class Recocido:
 		#----------------------------------------------#
 		return len(path), path
 	
+
     # Algoritmo de recocido simulado
 	def ejecutar_recocido(self, solucion_inicial: list):
 		solucion_actual = copy.deepcopy(solucion_inicial)
 		solucion_propuesta = []
 		dist = []
+		L_inicial = self.L
 
 		for i in solucion_actual:
 			dist.append(self.enviroment.manhattan(self.enviroment.shelf2coor(i), (0, 0)))
@@ -84,8 +101,6 @@ class Recocido:
 				solucion_propuesta.append(solucion_actual.pop(dist.index(min(dist))))
 	
 		solucion_actual = solucion_propuesta
-
-
 		temperatura = self.T
 		energia_actual, camino_actual = self.energia(solucion_actual)
 		it = 0
@@ -102,7 +117,9 @@ class Recocido:
 					camino_actual = camino_vecino
 					energia_actual  = energia_vecino
 			temperatura = self.esquema_enfriamiento(temperatura)
-			self.L = 10 * math.log(it + 1)
+			
+			
+			self.L = 10 * math.log(it + 1)			
 			it += 1
 
 		return solucion_actual, camino_actual

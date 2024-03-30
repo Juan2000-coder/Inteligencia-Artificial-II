@@ -4,19 +4,22 @@ from Problem import Problem
 from Astar import A_star
 from Enviroment import Enviroment
 import copy
+import csv
 
 class Recocido:
 	def __init__(self, T, T_min, L, enviroment:Enviroment):
 		self.T = T
 		self.T_min = T_min
 		self.L = L
+		self.L_original = L
 		self.enviroment = enviroment
 
 
     # Funcion variación de la temperatura
-	def esquema_enfriamiento(self, temperatura):
-		return (20 - 0.001 * round((math.exp(temperatura/2)), 2))
-	
+	def esquema_enfriamiento(self, iteracion, temperatura):
+		#return (self.T - 0.001 * round((math.exp(iteracion/2)), 2))
+		#return (self.T - 2*iteracion)
+		return temperatura * 0.85
 
     # Función para generar una solución vecina (perturbación)
 	def generar_vecino(self, solucion_actual, tam_bloque):
@@ -39,7 +42,7 @@ class Recocido:
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
 			return vecino	
 		elif abs(bloque[0] - bloque[1]) == 1:			
-			if random.random() > 0.5:
+			if random.random() > 0.85:
 				random.shuffle(bloque)
 				vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
 			return vecino
@@ -47,6 +50,45 @@ class Recocido:
 			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
 			return vecino
+
+		# Forma 3
+		#indice_inicio = random.randint(0, len(vecino) - tam_bloque)
+		#bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+
+		# Separar los números basados en sus diferencias
+		#grupo_diferencia_2 = []
+		#grupo_diferencia_1 = []
+		#resto = []
+
+		# Comparar cada elemento con los demás
+		#for i in range(len(bloque)):
+		#	for j in range(i+1, len(bloque)):
+		#		if abs(bloque[i] - bloque[j]) == 2 and bloque[i] not in grupo_diferencia_2 and bloque[j] not in grupo_diferencia_2:
+		#			grupo_diferencia_2.extend([bloque[i], bloque[j]])
+		#		elif abs(bloque[i] - bloque[j]) == 1 and bloque[i] not in grupo_diferencia_1 and bloque[j] not in grupo_diferencia_1:
+		#			grupo_diferencia_1.extend([bloque[i], bloque[j]])
+		# Añadir los números que no están ni en grupo_diferencia_2 ni en grupo_diferencia_1 al grupo resto
+		#for num in bloque:
+		#	if num in grupo_diferencia_2 and num in grupo_diferencia_1:
+		#		grupo_diferencia_1.remove(num)
+		#	if num not in grupo_diferencia_2 and num not in grupo_diferencia_1:
+		#		resto.append(num)
+
+		# Decidir al azar si se mezclan los de diferencia 1
+		#if random.random() > 0.85:
+		#	random.shuffle(grupo_diferencia_1)
+
+		# Mezclar el resto
+		#random.shuffle(resto)
+
+		# Reconstruir el bloque con las nuevas restricciones
+		#nuevo_bloque = grupo_diferencia_2 + grupo_diferencia_1 + resto
+
+		# Actualizar el vecino con el nuevo bloque
+		#del vecino[indice_inicio:indice_inicio + tam_bloque]  # Eliminar elementos viejos
+		#vecino[indice_inicio:indice_inicio] = nuevo_bloque  # Insertar elementos nuevos
+
+		#return vecino
 		
 	
 	def energia(self, estado):
@@ -81,7 +123,6 @@ class Recocido:
 		solucion_actual = copy.deepcopy(solucion_inicial)
 		solucion_propuesta = []
 		dist = []
-		L_inicial = self.L
 
 		for i in solucion_actual:
 			dist.append(self.enviroment.manhattan(self.enviroment.shelf2coor(i), (0, 0)))
@@ -105,22 +146,36 @@ class Recocido:
 		energia_actual, camino_actual = self.energia(solucion_actual)
 		it = 0
 
-		while temperatura > self.T_min:
-			for _ in range(round(self.L)):
-				tam_bloque =  2 	#len(solucion_actual) // 2
-				vecino = self.generar_vecino(solucion_actual, tam_bloque)
-				energia_vecino, camino_vecino = self.energia(vecino)
-				d_E = energia_actual - energia_vecino
-				
-				if d_E > 0 or (random.random() < math.exp(d_E / temperatura)):
-					solucion_actual = vecino
-					camino_actual = camino_vecino
-					energia_actual  = energia_vecino
-			temperatura = self.esquema_enfriamiento(temperatura)
-			
-			
-			self.L = 10 * math.log(it + 1)			
-			it += 1
+		with open('ejecucion_recocido.csv', 'w', newline='') as archivo_csv: 
+			escritor_csv = csv.writer(archivo_csv) 
+			escritor_csv.writerow(['it', 'T','e'] + ['-']*25)
+			while temperatura > self.T_min:
 
+				if temperatura > 0.1:
+					if not (int(len(solucion_actual) * 0.08) == 1):
+						tam_bloque =  int(len(solucion_actual) * 0.08)
+					else:
+						tam_bloque = 2
+					self.L = round(0.1*self.L_original)
+				else:
+					tam_bloque =  int(len(solucion_actual) * 0.28)
+					self.L = self.L_original
+
+
+				for _ in range(round(self.L)):
+					escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
+					vecino = self.generar_vecino(solucion_actual, tam_bloque)
+					energia_vecino, camino_vecino = self.energia(vecino)
+					d_E = energia_actual - energia_vecino
+					
+					if d_E > 0 or (random.random() < math.exp(d_E / temperatura)):
+						solucion_actual = vecino
+						camino_actual = camino_vecino
+						energia_actual  = energia_vecino
+						
+				it += 1
+				temperatura = self.esquema_enfriamiento(it, temperatura)
+
+			escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
+			
 		return solucion_actual, camino_actual
-	

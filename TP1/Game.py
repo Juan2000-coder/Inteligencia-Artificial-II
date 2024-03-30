@@ -18,7 +18,7 @@ class Game():
         pygame.init()                       # Inicializa pygame
         pygame.display.set_caption("Búsqueda A*")           # Establece el título de la ventana
         self.font           = pygame.font.SysFont(None, 12) # Establece la fuente de texto
-        self.screen         = pygame.display.set_mode((enviroment.width * self.cell_size, enviroment.heigth * self.cell_size))  # Crea la pantalla del juego con el tamaño calculado
+        self.screen         = pygame.display.set_mode((enviroment.width * self.cell_size, enviroment.height * self.cell_size))  # Crea la pantalla del juego con el tamaño calculado
         self.grid()                                         # Dibuja la cuadrícula del juego
 
     def grid(self):
@@ -26,8 +26,8 @@ class Game():
         self.screen.fill(WHITE)  # Rellena la pantalla con color blanco
         for x in range(0, self.enviroment.width * self.cell_size, self.cell_size):
             # Dibuja líneas verticales para representar las columnas de la cuadrícula
-            pygame.draw.line(self.screen, BLACK, (x, 0), (x, self.enviroment.heigth * self.cell_size))
-        for y in range(0, self.enviroment.heigth * self.cell_size, self.cell_size):
+            pygame.draw.line(self.screen, BLACK, (x, 0), (x, self.enviroment.height * self.cell_size))
+        for y in range(0, self.enviroment.height * self.cell_size, self.cell_size):
             # Dibuja líneas horizontales para representar las filas de la cuadrícula
             pygame.draw.line(self.screen, BLACK, (0, y), (self.enviroment.width * self.cell_size, y))
 

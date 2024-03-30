@@ -154,6 +154,7 @@ class Recocido:
 				if temperatura > 0.1:
 					if not (int(len(solucion_actual) * 0.08) == 1):
 						tam_bloque =  int(len(solucion_actual) * 0.08)
+						
 					else:
 						tam_bloque = 2
 					self.L = round(0.1*self.L_original)
@@ -161,7 +162,10 @@ class Recocido:
 					tam_bloque =  int(len(solucion_actual) * 0.28)
 					self.L = self.L_original
 
-
+				#print(tam_bloque)
+				if tam_bloque < 2:
+					tam_bloque = 2
+     
 				for _ in range(round(self.L)):
 					escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
 					vecino = self.generar_vecino(solucion_actual, tam_bloque)

@@ -2,7 +2,7 @@ import numpy as np
 
 class Enviroment:
     '''Esta clase es básicamente el tablero con los métodos necesarios.'''
-    def __init__(self, shelves_rows: int, shelves_columns: int):
+    def __init__(self, shelves_rows: int, shelves_columns: int, gen = []):
         '''Constructor de la clase Enviroment.
         inicializa el entorno con el número dado de filas y columnas de estantes'''
 
@@ -10,33 +10,54 @@ class Enviroment:
         self.shelves_rows       = shelves_rows
         self.shelves_columns    = shelves_columns
         self.width              = 3 * (shelves_columns) + 1
-        self.heigth             = 5 * (shelves_rows) + 1
-        self.data               = self.get_enviroment()     # Genera el entorno
+        self.height             = 5 * (shelves_rows) + 1
+        self.data               = self.get_enviroment(gen)     # Genera el entorno
         self.ocupied            = []                        # Lista para almacenar las posiciones ocupadas
 
-    def get_enviroment(self):
+    def get_enviroment(self, gen = []):
         '''Método para generar el entorno del almacén.
         Llena un numpy array con 0 en los pasillos y los números en las estanterías.'''
-        shelf = np.arange(1, 9).reshape(4, 2)
-        for j in range(self.shelves_columns):
-            shift = shelf + self.shelves_rows * 8 * j
+        if not gen:
+            shelf = np.arange(1, 9).reshape(4, 2)
+            for j in range(self.shelves_columns):
+                shift = shelf + self.shelves_rows * 8 * j
 
-            for i in range(self.shelves_rows):
-                block = shift + 8 * i
-                block = np.hstack((np.zeros((4, 1)), block))
-                block = np.vstack((np.zeros((1, 3)), block))
+                for i in range(self.shelves_rows):
+                    block = shift + 8 * i
+                    block = np.hstack((np.zeros((4, 1)), block))
+                    block = np.vstack((np.zeros((1, 3)), block))
 
-                if i == 0:
-                    column = block
+                    if i == 0:
+                        column = block
+                    else:
+                        column = np.vstack((column, block))
+
+                column = np.vstack((column, np.zeros((1, 3))))
+                if j == 0:
+                    data = column
                 else:
-                    column = np.vstack((column, block))
-
-            column = np.vstack((column, np.zeros((1, 3))))
-            if j == 0:
-                data = column
-            else:
-                data = np.hstack((data, column))
-        data = np.hstack((data, np.zeros((self.heigth, 1))))
+                    data = np.hstack((data, column))
+            data = np.hstack((data, np.zeros((self.height, 1))))
+        else:
+            k = 0
+            for j in range(self.shelves_columns):
+                for i in range(self.shelves_rows):
+                
+                    block = np.array(gen[k*8:(k+1)*8]).reshape(4, 2)
+                    block = np.hstack((np.zeros((4, 1)), block))
+                    block = np.vstack((np.zeros((1, 3)), block))
+                    if i == 0:
+                        column = block
+                    else:
+                        column = np.vstack((column, block))
+                    # Insertar la estantería en el entorno del almacén
+                    k += 1
+                column = np.vstack((column, np.zeros((1, 3))))
+                if j == 0:
+                    data = column
+                else:
+                    data = np.hstack((data, column))
+            data = np.hstack((data, np.zeros((self.height, 1))))           
 
         return data
 
@@ -52,7 +73,7 @@ class Enviroment:
 
     def is_in(self, p: tuple):
         '''Método para verificar si una posición está dentro de los límites del entorno'''
-        return (0 <= p[0] < self.heigth) and (0 <= p[1] < self.width)
+        return (0 <= p[0] < self.height) and (0 <= p[1] < self.width)
 
     def is_shelf(self, p: tuple):
         '''Método para verificar si una posición contiene un estante'''

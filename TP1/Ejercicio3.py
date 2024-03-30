@@ -40,7 +40,7 @@ if __name__ == '__main__':
         numero_orden = int(input("Por favor, ingrese un número de orden válido: "))
 
     # Creación de la instancia de la clase Orden
-    orden = Orden(numero_orden)
+    orden = Orden(numero_orden, "ordenes.txt")
     max_estante = max(orden.estantes)
 
     # Configuración del entorno de estanterías
@@ -58,8 +58,10 @@ if __name__ == '__main__':
     print_divider()
     print_instruction("Ejecución del algoritmo de Recocido Simulado")
     recocido = rc(100, 1e-12, 8, enviroment)
+   
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
-
+    print(solucion_optima)
+    print(camino_optimo)
     # Configuración del problema y el agente
     problema = Problem(enviroment, (0, 0), orden.estantes[-1])
     agent = Agent(problema)

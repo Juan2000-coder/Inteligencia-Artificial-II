@@ -1,5 +1,3 @@
-#Debajo de esto empieza la magia
-import random
 from Recocido import Recocido as rc
 from Ordenes import Orden
 from Enviroment import Enviroment

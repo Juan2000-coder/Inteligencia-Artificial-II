@@ -1,6 +1,6 @@
-import pygame
-from Agent import Agent
 from Enviroment import Enviroment
+from Agent import Agent
+import pygame
 
 #-------------------------COLORES--------------------------#
 WHITE  = (255, 255, 255)
@@ -11,8 +11,10 @@ BLUE   = (0, 0, 255)
 GREEN  = (0, 255, 0)
 YELLOW = (255, 255, 0)
 
+
 class Game():
     def __init__(self, enviroment: Enviroment):
+        '''Constructor de la clase Game'''
         self.enviroment     = enviroment    # El tablero de juego
         self.cell_size      = int(40 // (enviroment.number_of_shelves * 0.15))  # Calcula el tamaño de la celda en función del número de estantes
         pygame.init()                       # Inicializa pygame

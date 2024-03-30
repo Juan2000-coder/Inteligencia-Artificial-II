@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Enviroment:
     '''Esta clase es básicamente el tablero con los métodos necesarios.'''
     def __init__(self, shelves_rows: int, shelves_columns: int, gen = []):

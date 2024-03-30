@@ -1,7 +1,7 @@
-import  heapq                 # Importa el módulo heapq para el manejo de colas
-from    Problem import Problem
+from Problem import Problem
+import heapq                 # Importa el módulo heapq para el manejo de colas
 
-# Definición de la clase A_star
+
 class A_star:
     def __init__(self, problem: Problem):
         '''Constructor de la clase A_star, inicializa la instancia con un problema dado'''

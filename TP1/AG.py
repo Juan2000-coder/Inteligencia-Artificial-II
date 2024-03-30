@@ -1,6 +1,6 @@
-#Debajo de esto empieza la magia
-import random
 from Recocido import Recocido as rc
+import random
+
 
 class Individuo:
     def __init__(self, genes):
@@ -8,7 +8,7 @@ class Individuo:
         self.fitness = 0
 
     def calcular_fitness(self):
-      #Ejecutar recocido simulado
+        #Ejecutar recocido simulado
         solucion_optima, camino_optimo = recocido.ejecutar_recocido(#estantes)     
         self.fitness = len(camino_optimo)
 

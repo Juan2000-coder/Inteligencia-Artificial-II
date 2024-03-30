@@ -1,11 +1,13 @@
-from Problem import Problem
+from Recocido import Recocido as rc
 from Enviroment import Enviroment
+from Problem import Problem
+from Ordenes import Orden
 from Agent import Agent
 from Game import Game
-from Recocido import Recocido as rc
-from Ordenes import Orden
+
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 # Función para imprimir una línea divisoria
 def print_divider():

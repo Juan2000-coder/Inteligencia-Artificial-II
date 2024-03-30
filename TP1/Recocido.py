@@ -1,28 +1,33 @@
-import math
-import random
+from Enviroment import Enviroment
 from Problem import Problem
 from Astar import A_star
-from Enviroment import Enviroment
+
+import random
+import math
 import copy
 import csv
 
+
 class Recocido:
 	def __init__(self, T, T_min, L, enviroment:Enviroment):
-		self.T = T
-		self.T_min = T_min
-		self.L = L
-		self.L_original = L
-		self.enviroment = enviroment
+		'''Constructor de la clase Recocido.
+		Inicializa los parámetros del algoritmo de recocido simulado.'''
 
-
-    # Funcion variación de la temperatura
+		self.T = T						# T (float): Temperatura inicial.
+		self.T_min = T_min				# T_min (float): Temperatura mínima.
+		self.L = L						# L (int): Número de iteraciones por cada temperatura.
+		self.L_original = L				# L (int): Número de iteraciones por cada temperatura.
+		self.enviroment = enviroment	# enviroment (Enviroment): Objeto de la clase Enviroment que representa el entorno del problema.
+		
+		
 	def esquema_enfriamiento(self, iteracion, temperatura):
-		#return (self.T - 0.001 * round((math.exp(iteracion/2)), 2))
-		#return (self.T - 2*iteracion)
+		'''Función para variar la temperatura en cada iteración.'''
+
 		return temperatura * 0.85
 
-    # Función para generar una solución vecina (perturbación)
+    
 	def generar_vecino(self, solucion_actual, tam_bloque):
+		'''Genera una solución vecina (perturbación) a partir de la solución actual.'''
 		vecino = copy.deepcopy(solucion_actual)
 		
 		# Forma 1
@@ -92,6 +97,8 @@ class Recocido:
 		
 	
 	def energia(self, estado):
+		'''Calcula la energía (o costo) de un estado del problema.'''
+
 		path:list = []
 		start_pos = (0, 0)
 		# Calculo del camino completo de ida
@@ -118,8 +125,9 @@ class Recocido:
 		return len(path), path
 	
 
-    # Algoritmo de recocido simulado
 	def ejecutar_recocido(self, solucion_inicial: list):
+		'''Ejecuta el algoritmo de recocido simulado.'''
+
 		solucion_actual = copy.deepcopy(solucion_inicial)
 		solucion_propuesta = []
 		dist = []

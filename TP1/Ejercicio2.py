@@ -1,5 +1,5 @@
-from Problem import Problem
 from Enviroment import Enviroment
+from Problem import Problem
 from Agent import Agent
 from Game import Game
 

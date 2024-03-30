@@ -1,7 +1,7 @@
 from Recocido import Recocido as rc
 from Ordenes import Orden
 from Enviroment import Enviroment
-
+import random
 class Individuo:
   def __init__(self, genes):
     self.genes = genes

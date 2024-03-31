@@ -11,6 +11,7 @@ class Individuo:
   def calcular_costo(self):
     #Ejecutar recocido simulado
     ordenes = [1,2,3,4,5]
+    costo = 0
     for numero_orden in ordenes:
       # Creación de la instancia de la clase Orden
       orden = Orden(numero_orden, "ordenes2.txt")
@@ -27,45 +28,56 @@ class Individuo:
  #     print_instruction("Ejecución del algoritmo de Recocido Simulado")
       recocido = rc(100, 1e-12, 8, enviroment)
       solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)    
-      self.costo =+ len(camino_optimo)
-      print(self.costo)
+      costo = costo + len(camino_optimo)
+      
+      
+    self.costo = costo
+      
 
 class Poblacion:
   def __init__(self, tamano_poblacion, genes, _probabilidad_de_mutacion):#Inicializa la poblacion 
     self.individuos = []
     for _ in range(tamano_poblacion):
-      genes_random = random.shuffle(genes)
-      individuo = Individuo(genes_random)
+      lista_permutable = genes[:]
+      random.shuffle(lista_permutable)
+      individuo = Individuo(lista_permutable)
       self.individuos.append(individuo)
       self.probabilidad_de_mutacion = _probabilidad_de_mutacion
       self.probabilidades = []
+    
 
   def evaluar_poblacion(self):#Evalua la idoneidad de cada individuo
       for individuo in self.individuos:
         individuo.calcular_costo()
       costo_max = max([i.costo for i in self.individuos])
-      sum = 0
+      
+      suma = 0
+      
       for individuo in self.individuos:
-        print(sum)
-        sum = sum + (costo_max-individuo.costo)
+        
+        suma = suma + (costo_max-individuo.costo)
+      
       for individuo in self.individuos:
-        individuo.fitness = (costo_max-individuo.costo)/sum 
+        individuo.fitness = (costo_max-individuo.costo)/suma 
         
       self.probabilidades = [i.fitness for i in self.individuos]
+      print("Probabilidades")
+      print(self.probabilidades)
     
   def seleccionar_padres(self):#Seleciona 2 padres para cruzar
     
     ind = self.individuos
     prob = self.probabilidades
+    
     padre1 = random.choices(ind, weights=prob, k=1)[0]
     ind.remove(padre1)
     prob.remove(padre1.fitness)
     padre2 = random.choices(ind, weights=prob, k=1)[0]
-#    print(padre1.genes)
+    
     return padre1, padre2
 
   def cruzar(self, _padre1,_padre2):
-#    print(_padre1)
+    #print(_padre1)
     n = len(_padre1.genes)
     p1 = random.randint(0, n - 1)
     p2 = random.randint(0, n - 1)
@@ -81,8 +93,7 @@ class Poblacion:
     #print(1+punto_fin - punto_inicio)
     descendiente1 = []
     descendiente2 = []
-    print(segmento1)
-    print(segmento2)
+    
 
     for i in _padre2.genes:
       if i not in segmento1 :
@@ -105,13 +116,16 @@ class Poblacion:
       indice1, indice2 = random.sample(range(len(_individuo.genes)), 2)
 
       # Intercambiar los valores en los índices seleccionados
+      
       _individuo.genes[indice1], _individuo.genes[indice2] = _individuo.genes[indice2], _individuo.genes[indice1]
+
+    return _individuo
 
   def evolucionar(self):
       nueva_generacion = []
-
+      
       self.evaluar_poblacion()
-
+      self.imprimir_poblacion()
       # Elitismo: mantenemos al mejor individuo de la generación anterior
       mejor_individuo = max(self.individuos, key=lambda x: x.fitness)
   #    print(mejor_individuo.genes)
@@ -120,12 +134,23 @@ class Poblacion:
       while len(nueva_generacion) < len(self.individuos):
           padre1, padre2 = self.seleccionar_padres()
           hijo1, hijo2 = self.cruzar(padre1, padre2)
-
-          hijo1 = self.mutar(hijo1)
-          hijo2 = self.mutar(hijo2)
-
-          nueva_generacion.extend([hijo1, hijo2])
-
+          
+          _hijo1 = self.mutar(hijo1)
+          _hijo2 = self.mutar(hijo2)
+          
+          
+          #nueva_generacion.extend([hijo1, hijo2])
+          nueva_generacion.append(_hijo1)
+          nueva_generacion.append(_hijo2)
+          
       self.individuos = nueva_generacion
+  def imprimir_poblacion(self):
+    for i in self.individuos:
+      print("Individuo")
+      print(i.genes)
+      print("Fitness")
+      print(i.fitness)
+    print("tamano")
+    print(len(self.individuos))
 
 

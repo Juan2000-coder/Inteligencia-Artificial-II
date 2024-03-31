@@ -16,13 +16,13 @@ class Recocido:
 
 
     # Funcion variación de la temperatura
-	def esquema_enfriamiento(self, iteracion, temperatura):
+	def esquema_enfriamiento(self, temperatura):
 		#return (self.T - 0.001 * round((math.exp(iteracion/2)), 2))
 		#return (self.T - 2*iteracion)
 		return temperatura * 0.85
 
     # Función para generar una solución vecina (perturbación)
-	def generar_vecino(self, solucion_actual, tam_bloque):
+	def generar_vecino(self, solucion_actual:list, tam_bloque, permutaciones = 2):
 		vecino = copy.deepcopy(solucion_actual)
 		
 		# Forma 1
@@ -160,8 +160,11 @@ class Recocido:
 				else:
 					tam_bloque =  int(len(solucion_actual) * 0.28)
 					self.L = self.L_original
-
-
+				if not self.L > 0:
+					self.L = 1
+				if not tam_bloque >= 2:
+					tam_bloque = 2
+	
 				for _ in range(round(self.L)):
 					escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
 					vecino = self.generar_vecino(solucion_actual, tam_bloque)
@@ -174,7 +177,7 @@ class Recocido:
 						energia_actual  = energia_vecino
 						
 				it += 1
-				temperatura = self.esquema_enfriamiento(it, temperatura)
+				temperatura = self.esquema_enfriamiento(temperatura)
 
 			escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
 			

@@ -61,11 +61,59 @@ class Enviroment:
         '''Método para verificar si una posición está disponible (no es un estante ni está ocupada)'''
         return self.is_in(p) and not self.is_shelf(p) and p not in self.ocupied
 
-    def shelf2coor(self, shelf):
+    def shelf2coor(self, sh):
         '''Método para convertir un número de estante en coordenadas (fila, columna)'''
-        coords = np.where(self.data == shelf)
-        return (coords[0][0], coords[1][0])
+        p = np.where(self.data == sh)
+        return (p[0][0], p[1][0])
+    
+    def is_invertix(self, sh):
+        p = self.shelf2coor(sh)
+        return (p[0] - 1) % 5 == 0 or (p[0] - 4) % 5 == 0
 
     def manhattan(self, p1, p2):
         '''Método para calcular la distancia Manhattan entre dos puntos'''
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+    
+    def are_beside(self, sh1, sh2):
+        '''Método para determinar si dos estántes están uno al lado del otro
+        en una misma columna de una estánteria, por ejemplo 1 y 3.'''
+        p1 = self.shelf2coor(sh1)
+        p2 = self.shelf2coor(sh2)
+        return p1[1] == p2 [1] and abs(p1[0] - p2[0]) == 1
+    
+    def are_opposed(self, sh1, sh2):
+        '''Método para determinar si dos estántes están frente a frente
+        separados por un pasillo, por ejemplo 2 y 17 en una nave de 2 filas.'''
+        p1 = self.shelf2coor(sh1)
+        p2 = self.shelf2coor(sh2)
+        return p1[0] == p2 [0] and abs(p1[1] - p2[1]) == 2
+    
+    def are_border_opposed(self, sh1, sh2):
+        '''Método para determinar si dos estántes están frente a frente
+        separados por un pasillo en bordes de estanterías, por ejemplo 7 y 9
+        en una nave de al menos dos filas.'''
+        p1 = self.shelf2coor(sh1)
+        p2 = self.shelf2coor(sh2)
+        return abs(p1[0] - p2 [0]) == 2 and p1[1] == p2[1] and self.is_invertix(sh1) and self.is_invertix(sh2)
+    
+    def are_border_beside(self, sh1, sh2):
+        '''Método para determinar si dos estántes están uno al lado del 
+        otro pero en el borde de la estanteria. Por ejemplo 1 y 2.'''
+        p1 = self.shelf2coor(sh1)
+        p2 = self.shelf2coor(sh2)
+        return p1[0] == p2 [0] and abs(p1[1] - p2[1]) == 1 and self.is_invertix(sh1)
+    
+    def are_cross_beside(self, sh1, sh2):
+        '''Método para determinar si dos estántes están en filas adyacentes
+        pero separados por un pasillo en columnas de estanterías enfrentadas.'''
+        p1 = self.shelf2coor(sh1)
+        p2 = self.shelf2coor(sh2)
+        return abs(p1[0] - p2 [0]) == 1 and abs(p1[1] - p2[1]) == 2
+    
+    def are_border_cross_beside(self, sh1, sh2):
+        '''Método para determinar si dos estántes están separados por un pasillo
+        entre bordes de dos estanterías y cruzados. Por ejemplo 8 y 9 en una nave
+        de al menos filas.'''
+        p1 = self.shelf2coor(sh1)
+        p2 = self.shelf2coor(sh2)
+        return abs(p1[0] - p2 [0]) == 2 and abs(p1[1] - p2[1]) and self.is_invertix(sh1) and self.is_invertix(sh2)

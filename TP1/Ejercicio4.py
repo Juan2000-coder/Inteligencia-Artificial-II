@@ -1,4 +1,6 @@
 from AG import Poblacion
+
+
 def print_divider():
     print("=" * 100)
 
@@ -16,32 +18,32 @@ def print_error(message):
 
 #---------------------------MAIN---------------------------#
 if __name__ == '__main__':
-  print_divider()
-  print("BIENVENIDO AL PROGRAMA DE GESTIÓN DEL DEPOSITO")
-  print("Optimizacion con algoritmo genetico")
-  print_divider()
+    print_divider()
+    print("BIENVENIDO AL PROGRAMA DE GESTIÓN DEL DEPOSITO")
+    print("Optimizacion con algoritmo genetico")
+    print_divider()
 
 # Ejemplo de uso
   
-  tamano_poblacion = 10
-  probabilidad_mutacion = 0.01
-  genes = [i+1 for i in range(32)]
+    tam_poblacion = 10
+    prob_mutacion = 0.01
+    genes = [i+1 for i in range(32)]
+    
+    poblacion = Poblacion(tam_poblacion, genes, prob_mutacion)
   
-  poblacion = Poblacion(tamano_poblacion, genes, probabilidad_mutacion)
-  
-  generacion = 1
-  cont = 0
-  flag = True
-  while flag:
-      print(f"Generación {generacion}:")
-      
-      print("-------------------------------------------")
-      if generacion >= 100 :
-          flag = False
-      poblacion.evolucionar()
-      
-      generacion += 1
-      cont =+ 1
-  
-  print("¡Objetivo alcanzado!")
+    generacion = 1
+    cont = 0
+    flag = True
+    while flag:
+        print(f"Generación {generacion}:")
+        
+        print("-" * 100)
+        if generacion >= 100 :
+            flag = False
+        poblacion.evolucionar()
+        
+        generacion += 1
+        cont =+ 1
+    
+    print("¡Objetivo alcanzado!")
   

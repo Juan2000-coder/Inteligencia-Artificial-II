@@ -1,15 +1,20 @@
 from Recocido import Recocido as rc
 from Ordenes import Orden
 from Enviroment import Enviroment
+
 import random
+
+
 class Individuo:
+    '''Clase que representa un individuo de la población.
+    Cada individuo es una solución al problema que se desea resolver.'''
     def __init__(self, genes):
-        self.genes = genes
-        self.fitness = 0
-        self.costo = 0
+        self.genes = genes      # Genes que representan la solución
+        self.fitness = 0        # Idoneidad de la solución
+        self.costo = 0          # Costo de la solución
 
     def calcular_costo(self):
-        #Ejecutar recocido simulado
+        '''Calcula el costo de la solución representada por el individuo.'''
         ordenes = [1,2,3,4,5]
         costo = 0
         for numero_orden in ordenes:
@@ -35,18 +40,21 @@ class Individuo:
       
 
 class Poblacion:
-    def __init__(self, tamano_poblacion, genes, _probabilidad_de_mutacion):#Inicializa la poblacion 
+    '''Clase que representa una población de individuos.
+    Una población es un conjunto de soluciones al problema que se desea resolver.'''
+    def __init__(self, tam_poblacion, genes, _prob_mutacion): 
         self.individuos = []
-        for _ in range(tamano_poblacion):
-            lista_permutable = genes[:]
-            random.shuffle(lista_permutable)
-            individuo = Individuo(lista_permutable)
-            self.individuos.append(individuo)
-            self.probabilidad_de_mutacion = _probabilidad_de_mutacion
-            self.probabilidades = []
+        for _ in range(tam_poblacion):
+            lista_permutable = genes[:]                     # Copia de la lista de genes
+            random.shuffle(lista_permutable)                # Mezcla aleatoria de los genes
+            individuo = Individuo(lista_permutable)         # Creación de un nuevo individuo
+            self.individuos.append(individuo)               # Agregar el individuo a la población
+            self.prob_mutacion = _prob_mutacion             # Probabilidad de mutación
+            self.probabilidades = []                        # Probabilidades de selección de los individuos
       
 
-    def evaluar_poblacion(self):#Evalua la idoneidad de cada individuo
+    def evaluar_poblacion(self):
+        '''Evalúa la idoneidad de la poblacion de individuos.'''
         for individuo in self.individuos:
             individuo.calcular_costo()
         costo_max = max([i.costo for i in self.individuos])
@@ -63,8 +71,10 @@ class Poblacion:
         print("Probabilidades")
         print(self.probabilidades)
       
-    def seleccionar_padres(self):#Seleciona 2 padres para cruzar
-      
+
+    def seleccionar_padres(self):
+        '''Selecciona dos padres de la población actual,
+        teniendo en cuenta la probabilidad de selección de cada individuo.'''
         ind = self.individuos
         prob = self.probabilidades
         
@@ -76,7 +86,7 @@ class Poblacion:
         return padre1, padre2
 
     def cruzar(self, _padre1,_padre2):
-        #print(_padre1)
+        '''Cruza dos individuos para producir dos descendientes.'''
         n = len(_padre1.genes)
         p1 = random.randint(0, n - 1)
         p2 = random.randint(0, n - 1)
@@ -110,7 +120,8 @@ class Poblacion:
         return hijo1, hijo2
 
     def mutar(self,_individuo):
-        if random.random() < self.probabilidad_de_mutacion:
+        '''Muta un individuo, en fución de su probabilidad de mutación.'''
+        if random.random() < self.prob_mutacion:
         # Seleccionar dos índices aleatorios para intercambiar
           indice1, indice2 = random.sample(range(len(_individuo.genes)), 2)
 
@@ -119,17 +130,19 @@ class Poblacion:
 
         return _individuo
 
+
     def evolucionar(self):
+        '''Ejecuta una generación de una nueva población.'''
         nueva_generacion = []
         
         self.evaluar_poblacion()
         self.imprimir_poblacion()
         # Elitismo: mantenemos al mejor individuo de la generación anterior
         mejor_individuo = max(self.individuos, key=lambda x: x.fitness)
-    #    print(mejor_individuo.genes)
+        #print(mejor_individuo.genes)
         nueva_generacion.append(mejor_individuo)
 
-        while len(nueva_generacion) < (len(self.individuos) - 1):
+        while len(nueva_generacion) < (len(self.individuos) - 1):   # -1 porque el elitismo ya agrega un individuo a nueva_generacion
             padre1, padre2 = self.seleccionar_padres()
             hijo1, hijo2 = self.cruzar(padre1, padre2)
             
@@ -142,7 +155,10 @@ class Poblacion:
             nueva_generacion.append(_hijo2)
             
         self.individuos = nueva_generacion
+    
+    
     def imprimir_poblacion(self):
+        '''Imprime la población actual.'''
         for i in self.individuos:
             print("Individuo", i.genes)
             print("Fitness", i.fitness)

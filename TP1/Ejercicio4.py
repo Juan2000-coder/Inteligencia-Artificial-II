@@ -25,20 +25,21 @@ if __name__ == '__main__':
 
 # Ejemplo de uso
   
-    tam_poblacion = 6
-    prob_mutacion = 0.5
+    tam_poblacion = 10
+    prob_mutacion = 0.01
     genes = [i+1 for i in range(32)]
-  
+    
     poblacion = Poblacion(tam_poblacion, genes, prob_mutacion)
   
     generacion = 1
     cont = 0
-    while True:
+    flag = True
+    while flag:
         print(f"Generación {generacion}:")
         
         print("-" * 100)
-        if cont >= 100 :
-            break
+        if generacion >= 100 :
+            flag = False
         poblacion.evolucionar()
         
         generacion += 1

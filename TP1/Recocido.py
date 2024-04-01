@@ -19,7 +19,13 @@ class Recocido:
 		self.L_original = L				# L (int): Número de iteraciones por cada temperatura.
 		self.enviroment = enviroment	# enviroment (Enviroment): Objeto de la clase Enviroment que representa el entorno del problema.
 		
-		
+
+	def cambiar_entorno(self, enviroment:Enviroment):
+		'''Cambia el entorno del problema.'''
+
+		self.enviroment = enviroment
+
+
 	def esquema_enfriamiento(self, iteracion, temperatura):
 		'''Función para variar la temperatura en cada iteración.'''
 

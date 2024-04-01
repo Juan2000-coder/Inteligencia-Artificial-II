@@ -8,12 +8,12 @@ import random
 class Individuo:
     '''Clase que representa un individuo de la población.
     Cada individuo es una solución al problema que se desea resolver.'''
-    def __init__(self, genes):
-        self.genes = genes      # Genes que representan la solución
+    def __init__(self, _genes):
+        self.genes = _genes      # Genes que representan la solución
         self.fitness = 0        # Idoneidad de la solución
         self.costo = 0          # Costo de la solución
 
-    def calcular_costo(self):
+    def calcular_costo(self, _enviroment:Enviroment, _recocido:rc):
         '''Calcula el costo de la solución representada por el individuo.'''
         ordenes = [1,2,3,4,5]
         costo = 0
@@ -23,16 +23,20 @@ class Individuo:
             max_estante = max(orden.estantes)
 
             # Configuración del entorno de estanterías
-            shelves_rows = 2
-            shelves_columns = 2
+            #shelves_rows = 2
+            #shelves_columns = 2
             
-            enviroment = Enviroment(shelves_rows, shelves_columns, self.genes)
+            #enviroment = Enviroment(shelves_rows, shelves_columns, self.genes)
             #enviroment.get_enviroment(self.genes)
             # Ejecución del algoritmo de recocido simulado
             #print_divider()
             #print_instruction("Ejecución del algoritmo de Recocido Simulado")
-            recocido = rc(100, 1e-12, 8, enviroment)
-            solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)    
+
+            # Actualizacion de los datos del entorno
+            _enviroment.cambiar_data(self.genes)
+            _recocido.cambiar_entorno(_enviroment)
+
+            solucion_optima, camino_optimo = _recocido.ejecutar_recocido(orden.estantes)    
             costo = costo + len(camino_optimo)
         
         
@@ -42,21 +46,27 @@ class Individuo:
 class Poblacion:
     '''Clase que representa una población de individuos.
     Una población es un conjunto de soluciones al problema que se desea resolver.'''
-    def __init__(self, tam_poblacion, genes, _prob_mutacion): 
+    def __init__(self, tam_poblacion, _genes, _prob_mutacion): 
         self.individuos = []
+        # Configuración del entorno de estanterías
+        shelves_rows = 2
+        shelves_columns = 2
+        self.enviroment = Enviroment(shelves_rows, shelves_columns, _genes)
+        self.recocido = rc(100, 1e-12, 8, self.enviroment)
+
         for _ in range(tam_poblacion):
-            lista_permutable = genes[:]                     # Copia de la lista de genes
+            lista_permutable = _genes[:]                    # Copia de la lista de genes
             random.shuffle(lista_permutable)                # Mezcla aleatoria de los genes
             individuo = Individuo(lista_permutable)         # Creación de un nuevo individuo
             self.individuos.append(individuo)               # Agregar el individuo a la población
             self.prob_mutacion = _prob_mutacion             # Probabilidad de mutación
             self.probabilidades = []                        # Probabilidades de selección de los individuos
-      
+
 
     def evaluar_poblacion(self):
         '''Evalúa la idoneidad de la poblacion de individuos.'''
         for individuo in self.individuos:
-            individuo.calcular_costo()
+            individuo.calcular_costo(self.enviroment, self.recocido)
         costo_max = max([i.costo for i in self.individuos])
         
         suma = 0
@@ -85,7 +95,7 @@ class Poblacion:
         
         return padre1, padre2
 
-    def cruzar(self, _padre1,_padre2):
+    def cruzar(self, _padre1, _padre2):
         '''Cruza dos individuos para producir dos descendientes.'''
         n = len(_padre1.genes)
         p1 = random.randint(0, n - 1)
@@ -119,14 +129,15 @@ class Poblacion:
         #print(descendiente2)
         return hijo1, hijo2
 
-    def mutar(self,_individuo):
+
+    def mutar(self, _individuo):
         '''Muta un individuo, en fución de su probabilidad de mutación.'''
         if random.random() < self.prob_mutacion:
         # Seleccionar dos índices aleatorios para intercambiar
-          indice1, indice2 = random.sample(range(len(_individuo.genes)), 2)
+            indice1, indice2 = random.sample(range(len(_individuo.genes)), 2)
 
-        # Intercambiar los valores en los índices seleccionados
-        _individuo.genes[indice1], _individuo.genes[indice2] = _individuo.genes[indice2], _individuo.genes[indice1]
+            # Intercambiar los valores en los índices seleccionados
+            _individuo.genes[indice1], _individuo.genes[indice2] = _individuo.genes[indice2], _individuo.genes[indice1]
 
         return _individuo
 
@@ -146,11 +157,10 @@ class Poblacion:
             padre1, padre2 = self.seleccionar_padres()
             hijo1, hijo2 = self.cruzar(padre1, padre2)
             
+
             _hijo1 = self.mutar(hijo1)
             _hijo2 = self.mutar(hijo2)
             
-            
-            #nueva_generacion.extend([hijo1, hijo2])
             nueva_generacion.append(_hijo1)
             nueva_generacion.append(_hijo2)
             

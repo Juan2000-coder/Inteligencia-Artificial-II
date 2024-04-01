@@ -15,6 +15,13 @@ class Enviroment:
         self.data               = self.get_enviroment(gen)     # Genera el entorno
         self.ocupied            = []                        # Lista para almacenar las posiciones ocupadas
 
+
+    def cambiar_data(self, gen):
+        '''Método para cambiar el entorno del almacén'''
+        
+        self.data = self.get_enviroment(gen)
+
+
     def get_enviroment(self, gen = []):
         '''Método para generar el entorno del almacén.
         Llena un numpy array con 0 en los pasillos y los números en las estanterías.'''

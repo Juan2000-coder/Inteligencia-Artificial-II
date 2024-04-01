@@ -74,8 +74,8 @@ class Poblacion:
     def seleccionar_padres(self):
         '''Selecciona dos padres de la población actual,
         teniendo en cuenta la probabilidad de selección de cada individuo.'''
-        ind = self.individuos
-        prob = self.probabilidades
+        ind = copy.deepcopy(self.individuos)
+        prob = copy.deepcopy(self.probabilidades)
         
         padre1 = random.choices(ind, weights=prob, k=1)[0]
         ind.remove(padre1)

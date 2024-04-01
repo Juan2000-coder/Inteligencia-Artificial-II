@@ -1,4 +1,6 @@
 from AG import Poblacion
+
+
 def print_divider():
     print("=" * 100)
 

@@ -2,6 +2,7 @@ from Recocido import Recocido as rc
 from Ordenes import Orden
 from Enviroment import Enviroment
 import random
+import copy
 class Individuo:
   def __init__(self, genes):
     self.genes = genes
@@ -66,8 +67,8 @@ class Poblacion:
     
   def seleccionar_padres(self):#Seleciona 2 padres para cruzar
     
-    ind = self.individuos
-    prob = self.probabilidades
+    ind = copy.deepcopy(self.individuos)
+    prob = copy.deepcopy(self.probabilidades)
     
     padre1 = random.choices(ind, weights=prob, k=1)[0]
     ind.remove(padre1)
@@ -130,15 +131,15 @@ class Poblacion:
       mejor_individuo = max(self.individuos, key=lambda x: x.fitness)
   #    print(mejor_individuo.genes)
       nueva_generacion.append(mejor_individuo)
-
+      
       while len(nueva_generacion) < len(self.individuos):
           padre1, padre2 = self.seleccionar_padres()
           hijo1, hijo2 = self.cruzar(padre1, padre2)
           
           _hijo1 = self.mutar(hijo1)
           _hijo2 = self.mutar(hijo2)
-          
-          
+          print(len(nueva_generacion))
+          print(len(self.individuos))
           #nueva_generacion.extend([hijo1, hijo2])
           nueva_generacion.append(_hijo1)
           nueva_generacion.append(_hijo2)

@@ -117,7 +117,7 @@ class Poblacion:
           indice1, indice2 = random.sample(range(len(_individuo.genes)), 2)
 
         # Intercambiar los valores en los índices seleccionados
-        _individuo.genes[indice1], _individuo.genes[indice2] = _individuo.genes[indice2], _individuo.genes[indice1]
+          _individuo.genes[indice1], _individuo.genes[indice2] = _individuo.genes[indice2], _individuo.genes[indice1]
 
         return _individuo
 

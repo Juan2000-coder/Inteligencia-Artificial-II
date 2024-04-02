@@ -8,18 +8,23 @@ class Individuo:
     '''Clase que representa un individuo de la población.
     Cada individuo es una solución al problema que se desea resolver.'''
     def __init__(self, _genes):
-        self.genes = _genes      # Genes que representan la solución
+        self.genes = _genes     # Genes que representan la solución
         self.fitness = 0        # Idoneidad de la solución
         self.costo = 0          # Costo de la solución
 
     def calcular_costo(self, _enviroment:Enviroment, _recocido:rc):
         '''Calcula el costo de la solución representada por el individuo.'''
-        ordenes = [1,2,3,4,5]
+        self.nro_ordenes = [1,2,3,4,5]
+        self.soluciones = []
+        self.caminos = []
+        self.costo = 0
+        self.ordenes = []
         costo = 0
-        for numero_orden in ordenes:
+        for numero_orden in self.nro_ordenes:
             # Creación de la instancia de la clase Orden
             orden = Orden(numero_orden, "ordenes2.txt")
-            max_estante = max(orden.estantes)
+            self.ordenes.append(orden.estantes)
+            #max_estante = max(orden.estantes)
 
             # Configuración del entorno de estanterías
             #shelves_rows = 2
@@ -33,12 +38,12 @@ class Individuo:
 
             # Actualizacion de los datos del entorno
             _enviroment.cambiar_data(self.genes)
-            _recocido.cambiar_entorno(_enviroment)
+            #_recocido.cambiar_entorno(_enviroment)
 
-            solucion_optima, camino_optimo = _recocido.ejecutar_recocido(orden.estantes)    
+            solucion_optima, camino_optimo = _recocido.ejecutar_recocido(orden.estantes)
+            self.soluciones.append(solucion_optima)
+            self.caminos.append(camino_optimo)
             costo = costo + len(camino_optimo)
-        
-        
         self.costo = costo
       
 
@@ -51,7 +56,7 @@ class Poblacion:
         shelves_rows = 2
         shelves_columns = 2
         self.enviroment = Enviroment(shelves_rows, shelves_columns, _genes)
-        self.recocido = rc(100, 1e-12, 8, self.enviroment)
+        self.recocido = rc(100, 1e-4, 3, self.enviroment)
 
         for _ in range(tam_poblacion):
             lista_permutable = _genes[:]                    # Copia de la lista de genes

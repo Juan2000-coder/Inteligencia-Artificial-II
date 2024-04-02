@@ -28,11 +28,11 @@ if __name__ == '__main__':
     tam_poblacion = 10
     prob_mutacion = 0.01
     genes = [i+1 for i in range(32)]
-    
-    poblacion = Poblacion(tam_poblacion, genes, prob_mutacion)
+    estanterias = [2, 2]
+    par_recocido = [1e-11, 1e-12, 1]
+    poblacion = Poblacion(tam_poblacion, genes, prob_mutacion, *estanterias, *par_recocido)
   
     generacion = 1
-    cont = 0
     flag = True
     while flag:
         print(f"Generación {generacion}:")
@@ -43,7 +43,6 @@ if __name__ == '__main__':
         poblacion.evolucionar()
         
         generacion += 1
-        cont =+ 1
     
     print("¡Objetivo alcanzado!")
   

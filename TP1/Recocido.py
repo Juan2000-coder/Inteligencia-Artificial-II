@@ -36,22 +36,23 @@ class Recocido:
 		'''Obtiene un índice de inicio del bloque aleatorio
 		y toma un bloque de tam_bloque elementos. Luego los agita
 		y lo vuelve a insertar en la lista'''
-		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		'''indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
 		random.shuffle(bloque)
 		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-		return vecino		
+		return vecino'''
 
 		# Forma 2
-		'''indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
 		if abs(bloque[0] - bloque[1]) == 2:
 			while abs(bloque[0] - bloque[1]) == 2:
 				indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 				bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino	
-		elif abs(bloque[0] - bloque[1]) == 1:			
+			return vecino
+		elif abs(bloque[0] - bloque[1]) == 1:
 			if random.random() > 0.85:
 				random.shuffle(bloque)
 				vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
@@ -59,7 +60,7 @@ class Recocido:
 		else:
 			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino'''
+			return vecino
 	
 	def energia(self, estado):
 		'''Calcula la energía (o costo) de un estado del problema.'''

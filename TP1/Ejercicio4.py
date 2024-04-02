@@ -31,7 +31,7 @@ if __name__ == '__main__':
     prob_mutacion = 0.01
     genes = [i+1 for i in range(32)]
     estanterias = [2, 2]
-    par_recocido = [1e-11, 1e-12, 1]
+    par_recocido = [100, 1e-4, 3]
     poblacion = Poblacion(tam_poblacion, genes, prob_mutacion, *estanterias, *par_recocido)
   
     generacion = 1

@@ -40,10 +40,10 @@ class Individuo:
 class Poblacion:
     '''Clase que representa una población de individuos.
     Una población es un conjunto de soluciones al problema que se desea resolver.'''
-    def __init__(self, tam_poblacion, _genes, _prob_mutacion, _shelves_rows, _shelves_columns, _temp_inicio, _temp_min, _L): 
+    def __init__(self, tam_poblacion, _genes, _prob_mutacion, _shelves_rows, _shelves_columns, _temp_inicio, _temp_min, _L, tb_alta, tb_baja, f_T): 
         self.individuos = []
         self.enviroment = Enviroment(_shelves_rows, _shelves_columns, _genes)
-        self.recocido = rc(_temp_inicio, _temp_min, _L, self.enviroment)
+        self.recocido = rc(_temp_inicio, _temp_min, _L, self.enviroment, tb_alta, tb_baja, f_T)
 
         for _ in range(tam_poblacion):
             lista_permutable = _genes[:]                    # Copia de la lista de genes

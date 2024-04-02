@@ -1,6 +1,6 @@
 class Orden:
-    def __init__(self, numero_orden):
-        self.archivo = 'ordenes.txt'
+    def __init__(self, numero_orden, _archivo):
+        self.archivo = _archivo
         self.estantes = self.obtener_orden(numero_orden)
 
     def obtener_orden(self, numero_orden):

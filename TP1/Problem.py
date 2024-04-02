@@ -1,5 +1,6 @@
 from Enviroment import Enviroment
 
+
 class Problem:
     def __init__(self, enviroment: Enviroment, start: tuple, goal_shelf):
         '''Constructor de la clase Problem, inicializa el problema con el entorno, la posición inicial y el estante objetivo.'''

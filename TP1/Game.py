@@ -1,6 +1,7 @@
-import pygame
-from Agent import Agent
 from Enviroment import Enviroment
+from Agent import Agent
+import pygame
+from AG import Individuo
 
 #-------------------------COLORES--------------------------#
 WHITE  = (255, 255, 255)
@@ -11,14 +12,18 @@ BLUE   = (0, 0, 255)
 GREEN  = (0, 255, 0)
 YELLOW = (255, 255, 0)
 
+
 class Game():
     def __init__(self, enviroment: Enviroment):
+        '''Constructor de la clase Game'''
         self.enviroment     = enviroment    # El tablero de juego
-        self.cell_size      = int(40 // (enviroment.number_of_shelves * 0.15))  # Calcula el tamaño de la celda en función del número de estantes
+        #self.cell_size      = int(40 // (enviroment.number_of_shelves * 0.15))  # Calcula el tamaño de la celda en función del número de estantes
         pygame.init()                       # Inicializa pygame
         pygame.display.set_caption("Búsqueda A*")           # Establece el título de la ventana
-        self.font           = pygame.font.SysFont(None, 12) # Establece la fuente de texto
-        self.screen         = pygame.display.set_mode((enviroment.width * self.cell_size, enviroment.heigth * self.cell_size))  # Crea la pantalla del juego con el tamaño calculado
+        self.font           = pygame.font.SysFont(None, 20) # Establece la fuente de texto
+        screen_height = pygame.display.Info().current_h
+        self.cell_size = (screen_height-100)//enviroment.height
+        self.screen         = pygame.display.set_mode((enviroment.width * self.cell_size, enviroment.height * self.cell_size))  # Crea la pantalla del juego con el tamaño calculado
         self.grid()                                         # Dibuja la cuadrícula del juego
 
     def grid(self):
@@ -26,8 +31,8 @@ class Game():
         self.screen.fill(WHITE)  # Rellena la pantalla con color blanco
         for x in range(0, self.enviroment.width * self.cell_size, self.cell_size):
             # Dibuja líneas verticales para representar las columnas de la cuadrícula
-            pygame.draw.line(self.screen, BLACK, (x, 0), (x, self.enviroment.heigth * self.cell_size))
-        for y in range(0, self.enviroment.heigth * self.cell_size, self.cell_size):
+            pygame.draw.line(self.screen, BLACK, (x, 0), (x, self.enviroment.height * self.cell_size))
+        for y in range(0, self.enviroment.height * self.cell_size, self.cell_size):
             # Dibuja líneas horizontales para representar las filas de la cuadrícula
             pygame.draw.line(self.screen, BLACK, (0, y), (self.enviroment.width * self.cell_size, y))
 
@@ -106,7 +111,9 @@ class Game():
     def paint_goals(self, lista):
         for shelf in lista:
             coord = self.enviroment.shelf2coor(shelf)
+            number_text = self.font.render(str(shelf), True, BLACK)
             pygame.draw.rect(self.screen, RED, (coord[1] * self.cell_size, coord[0] * self.cell_size, self.cell_size, self.cell_size))
+            self.screen.blit(number_text, (coord[1] * self.cell_size, coord[0] * self.cell_size))
             pygame.display.flip()
 
         
@@ -163,7 +170,6 @@ class Game():
             move_event  = pygame.USEREVENT + 1       # Evento de movimiento del montacargas
             pygame.time.set_timer(move_event, 200)  # Configura un temporizador para controlar el movimiento del agente
 
-            check = False
             goal = solucion_optima.pop(0)
             i = 1
 
@@ -185,7 +191,9 @@ class Game():
                                 number_text = self.font.render(str(i), True, BLACK)
                                 # Dibuja el número del estante en la celda
                                 pygame.draw.rect(self.screen, GREEN, (goal_coords[1] * self.cell_size, goal_coords[0] * self.cell_size, self.cell_size, self.cell_size))
-                                self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size + 10))
+                                self.screen.blit(number_text, ((goal_coords[1]+ 1)* self.cell_size - 10, (goal_coords[0] + 1) * self.cell_size - 10))
+                                number_text = self.font.render(str(goal), True, BLACK)
+                                self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size))
                                 if solucion_optima:
                                     goal = solucion_optima.pop(0)
                                     i += 1
@@ -195,13 +203,14 @@ class Game():
                                     if position in neighbors:
                                         number_text = self.font.render(str(i), True, BLACK)
                                         pygame.draw.rect(self.screen, GREEN, (goal_coords[1] * self.cell_size, goal_coords[0] * self.cell_size, self.cell_size, self.cell_size))
-                                        self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size + 10))
+                                        self.screen.blit(number_text, ((goal_coords[1]+ 1)* self.cell_size - 10, (goal_coords[0] + 1) * self.cell_size - 10))
+                                        number_text = self.font.render(str(goal), True, BLACK)
+                                        self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size))
                                         if solucion_optima:
                                             goal = solucion_optima.pop(0)
                                             i += 1
                                 pygame.time.set_timer(move_event, 800)
-                                check = True
-                            elif check:
+                            else:
                                 pygame.time.set_timer(move_event, 200)
                             agent1.move(position)                    
                             # Dibuja al agente 1 en su nueva posición después de moverlo
@@ -247,3 +256,72 @@ class Game():
         return start_position, goals_positions  # Retorna la posicion de inicio y las de llegada seleccionadas
 
 ##############################AGREGADO VALENTIN EJ3############################################    
+    def run_ej4(self, agent1:Agent, individuo:Individuo):
+            '''Sumulación del recorrido del montacargas'''
+            running = True
+            clock   = pygame.time.Clock()
+
+            move_event  = pygame.USEREVENT + 1       # Evento de movimiento del montacargas
+            pygame.time.set_timer(move_event, 200)  # Configura un temporizador para controlar el movimiento del agente
+
+
+            agent1.path = individuo.caminos.pop(0)
+            solucion_optima = individuo.soluciones.pop(0)
+            goal = solucion_optima.pop(0)
+            self.paint_goals(individuo.ordenes.pop(0))
+            i = 1
+
+            while running:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:   # Se cierra la ventana
+                        running = False
+                    elif event.type == move_event:  # Es un turno de movimiento
+                        if agent1.path:
+                            # Dibuja el agente 1 en su posición actual antes de moverlo
+                            pygame.draw.rect(self.screen, VIOLET, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                            # Mueve al agente 1 a la siguiente posición en su camino
+                            position = agent1.path.pop(0)
+                            #neighbors = agent1.problem.enviroment.neighbors(goal))
+                            goal_coords = agent1.problem.enviroment.shelf2coor(goal)
+                            neighbors = agent1.problem.enviroment.neighbors(goal_coords)
+
+                            if position in neighbors:
+                                number_text = self.font.render(str(i), True, BLACK)
+                                # Dibuja el número del estante en la celda
+                                pygame.draw.rect(self.screen, GREEN, (goal_coords[1] * self.cell_size, goal_coords[0] * self.cell_size, self.cell_size, self.cell_size))
+                                self.screen.blit(number_text, ((goal_coords[1]+ 1)* self.cell_size - 10, (goal_coords[0] + 1) * self.cell_size - 10))
+                                number_text = self.font.render(str(goal), True, BLACK)
+                                self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size))
+                                if solucion_optima:
+                                    goal = solucion_optima.pop(0)
+                                    i += 1
+                                    #neighbors = agent1.problem.enviroment.neighbors(goal)
+                                    goal_coords = agent1.problem.enviroment.shelf2coor(goal)
+                                    neighbors = agent1.problem.enviroment.neighbors(goal_coords)
+                                    if position in neighbors:
+                                        number_text = self.font.render(str(i), True, BLACK)
+                                        pygame.draw.rect(self.screen, GREEN, (goal_coords[1] * self.cell_size, goal_coords[0] * self.cell_size, self.cell_size, self.cell_size))
+                                        self.screen.blit(number_text, ((goal_coords[1]+ 1)* self.cell_size - 10, (goal_coords[0] + 1) * self.cell_size - 10))
+                                        number_text = self.font.render(str(goal), True, BLACK)
+                                        self.screen.blit(number_text, (goal_coords[1]* self.cell_size + 10, goal_coords[0] * self.cell_size))
+                                        if solucion_optima:
+                                            goal = solucion_optima.pop(0)
+                                            i += 1
+                                pygame.time.set_timer(move_event, 800)
+                            else:
+                                pygame.time.set_timer(move_event, 200)
+                            agent1.move(position)                    
+                            # Dibuja al agente 1 en su nueva posición después de moverlo
+                            pygame.draw.rect(self.screen, BLUE, (agent1.position[1] * self.cell_size, agent1.position[0] * self.cell_size, self.cell_size, self.cell_size))
+
+                            pygame.display.flip()  # Actualiza la pantalla del juego
+                        elif individuo.soluciones:
+                            self.grid()
+                            self.paint_goals(individuo.ordenes.pop(0))
+                            solucion_optima = individuo.soluciones.pop(0)
+                            agent1.path = individuo.caminos.pop(0)
+                            agent1.move((0,0))
+                            i = 1
+                            goal = solucion_optima.pop(0)
+                clock.tick(30)  # Controla la velocidad del bucle
+            pygame.quit()       # Cierra pygame y sale del juego

@@ -1,18 +1,15 @@
-from Astar      import A_star
-from Problem    import Problem
+from Problem import Problem
+from Astar import A_star
+
 
 class Agent:
     def __init__(self, problem: Problem):
         '''Constructor de la clase Agent'''
 
-        # Inicializa el agente con un problema dado
-        self.problem    = problem
-        # Establece la posición inicial del agente
-        self.position   = self.problem.start
-        # Inicializa el algoritmo A* con el problema dado
-        self.a_star     = A_star(self.problem)
-        # Inicializa una lista vacía para almacenar el camino del agente
-        self.path:list       = []
+        self.problem    = problem                # Inicializa el agente con un problema dado
+        self.position   = self.problem.start     # Establece la posición inicial del agente
+        self.a_star     = A_star(self.problem)   # Inicializa el algoritmo A* con el problema dado
+        self.path:list  = []                     # Inicializa una lista vacía para almacenar el camino del agente
 
     def check_move(self, position):
         '''Método para verificar si un movimiento es válido'''

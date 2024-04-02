@@ -1,7 +1,7 @@
-import  heapq                 # Importa el módulo heapq para el manejo de colas
-from    Problem import Problem
+from Problem import Problem
+import heapq                 # Importa el módulo heapq para el manejo de colas
 
-# Definición de la clase A_star
+
 class A_star:
     def __init__(self, problem: Problem):
         '''Constructor de la clase A_star, inicializa la instancia con un problema dado'''
@@ -15,7 +15,7 @@ class A_star:
         self.open_list = [(0, self.problem.start)]  # Lista abierta inicial con el nodo de inicio y su costo estimado
         self.parent_of = {}                         # Diccionario para almacenar los padres de cada nodo
 
-        self.g_score    = {(x, y): float('inf') for x in range(self.problem.enviroment.heigth) for y in range(self.problem.enviroment.width)}
+        self.g_score    = {(x, y): float('inf') for x in range(self.problem.enviroment.height) for y in range(self.problem.enviroment.width)}
         # Inicializa los valores de g_score a infinito para cada posición posible
 
         self.g_score[self.problem.start] = 0        # Establece el valor de g_score para el nodo inicial en 0

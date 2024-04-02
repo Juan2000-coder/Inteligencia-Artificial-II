@@ -1,31 +1,45 @@
-import math
-import random
+from Enviroment import Enviroment
 from Problem import Problem
 from Astar import A_star
-from Enviroment import Enviroment
+
+import random
+import math
 import copy
 import csv
 
+
 class Recocido:
-	def __init__(self, T, T_min, L, enviroment:Enviroment):
-		self.T = T
-		self.T_min = T_min
-		self.L = L
-		self.L_original = L
-		self.enviroment = enviroment
+	def __init__(self, T, T_min, L, enviroment:Enviroment, tb_alta=0.08, tb_baja=0.28, f_T=0.85):
+		'''Constructor de la clase Recocido.
+		Inicializa los parámetros del algoritmo de recocido simulado.'''
 
+		self.T = T						# T (float): Temperatura inicial.
+		self.T_min = T_min				# T_min (float): Temperatura mínima.
+		self.L = L						# L (int): Número de iteraciones por cada temperatura.
+		self.L_original = L				# L (int): Número de iteraciones por cada temperatura.
+		self.enviroment = enviroment	# enviroment (Enviroment): Objeto de la clase Enviroment que representa el entorno del problema.
+		self.tb_alta = tb_alta			# Tamaño de bloque a alta T (porcentaja de la longitud de la orden)
+		self.tb_baja = tb_baja			# Tamaño de bloque a baja T (porcentaja de la longitud de la orden)
+		self.f_T 	 = f_T				# Factor de reducción de la temperatura
 
-    # Funcion variación de la temperatura
 	def esquema_enfriamiento(self, temperatura):
-		#return (self.T - 0.001 * round((math.exp(iteracion/2)), 2))
-		#return (self.T - 2*iteracion)
-		return temperatura * 0.82
+		'''Función para variar la temperatura en cada iteración.'''
 
-    # Función para generar una solución vecina (perturbación)
-	def generar_vecino(self, solucion_actual:list, tam_bloque):
+		return temperatura * self.f_T
+
+    
+	def generar_vecino(self, solucion_actual, tam_bloque):
+		'''Genera una solución vecina (perturbación) a partir de la solución actual.'''
 		vecino = copy.deepcopy(solucion_actual)
 		
 		# Forma 1
+		#indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		#bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+		#random.shuffle(bloque)
+		#vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
+		#return vecino		
+
+		# Forma 2
 		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
 		random.shuffle(bloque)
@@ -37,9 +51,10 @@ class Recocido:
 			while abs(bloque[0] - bloque[1]) == 2:
 				indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 				bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino	
-		elif abs(bloque[0] - bloque[1]) == 1:			
+			return vecino
+		elif abs(bloque[0] - bloque[1]) == 1:
 			if random.random() > 0.85:
 				random.shuffle(bloque)
 				vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
@@ -47,10 +62,11 @@ class Recocido:
 		else:
 			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino'''
-		return vecino
+			return vecino
 	
 	def energia(self, estado):
+		'''Calcula la energía (o costo) de un estado del problema.'''
+
 		path:list = []
 		start_pos = (0, 0)
 		# Calculo del camino completo de ida
@@ -76,17 +92,19 @@ class Recocido:
 		#----------------------------------------------#
 		return len(path), path
 	
-
-    # Algoritmo de recocido simulado
-	def ejecutar_recocido(self, solucion_inicial: list):
-		solucion_actual = copy.deepcopy(solucion_inicial)
+	def solucion_incial(self, orden:list):
+		'''Obtiene una propuesta para la solución incial'''
+		solucion_actual = copy.deepcopy(orden)
 		solucion_propuesta = []
 		dist = []
 
+		# En el bucle se obtiene el elemento más cercano al punto de partida
 		for i in solucion_actual:
 			dist.append(self.enviroment.manhattan(self.enviroment.shelf2coor(i), (0, 0)))
 		solucion_actual.insert(0, solucion_actual.pop(dist.index(min(dist))))
 
+		# Se arma la solución propuesta incorporando sucesivemente el elemento más
+		# cercano al último en la lista
 		l = len(solucion_actual)
 		for k in range(l):
 			dist = []
@@ -100,31 +118,32 @@ class Recocido:
 				
 				solucion_propuesta.append(solucion_actual.pop(dist.index(min(dist))))
 	
-		solucion_actual = solucion_propuesta
+		return solucion_propuesta
+
+	def ejecutar_recocido(self, orden: list):
+		'''Ejecuta el algoritmo de recocido simulado.'''
+		solucion_actual = self.solucion_incial(orden)
+
 		temperatura = self.T
 		energia_actual, camino_actual = self.energia(solucion_actual)
 		it = 0
 
+		# Se escriben los datos en un archivo para visualizar la evolución
 		with open('ejecucion_recocido.csv', 'w', newline='') as archivo_csv: 
 			escritor_csv = csv.writer(archivo_csv) 
-			escritor_csv.writerow(['it', 'T','e'] + ['-']*25)
+			escritor_csv.writerow(['it', 'T','e'] + ['-']*len(orden))
 			while temperatura > self.T_min:
-
-				if temperatura > 0.1:
-					if not (int(len(solucion_actual) * 0.08) == 1):
-						tam_bloque =  int(len(solucion_actual) * 0.08)
+				if temperatura > 0.1: 	# Parámetros en alta temperatura
+					if not (int(len(solucion_actual) * self.tb_alta) == 1):
+						tam_bloque =  int(len(solucion_actual) * self.tb_alta)
 					else:
 						tam_bloque = 2
 					self.L = round(0.1*self.L_original)
-				else:
-					tam_bloque =  int(len(solucion_actual) * 0.28)
+				else:					# Parámetros en baja temperatura
+					tam_bloque =  int(len(solucion_actual) * self.tb_baja)
 					self.L = self.L_original
-				if not self.L > 0:
-					self.L = 1
-				if not tam_bloque >= 2:
-					tam_bloque = 2
-				#self.L = self.L_original
-	
+
+
 				for _ in range(round(self.L)):
 					escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
 					vecino = self.generar_vecino(solucion_actual, tam_bloque)

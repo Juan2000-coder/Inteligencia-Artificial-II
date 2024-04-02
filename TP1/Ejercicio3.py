@@ -1,11 +1,13 @@
-from Problem import Problem
+from Recocido import Recocido as rc
 from Enviroment import Enviroment
+from Problem import Problem
+from Ordenes import Orden
 from Agent import Agent
 from Game import Game
-from Recocido import Recocido as rc
-from Ordenes import Orden
+
 import pandas as pd
 import matplotlib.pyplot as plt
+
 
 # Función para imprimir una línea divisoria
 def print_divider():
@@ -40,7 +42,7 @@ if __name__ == '__main__':
         numero_orden = int(input("Por favor, ingrese un número de orden válido: "))
 
     # Creación de la instancia de la clase Orden
-    orden = Orden(numero_orden)
+    orden = Orden(numero_orden, "ordenes.txt")
     max_estante = max(orden.estantes)
 
     # Configuración del entorno de estanterías
@@ -57,9 +59,11 @@ if __name__ == '__main__':
     # Ejecución del algoritmo de recocido simulado
     print_divider()
     print_instruction("Ejecución del algoritmo de Recocido Simulado")
-    recocido = rc(0.5, 1e-7, 6, enviroment)
+    recocido = rc(50, 1e-10, 6,enviroment, 0.12, 0.22, 0.75)
+   
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
-
+    print(solucion_optima)
+    #print(camino_optimo)
     # Configuración del problema y el agente
     problema = Problem(enviroment, (0, 0), orden.estantes[-1])
     agent = Agent(problema)

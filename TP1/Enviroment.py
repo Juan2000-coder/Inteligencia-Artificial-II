@@ -116,4 +116,4 @@ class Enviroment:
         de al menos filas.'''
         p1 = self.shelf2coor(sh1)
         p2 = self.shelf2coor(sh2)
-        return abs(p1[0] - p2 [0]) == 2 and abs(p1[1] - p2[1]) and self.is_invertix(sh1) and self.is_invertix(sh2)
+        return abs(p1[0] - p2 [0]) == 2 and abs(p1[1] - p2[1]) == 1 and self.is_invertix(sh1) and self.is_invertix(sh2)

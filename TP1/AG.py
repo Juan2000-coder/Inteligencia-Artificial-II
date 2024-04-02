@@ -26,37 +26,24 @@ class Individuo:
             self.ordenes.append(orden.estantes)
             #max_estante = max(orden.estantes)
 
-            # Configuración del entorno de estanterías
-            #shelves_rows = 2
-            #shelves_columns = 2
-            
-            #enviroment = Enviroment(shelves_rows, shelves_columns, self.genes)
-            #enviroment.get_enviroment(self.genes)
-            # Ejecución del algoritmo de recocido simulado
-            #print_divider()
-            #print_instruction("Ejecución del algoritmo de Recocido Simulado")
-
             # Actualizacion de los datos del entorno
             _enviroment.cambiar_data(self.genes)
-            #_recocido.cambiar_entorno(_enviroment)
 
             solucion_optima, camino_optimo = _recocido.ejecutar_recocido(orden.estantes)
             self.soluciones.append(solucion_optima)
             self.caminos.append(camino_optimo)
             costo = costo + len(camino_optimo)
+        
         self.costo = costo
       
 
 class Poblacion:
     '''Clase que representa una población de individuos.
     Una población es un conjunto de soluciones al problema que se desea resolver.'''
-    def __init__(self, tam_poblacion, _genes, _prob_mutacion): 
+    def __init__(self, tam_poblacion, _genes, _prob_mutacion, _shelves_rows, _shelves_columns, _temp_inicio, _temp_min, _L): 
         self.individuos = []
-        # Configuración del entorno de estanterías
-        shelves_rows = 2
-        shelves_columns = 2
-        self.enviroment = Enviroment(shelves_rows, shelves_columns, _genes)
-        self.recocido = rc(100, 1e-4, 3, self.enviroment)
+        self.enviroment = Enviroment(_shelves_rows, _shelves_columns, _genes)
+        self.recocido = rc(_temp_inicio, _temp_min, _L, self.enviroment)
 
         for _ in range(tam_poblacion):
             lista_permutable = _genes[:]                    # Copia de la lista de genes
@@ -152,22 +139,27 @@ class Poblacion:
         
         self.evaluar_poblacion()
         self.imprimir_poblacion()
+        
         # Elitismo: mantenemos al mejor individuo de la generación anterior
         mejor_individuo = max(self.individuos, key=lambda x: x.fitness)
-        #print(mejor_individuo.genes)
         nueva_generacion.append(mejor_individuo)
 
-        while len(nueva_generacion) < (len(self.individuos) - 1):   # -1 porque el elitismo ya agrega un individuo a nueva_generacion
+        while (len(nueva_generacion)) < (len(self.individuos)):
             padre1, padre2 = self.seleccionar_padres()
             hijo1, hijo2 = self.cruzar(padre1, padre2)
             
-
             _hijo1 = self.mutar(hijo1)
             _hijo2 = self.mutar(hijo2)
             
             nueva_generacion.append(_hijo1)
             nueva_generacion.append(_hijo2)
-            
+        
+        if len(nueva_generacion) == (len(self.individuos) + 1):
+            if random.random() < 0.5:
+                nueva_generacion.pop(-1)
+            else:
+                nueva_generacion.pop(-2)
+        
         self.individuos = nueva_generacion
     
     

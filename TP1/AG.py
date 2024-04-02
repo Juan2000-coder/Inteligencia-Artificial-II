@@ -21,23 +21,11 @@ class Individuo:
             orden = Orden(numero_orden, "ordenes2.txt")
             max_estante = max(orden.estantes)
 
-            # Configuración del entorno de estanterías
-            #shelves_rows = 2
-            #shelves_columns = 2
-            
-            #enviroment = Enviroment(shelves_rows, shelves_columns, self.genes)
-            #enviroment.get_enviroment(self.genes)
-            # Ejecución del algoritmo de recocido simulado
-            #print_divider()
-            #print_instruction("Ejecución del algoritmo de Recocido Simulado")
-
             # Actualizacion de los datos del entorno
             _enviroment.cambiar_data(self.genes)
-            _recocido.cambiar_entorno(_enviroment)
 
             solucion_optima, camino_optimo = _recocido.ejecutar_recocido(orden.estantes)    
             costo = costo + len(camino_optimo)
-        
         
         self.costo = costo
       
@@ -159,7 +147,6 @@ class Poblacion:
             nueva_generacion.append(_hijo1)
             nueva_generacion.append(_hijo2)
         
-
         if len(nueva_generacion) == (len(self.individuos) + 1):
             if random.random() < 0.5:
                 nueva_generacion.pop(-1)

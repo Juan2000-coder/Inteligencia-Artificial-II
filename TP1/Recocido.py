@@ -19,21 +19,19 @@ class Recocido:
 	def esquema_enfriamiento(self, temperatura):
 		#return (self.T - 0.001 * round((math.exp(iteracion/2)), 2))
 		#return (self.T - 2*iteracion)
-		return temperatura * 0.85
+		return temperatura * 0.82
 
     # Función para generar una solución vecina (perturbación)
-	def generar_vecino(self, solucion_actual:list, tam_bloque, permutaciones = 2):
+	def generar_vecino(self, solucion_actual:list, tam_bloque):
 		vecino = copy.deepcopy(solucion_actual)
 		
 		# Forma 1
-		#indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
-		#bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-		#random.shuffle(bloque)
-		#vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-		#return vecino		
-
-		# Forma 2
 		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+		random.shuffle(bloque)
+		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
+		# Forma 2
+		'''indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
 		if abs(bloque[0] - bloque[1]) == 2:
 			while abs(bloque[0] - bloque[1]) == 2:
@@ -49,47 +47,8 @@ class Recocido:
 		else:
 			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino
-
-		# Forma 3
-		#indice_inicio = random.randint(0, len(vecino) - tam_bloque)
-		#bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-
-		# Separar los números basados en sus diferencias
-		#grupo_diferencia_2 = []
-		#grupo_diferencia_1 = []
-		#resto = []
-
-		# Comparar cada elemento con los demás
-		#for i in range(len(bloque)):
-		#	for j in range(i+1, len(bloque)):
-		#		if abs(bloque[i] - bloque[j]) == 2 and bloque[i] not in grupo_diferencia_2 and bloque[j] not in grupo_diferencia_2:
-		#			grupo_diferencia_2.extend([bloque[i], bloque[j]])
-		#		elif abs(bloque[i] - bloque[j]) == 1 and bloque[i] not in grupo_diferencia_1 and bloque[j] not in grupo_diferencia_1:
-		#			grupo_diferencia_1.extend([bloque[i], bloque[j]])
-		# Añadir los números que no están ni en grupo_diferencia_2 ni en grupo_diferencia_1 al grupo resto
-		#for num in bloque:
-		#	if num in grupo_diferencia_2 and num in grupo_diferencia_1:
-		#		grupo_diferencia_1.remove(num)
-		#	if num not in grupo_diferencia_2 and num not in grupo_diferencia_1:
-		#		resto.append(num)
-
-		# Decidir al azar si se mezclan los de diferencia 1
-		#if random.random() > 0.85:
-		#	random.shuffle(grupo_diferencia_1)
-
-		# Mezclar el resto
-		#random.shuffle(resto)
-
-		# Reconstruir el bloque con las nuevas restricciones
-		#nuevo_bloque = grupo_diferencia_2 + grupo_diferencia_1 + resto
-
-		# Actualizar el vecino con el nuevo bloque
-		#del vecino[indice_inicio:indice_inicio + tam_bloque]  # Eliminar elementos viejos
-		#vecino[indice_inicio:indice_inicio] = nuevo_bloque  # Insertar elementos nuevos
-
-		#return vecino
-		
+			return vecino'''
+		return vecino
 	
 	def energia(self, estado):
 		path:list = []
@@ -164,6 +123,7 @@ class Recocido:
 					self.L = 1
 				if not tam_bloque >= 2:
 					tam_bloque = 2
+				#self.L = self.L_original
 	
 				for _ in range(round(self.L)):
 					escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)

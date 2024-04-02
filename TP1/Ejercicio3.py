@@ -63,7 +63,7 @@ if __name__ == '__main__':
    
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
     print(solucion_optima)
-    print(camino_optimo)
+    #print(camino_optimo)
     # Configuración del problema y el agente
     problema = Problem(enviroment, (0, 0), orden.estantes[-1])
     agent = Agent(problema)

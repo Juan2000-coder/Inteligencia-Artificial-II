@@ -45,7 +45,6 @@ if __name__ == '__main__':
         poblacion.evolucionar()
         
         generacion += 1
-        cont =+ 1
     mejor_individuo = max(poblacion.individuos, key=lambda x: x.fitness)
     poblacion.enviroment.cambiar_data(mejor_individuo.genes)
     

@@ -26,12 +26,12 @@ if __name__ == '__main__':
     print_divider()
 
 # Ejemplo de uso
-  
     tam_poblacion = 10
     prob_mutacion = 0.01
+    num_generaciones = 100
     genes = [i+1 for i in range(32)]
     estanterias = [2, 2]
-    par_recocido = [1e-11, 1e-12, 1]
+    par_recocido = [100, 1e-5, 3, 0.6, 0.6, 0.8]
     poblacion = Poblacion(tam_poblacion, genes, prob_mutacion, *estanterias, *par_recocido)
   
     generacion = 1
@@ -40,7 +40,7 @@ if __name__ == '__main__':
         print(f"Generación {generacion}:")
         
         print("-" * 100)
-        if generacion >= 100 :
+        if generacion >= num_generaciones:
             flag = False
         poblacion.evolucionar()
         

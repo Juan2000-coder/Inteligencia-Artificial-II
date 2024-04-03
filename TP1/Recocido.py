@@ -9,7 +9,7 @@ import csv
 
 
 class Recocido:
-	def __init__(self, T, T_min, L, enviroment:Enviroment):
+	def __init__(self, T, T_min, L, enviroment:Enviroment, tb_alta=0.08, tb_baja=0.28, f_T=0.85):
 		'''Constructor de la clase Recocido.
 		Inicializa los parámetros del algoritmo de recocido simulado.'''
 
@@ -18,18 +18,14 @@ class Recocido:
 		self.L = L						# L (int): Número de iteraciones por cada temperatura.
 		self.L_original = L				# L (int): Número de iteraciones por cada temperatura.
 		self.enviroment = enviroment	# enviroment (Enviroment): Objeto de la clase Enviroment que representa el entorno del problema.
-		
-
-	def cambiar_entorno(self, enviroment:Enviroment):
-		'''Cambia el entorno del problema.'''
-
-		self.enviroment = enviroment
-
+		self.tb_alta = tb_alta			# Tamaño de bloque a alta T (porcentaja de la longitud de la orden)
+		self.tb_baja = tb_baja			# Tamaño de bloque a baja T (porcentaja de la longitud de la orden)
+		self.f_T 	 = f_T				# Factor de reducción de la temperatura
 
 	def esquema_enfriamiento(self, temperatura):
 		'''Función para variar la temperatura en cada iteración.'''
 
-		return temperatura * 0.85
+		return temperatura * self.f_T
 
     
 	def generar_vecino(self, solucion_actual, tam_bloque):
@@ -40,22 +36,23 @@ class Recocido:
 		'''Obtiene un índice de inicio del bloque aleatorio
 		y toma un bloque de tam_bloque elementos. Luego los agita
 		y lo vuelve a insertar en la lista'''
-		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		'''indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
 		random.shuffle(bloque)
 		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-		return vecino		
+		return vecino'''
 
 		# Forma 2
-		'''indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
 		if abs(bloque[0] - bloque[1]) == 2:
 			while abs(bloque[0] - bloque[1]) == 2:
 				indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 				bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino	
-		elif abs(bloque[0] - bloque[1]) == 1:			
+			return vecino
+		elif abs(bloque[0] - bloque[1]) == 1:
 			if random.random() > 0.85:
 				random.shuffle(bloque)
 				vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
@@ -63,7 +60,7 @@ class Recocido:
 		else:
 			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino'''
+			return vecino
 	
 	def energia(self, estado):
 		'''Calcula la energía (o costo) de un estado del problema.'''
@@ -135,15 +132,14 @@ class Recocido:
 			escritor_csv.writerow(['it', 'T','e'] + ['-']*len(orden))
 			while temperatura > self.T_min:
 				if temperatura > 0.1: 	# Parámetros en alta temperatura
-					if not (int(len(solucion_actual) * 0.08) == 1):
-						tam_bloque =  int(len(solucion_actual) * 0.08)
+					if not (int(len(solucion_actual) * self.tb_alta) == 1):
+						tam_bloque =  int(len(solucion_actual) * self.tb_alta)
 					else:
 						tam_bloque = 2
 					self.L = round(0.1*self.L_original)
 				else:					# Parámetros en baja temperatura
-					tam_bloque =  int(len(solucion_actual) * 0.28)
+					tam_bloque =  int(len(solucion_actual) * self.tb_baja)
 					self.L = self.L_original
-				
 				# En caso de que no se tengan los mínimos
 				if tam_bloque < 2:
 					tam_bloque = 2

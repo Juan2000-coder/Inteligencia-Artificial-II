@@ -40,10 +40,10 @@ class Individuo:
 class Poblacion:
     '''Clase que representa una población de individuos.
     Una población es un conjunto de soluciones al problema que se desea resolver.'''
-    def __init__(self, tam_poblacion, _genes, _prob_mutacion, _shelves_rows, _shelves_columns, _temp_inicio, _temp_min, _L): 
+    def __init__(self, tam_poblacion, _genes, _prob_mutacion, _shelves_rows, _shelves_columns, _temp_inicio, _temp_min, _L, tb_alta, tb_baja, f_T): 
         self.individuos = []
         self.enviroment = Enviroment(_shelves_rows, _shelves_columns, _genes)
-        self.recocido = rc(_temp_inicio, _temp_min, _L, self.enviroment)
+        self.recocido = rc(_temp_inicio, _temp_min, _L, self.enviroment, tb_alta, tb_baja, f_T)
 
         for _ in range(tam_poblacion):
             lista_permutable = _genes[:]                    # Copia de la lista de genes
@@ -86,7 +86,7 @@ class Poblacion:
         
         return padre1, padre2
 
-    def cruzar(self, _padre1, _padre2):
+    def cruzar(self, _padre1, _padre2): # CRUCE DE ORDEN
         '''Cruza dos individuos para producir dos descendientes.'''
         n = len(_padre1.genes)
         p1 = random.randint(0, n - 1)
@@ -121,8 +121,8 @@ class Poblacion:
         return hijo1, hijo2
 
 
-    def mutar(self, _individuo):
-        '''Muta un individuo, en fución de su probabilidad de mutación.'''
+    def mutar(self, _individuo): # MUTACION POR INTERCAMBIO
+        '''Muta un individuo, en función de su probabilidad de mutación.'''
         if random.random() < self.prob_mutacion:
         # Seleccionar dos índices aleatorios para intercambiar
             indice1, indice2 = random.sample(range(len(_individuo.genes)), 2)

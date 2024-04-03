@@ -101,6 +101,7 @@ class Enviroment:
 
     def manhattan(self, p1, p2):
         '''Método para calcular la distancia Manhattan entre dos puntos'''
+        return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
     
     def are_beside(self, sh1, sh2):
         '''Método para determinar si dos estántes están uno al lado del otro

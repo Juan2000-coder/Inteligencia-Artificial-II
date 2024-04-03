@@ -40,14 +40,30 @@ class Recocido:
 		#return vecino		
 
 		# Forma 2
-		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
-		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-		random.shuffle(bloque)
-		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-		# Forma 2
 		'''indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-		if abs(bloque[0] - bloque[1]) == 2:
+		random.shuffle(bloque)
+		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque'''
+		# Forma 2
+		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
+		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
+		pares = list(zip(bloque[:-1], bloque[1:]))
+		bloque1 = []
+		indices1 = []
+		for i, par in enumerate(pares):
+			if self.enviroment.are_opposed(par[0], par[1]) or self.enviroment.are_beside(par[0], par[1]):
+				bloque1 += [par[0], par[1]]
+				indices1 += [i, i + 1]
+		bloque2  = [elemento for elemento in bloque if elemento not in bloque1]
+		indices2 = [indice for indice in list(range(0, len(bloque))) if indice not in indices1]
+		random.shuffle(bloque2)
+
+		for i, indice in enumerate(indices2):
+			bloque[indice] = bloque2[i]
+		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
+		return vecino
+		
+		'''if abs(bloque[0] - bloque[1]) == 2:
 			while abs(bloque[0] - bloque[1]) == 2:
 				indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 				bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
@@ -62,7 +78,7 @@ class Recocido:
 		else:
 			random.shuffle(bloque)
 			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino
+			return vecino'''
 	
 	def energia(self, estado):
 		'''Calcula la energía (o costo) de un estado del problema.'''
@@ -156,6 +172,7 @@ class Recocido:
 						energia_actual  = energia_vecino
 						
 				it += 1
+				temperatura = self.esquema_enfriamiento(temperatura)
 				temperatura = self.esquema_enfriamiento(temperatura)
 
 			escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)

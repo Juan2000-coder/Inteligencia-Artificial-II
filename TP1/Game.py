@@ -117,7 +117,7 @@ class Game():
             pygame.display.flip()
 
         
-    def get_checkpoints(self):
+    def get_checkpoints(self, n):
         '''Método para obtener las posiciones de inicio y llegada seleccionadas por el usuario'''
         running = True
         clock   = pygame.time.Clock()   # Para control de tiempos
@@ -134,8 +134,8 @@ class Game():
                     mouse_x, mouse_y = pygame.mouse.get_pos()  # Obtiene la posición del mouse
                     cell_x, cell_y = mouse_x // self.cell_size, mouse_y // self.cell_size   # Coordenadas x,y de la celda
                     # Las posiciones en el np.array se usan con los indices invertidos.
-
-                    if len(start_positions) < 2:               # Solo permite dos posiciones de inicio
+                    
+                    if len(start_positions) < n:               # Solo permite dos posiciones de inicio
                         if not self.enviroment.is_shelf((cell_y, cell_x)):  # Verifica que la celda no sea un estante
                             if len(start_positions) == 0:
                                 start_positions.append((cell_y, cell_x))
@@ -146,7 +146,7 @@ class Game():
                                 pygame.draw.rect(self.screen, GREEN, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
                                 # Dibuja un rectángulo verde en la celda para indicar la segunda posición de inicio
 
-                    elif len(goal_positions) < 2:               # Solo permite dos posiciones de llegada
+                    elif len(goal_positions) < n:               # Solo permite dos posiciones de llegada
                         if self.enviroment.is_shelf((cell_y, cell_x)):  # Verifica que la celda sí sea un estante
                             goal_positions.append((cell_y, cell_x))
                             pygame.draw.rect(self.screen, RED, (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
@@ -325,3 +325,33 @@ class Game():
                             goal = solucion_optima.pop(0)
                 clock.tick(30)  # Controla la velocidad del bucle
             pygame.quit()       # Cierra pygame y sale del juego
+            
+            ##############################AGREGADO Francisco^2 EJ!############################################
+            
+    def run_ej1(self, agent: Agent):
+        '''Simulación del recorrido del montacargas'''
+        running = True
+        clock   = pygame.time.Clock()
+
+        move_event  = pygame.USEREVENT + 1       # Evento de movimiento del montacargas
+        pygame.time.set_timer(move_event, 200)  # Configura un temporizador para controlar el movimiento del agente
+
+        while running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:   # Se cierra la ventana
+                    running = False
+                elif event.type == move_event:  # Es un turno de movimiento
+                    if agent.path:             # Si el agente tiene un camino por recorrer
+                        # Dibuja al agente en su posición actual antes de moverlo
+                        pygame.draw.rect(self.screen, BLUE, (agent.position[1] * self.cell_size, agent.position[0] * self.cell_size, self.cell_size, self.cell_size))
+
+                        # Mueve al agente a la siguiente posición en su camino
+                        position = agent.path.pop(0)
+                        agent.move(position)
+                        
+                        # Dibuja al agente en su nueva posición después de moverlo
+                        pygame.draw.rect(self.screen, GREEN, (agent.position[1] * self.cell_size, agent.position[0] * self.cell_size, self.cell_size, self.cell_size))
+                    pygame.display.flip()  # Actualiza la pantalla del juego
+            clock.tick(30)  # Controla la velocidad del bucle
+        pygame.quit()       # Cierra pygame y sale del juego
+    

@@ -155,6 +155,7 @@ class Game():
                         full = True             # Se han seleccionado todas las posiciones necesarias
                     pygame.display.flip()       # Actualiza la pantalla del juego
             clock.tick(30)                      # Controla la velocidad del bucle
+        pygame.quit()
         return start_positions, goal_positions  # Retorna las posiciones de inicio y llegada seleccionadas
     
 

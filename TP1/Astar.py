@@ -12,7 +12,7 @@ class A_star:
         '''Método para configurar la búsqueda A*.
         Setea la lista abierta y los costos de camino de las casillas.'''
 
-        self.open_list = [(0, self.problem.start)]  # Lista abierta inicial con el nodo de inicio y su costo estimado
+        self.open_list = [(self.problem.enviroment.manhattan(self.problem.start, self.problem.goal), self.problem.start)]  # Lista abierta inicial con el nodo de inicio y su costo estimado
         self.parent_of = {}                         # Diccionario para almacenar los padres de cada nodo
 
         self.g_score    = {(x, y): float('inf') for x in range(self.problem.enviroment.height) for y in range(self.problem.enviroment.width)}

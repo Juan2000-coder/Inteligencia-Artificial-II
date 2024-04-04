@@ -1,27 +1,7 @@
 import numpy as np
-
-
-class Enviroment:
-    '''Esta clase es básicamente el tablero con los métodos necesarios.'''
-    def __init__(self, shelves_rows: int, shelves_columns: int, gen = []):
-        '''Constructor de la clase Enviroment.
-        inicializa el entorno con el número dado de filas y columnas de estantes'''
-
-        self.number_of_shelves  = shelves_rows * shelves_columns
-        self.shelves_rows       = shelves_rows
-        self.shelves_columns    = shelves_columns
-        self.width              = 3 * (shelves_columns) + 1
-        self.height             = 5 * (shelves_rows) + 1
-        self.data               = self.get_enviroment(gen)     # Genera el entorno
-        self.ocupied            = []                        # Lista para almacenar las posiciones ocupadas
-
-
-    def cambiar_data(self, gen):
-        '''Método para cambiar el entorno del almacén'''
-        
-        self.data = self.get_enviroment(gen)
-
-
+class Super_enviroment():
+    def __init__(self):
+        pass
     def get_enviroment(self, gen = []):
         '''Método para generar el entorno del almacén.
         Llena un numpy array con 0 en los pasillos y los números en las estanterías.'''
@@ -102,6 +82,27 @@ class Enviroment:
     def manhattan(self, p1, p2):
         '''Método para calcular la distancia Manhattan entre dos puntos'''
         return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
+
+
+class Enviroment:
+    '''Esta clase es básicamente el tablero con los métodos necesarios.'''
+    def __init__(self, shelves_rows: int, shelves_columns: int, gen = []):
+        '''Constructor de la clase Enviroment.
+        inicializa el entorno con el número dado de filas y columnas de estantes'''
+
+        self.number_of_shelves  = shelves_rows * shelves_columns
+        self.shelves_rows       = shelves_rows
+        self.shelves_columns    = shelves_columns
+        self.width              = 3 * (shelves_columns) + 1
+        self.height             = 5 * (shelves_rows) + 1
+        self.data               = self.get_enviroment(gen)     # Genera el entorno
+        self.ocupied            = []                        # Lista para almacenar las posiciones ocupadas
+
+
+    def cambiar_data(self, gen):
+        '''Método para cambiar el entorno del almacén'''
+        
+        self.data = self.get_enviroment(gen)
     
     def are_beside(self, sh1, sh2):
         '''Método para determinar si dos estántes están uno al lado del otro

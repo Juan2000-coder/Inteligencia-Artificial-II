@@ -12,7 +12,7 @@ if __name__ == '__main__':
     enviroment        = Enviroment(shelves_rows, shelves_columns)
 
     game1               = Game(enviroment)
-    start_pos, goal_pos = game1.get_checkpoints()
+    start_pos, goal_pos = game1.get_checkpoints(2)
 
     problem1          = Problem(enviroment, start_pos[0], goal_pos[0])
     problem2          = Problem(enviroment, start_pos[1], goal_pos[1])

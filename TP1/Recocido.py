@@ -99,7 +99,7 @@ class Recocido:
 				# Actualiza el camino
 				path       += a_star.solve()
 		
-		#-------APPENDEA EL CAMINO DE VUELTA-----------#
+		#-------APPEND DEL CAMINO DE VUELTA-----------#
 		a_star.problem.start = path[-1]
 		a_star.problem.goal  = start_pos
 		a_star.problem.goal_shelf = None

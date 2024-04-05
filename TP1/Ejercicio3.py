@@ -1,8 +1,7 @@
 from Recocido import Recocido as rc
-from Enviroment import Enviroment
-from Problem import Problem
+from Enviroment import Almacen
 from Ordenes import Orden
-from Agent import Agent
+from Agent import Agent34
 from Game import Game
 
 import pandas as pd
@@ -54,7 +53,7 @@ if __name__ == '__main__':
     while shelves_columns < min_col:
         print_instruction(f"Debe haber como mínimo {min_col} columnas.")
         shelves_columns = int(input("Indique la cantidad de columnas de estanterías: "))
-    enviroment = Enviroment(shelves_rows, shelves_columns)
+    enviroment = Almacen(shelves_rows, shelves_columns)
 
     # Ejecución del algoritmo de recocido simulado
     print_divider()
@@ -65,9 +64,8 @@ if __name__ == '__main__':
     print(solucion_optima)
     #print(camino_optimo)
     # Configuración del problema y el agente
-    problema = Problem(enviroment, (0, 0), orden.estantes[-1])
-    agent = Agent(problema)
-    agent.path = camino_optimo
+    agent       = Agent34((0, 0), enviroment)
+    agent.path  = camino_optimo
     enviroment.ocupied.append(agent.position)
 
     # Ejecución del juego o visualización de estadísticas

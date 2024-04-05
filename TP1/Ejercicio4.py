@@ -1,7 +1,6 @@
 from AG import Poblacion
 from Game import Game
-from Agent import Agent
-from Problem import Problem
+from Agent import Agent34
 
 def print_divider():
     print("=" * 100)
@@ -46,12 +45,11 @@ if __name__ == '__main__':
         
         generacion += 1
     mejor_individuo = max(poblacion.individuos, key=lambda x: x.fitness)
-    poblacion.enviroment.cambiar_data(mejor_individuo.genes)
+    poblacion.enviroment.data = poblacion.enviroment.get_enviroment(mejor_individuo.genes)
     
     print("¡Objetivo alcanzado!")
     juego = Game(poblacion.enviroment)
-    problema = Problem(poblacion.enviroment, (0, 0), 5)
-    agent = Agent(problema)
+    agent = Agent34((0,0), poblacion.enviroment)
     poblacion.enviroment.ocupied.append(agent.position)
     juego.run_ej4(agent, mejor_individuo)
 

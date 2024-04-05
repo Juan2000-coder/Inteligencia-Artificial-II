@@ -1,5 +1,4 @@
 from Enviroment import Enviroment
-from Problem import Problem
 from Astar import A_star
 
 import random
@@ -33,52 +32,11 @@ class Recocido:
 		vecino = copy.deepcopy(solucion_actual)
 		
 		# Forma 1
-		#indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
-		#bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-		#random.shuffle(bloque)
-		#vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-		#return vecino		
-
-		# Forma 2
-		'''indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
-		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-		random.shuffle(bloque)
-		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque'''
-		# Forma 2
 		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-		pares = list(zip(bloque[:-1], bloque[1:]))
-		bloque1 = []
-		indices1 = []
-		for i, par in enumerate(pares):
-			if self.enviroment.are_opposed(par[0], par[1]) or self.enviroment.are_beside(par[0], par[1]):
-				bloque1 += [par[0], par[1]]
-				indices1 += [i, i + 1]
-		bloque2  = [elemento for elemento in bloque if elemento not in bloque1]
-		indices2 = [indice for indice in list(range(0, len(bloque))) if indice not in indices1]
-		random.shuffle(bloque2)
-
-		for i, indice in enumerate(indices2):
-			bloque[indice] = bloque2[i]
+		random.shuffle(bloque)
 		vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
 		return vecino
-		
-		'''if abs(bloque[0] - bloque[1]) == 2:
-			while abs(bloque[0] - bloque[1]) == 2:
-				indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
-				bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
-			random.shuffle(bloque)
-			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino
-		elif abs(bloque[0] - bloque[1]) == 1:
-			if random.random() > 0.85:
-				random.shuffle(bloque)
-				vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino
-		else:
-			random.shuffle(bloque)
-			vecino[indice_inicio:indice_inicio + tam_bloque] = bloque
-			return vecino'''
 	
 	def energia(self, estado):
 		'''Calcula la energía (o costo) de un estado del problema.'''
@@ -87,23 +45,17 @@ class Recocido:
 		start_pos = (0, 0)
 		# Calculo del camino completo de ida
 		for i, goal in enumerate(estado):
-				if i == 0:
-					# Problema inicial desde la posición de inicio al primer objetivo
-						problem  = Problem(self.enviroment, start_pos, self.enviroment.shelf2coor(goal))
-						a_star   = A_star(problem)
-				else:
-					# Redefine el problema por cada objetivo
-						a_star.problem.start = path[-1]
-						a_star.problem.goal  = self.enviroment.shelf2coor(goal)
-						a_star.re_init(a_star.problem)
-				# Actualiza el camino
-				path       += a_star.solve()
+			if i == 0:
+				# Problema inicial desde la posición de inicio al primer objetivo
+				a_star   = A_star(self.enviroment, start_pos, goal)
+			else:
+				# Redefine el problema por cada objetivo
+				a_star.re_init(path[-1], goal)
+			# Actualiza el camino
+			path       += a_star.solve()
 		
 		#-------APPEND DEL CAMINO DE VUELTA-----------#
-		a_star.problem.start = path[-1]
-		a_star.problem.goal  = start_pos
-		a_star.problem.goal_shelf = None
-		a_star.re_init(a_star.problem)
+		a_star.re_init(path[-1], start_pos)
 		path       	+= a_star.solve()
 		#----------------------------------------------#
 		return len(path), path

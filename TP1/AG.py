@@ -1,40 +1,37 @@
 from Recocido import Recocido as rc
 from Ordenes import Orden
-from Enviroment import Enviroment
+from Enviroment import Enviroment, Almacen
 
 import random
 import copy
+
 class Individuo:
     '''Clase que representa un individuo de la población.
     Cada individuo es una solución al problema que se desea resolver.'''
     def __init__(self, _genes):
-        self.genes = _genes     # Genes que representan la solución
-        self.fitness = 0        # Idoneidad de la solución
-        self.costo = 0          # Costo de la solución
+        self.genes      = _genes    # Genes que representan la solución
+        self.fitness    = 0         # Idoneidad de la solución
+        self.costo      = 0         # Costo de la solución
 
     def calcular_costo(self, _enviroment:Enviroment, _recocido:rc):
         '''Calcula el costo de la solución representada por el individuo.'''
-        self.nro_ordenes = [1,2,3,4,5]
-        self.soluciones = []
-        self.caminos = []
-        self.costo = 0
-        self.ordenes = []
-        costo = 0
+        self.nro_ordenes         = list(range(1, 6))
+        self.soluciones:list     = []
+        self.caminos:list        = []
+        self.ordenes:list        = []
+        self.costo               = 0
+
         for numero_orden in self.nro_ordenes:
             # Creación de la instancia de la clase Orden
             orden = Orden(numero_orden, "ordenes2.txt")
             self.ordenes.append(orden.estantes)
-            #max_estante = max(orden.estantes)
 
             # Actualizacion de los datos del entorno
-            _enviroment.cambiar_data(self.genes)
-
+            _enviroment.data = _enviroment.get_enviroment(self.genes)
             solucion_optima, camino_optimo = _recocido.ejecutar_recocido(orden.estantes)
             self.soluciones.append(solucion_optima)
             self.caminos.append(camino_optimo)
-            costo = costo + len(camino_optimo)
-        
-        self.costo = costo
+            self.costo += len(camino_optimo)
       
 
 class Poblacion:
@@ -42,8 +39,8 @@ class Poblacion:
     Una población es un conjunto de soluciones al problema que se desea resolver.'''
     def __init__(self, tam_poblacion, _genes, _prob_mutacion, _shelves_rows, _shelves_columns, _temp_inicio, _temp_min, _L, tb_alta, tb_baja, f_T): 
         self.individuos = []
-        self.enviroment = Enviroment(_shelves_rows, _shelves_columns, _genes)
-        self.recocido = rc(_temp_inicio, _temp_min, _L, self.enviroment, tb_alta, tb_baja, f_T)
+        self.enviroment = Almacen(_shelves_rows, _shelves_columns, _genes)
+        self.recocido   = rc(_temp_inicio, _temp_min, _L, self.enviroment, tb_alta, tb_baja, f_T)
 
         for _ in range(tam_poblacion):
             lista_permutable = _genes[:]                    # Copia de la lista de genes

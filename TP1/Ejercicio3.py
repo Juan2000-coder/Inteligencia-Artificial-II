@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # Ejecución del algoritmo de recocido simulado
     print_divider()
     print_instruction("Ejecución del algoritmo de Recocido Simulado")
-    recocido = rc(50, 1e-12, 8,enviroment, 0.08, 0.28, 0.85)
+    recocido = rc(100, 1e-12, 8, enviroment, 0.08, 0.28, 0.85)
    
     solucion_optima, camino_optimo = recocido.ejecutar_recocido(orden.estantes)
     print(solucion_optima)

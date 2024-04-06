@@ -20,6 +20,7 @@ class Recocido:
 		self.tb_alta = tb_alta			# Tamaño de bloque a alta T (porcentaja de la longitud de la orden)
 		self.tb_baja = tb_baja			# Tamaño de bloque a baja T (porcentaja de la longitud de la orden)
 		self.f_T 	 = f_T				# Factor de reducción de la temperatura
+		self.pares	 = {}				# Las claves son pares en la ordenes y los valores son paths.
 
 	def esquema_enfriamiento(self, temperatura):
 		'''Función para variar la temperatura en cada iteración.'''
@@ -42,22 +43,39 @@ class Recocido:
 		'''Calcula la energía (o costo) de un estado del problema.'''
 
 		path:list = []
-		start_pos = (0, 0)
 		# Calculo del camino completo de ida
 		for i, goal in enumerate(estado):
 			if i == 0:
 				# Problema inicial desde la posición de inicio al primer objetivo
-				a_star   = A_star(self.enviroment, start_pos, goal)
+				start_pos = (0, 0)
+				a_star    = A_star(self.enviroment, start_pos, goal)
 			else:
 				# Redefine el problema por cada objetivo
-				a_star.re_init(path[-1], goal)
+				start_pos = path[-1]
+
 			# Actualiza el camino
-			path       += a_star.solve()
+			if (start_pos, self.enviroment.shelf2coor(goal)) in self.pares:
+				avance = self.pares[(start_pos, self.enviroment.shelf2coor(goal))]
+			else:
+				a_star.re_init(start_pos, goal)
+				avance  = a_star.solve()
+				self.pares[(start_pos, self.enviroment.shelf2coor(goal))] = avance
+				inverso = copy.deepcopy(avance).reverse()
+				self.pares[(self.enviroment.shelf2coor(goal), start_pos)] = inverso
+			path += avance
 		
-		#-------APPEND DEL CAMINO DE VUELTA-----------#
-		a_star.re_init(path[-1], start_pos)
-		path       	+= a_star.solve()
-		#----------------------------------------------#
+		#--------APPEND DEL CAMINO DE VUELTA-----------#
+		start_pos = path[-1]
+		goal 	  = (0, 0)
+		a_star.re_init(start_pos, goal)
+		if (start_pos, goal) in self.pares:
+			avance = self.pares[(start_pos, goal)]
+		else:
+			avance = a_star.solve()
+			self.pares[(start_pos, goal)] = avance
+			inverso = copy.deepcopy(avance).reverse()
+			self.pares[(goal, start_pos)] = inverso
+		path += avance
 		return len(path), path
 	
 	def solucion_incial(self, orden:list):
@@ -110,8 +128,7 @@ class Recocido:
 				else:					# Parámetros en baja temperatura
 					tam_bloque =  int(len(solucion_actual) * self.tb_baja)
 					self.L = self.L_original
-
-
+				self.L = self.L_original
 				for _ in range(round(self.L)):
 					escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
 					vecino = self.generar_vecino(solucion_actual, tam_bloque)
@@ -124,7 +141,6 @@ class Recocido:
 						energia_actual  = energia_vecino
 						
 				it += 1
-				temperatura = self.esquema_enfriamiento(temperatura)
 				temperatura = self.esquema_enfriamiento(temperatura)
 
 			escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)

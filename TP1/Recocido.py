@@ -78,7 +78,7 @@ class Recocido:
 		path += avance
 		return len(path), path
 	
-	def solucion_incial(self, orden:list):
+	def solucion_inicial(self, orden:list):
 		'''Obtiene una propuesta para la solución incial'''
 		solucion_actual = copy.deepcopy(orden)
 		solucion_propuesta = []
@@ -108,29 +108,28 @@ class Recocido:
 
 	def ejecutar_recocido(self, orden: list):
 		'''Ejecuta el algoritmo de recocido simulado.'''
-		solucion_actual = self.solucion_incial(orden)
+		solucion_actual = self.solucion_inicial(orden)
 
 		temperatura = self.T
 		energia_actual, camino_actual = self.energia(solucion_actual)
 		it = 0
 
 		# Se escriben los datos en un archivo para visualizar la evolución
-		with open('ejecucion_recocido.csv', 'w', newline='') as archivo_csv: 
-			escritor_csv = csv.writer(archivo_csv) 
-			escritor_csv.writerow(['it', 'T','e'] + ['-']*len(orden))
-			while temperatura > self.T_min:
+		#with open('ejecucion_recocido.csv', 'w', newline='') as archivo_csv:
+			#escritor_csv = csv.writer(archivo_csv)
+			#escritor_csv.writerow(['it', 'T','e'] + ['-']*len(orden))
+		while temperatura > self.T_min:
 				if temperatura > 0.1: 	# Parámetros en alta temperatura
 					if not (int(len(solucion_actual) * self.tb_alta) == 1):
 						tam_bloque =  int(len(solucion_actual) * self.tb_alta)
 					else:
 						tam_bloque = 2
-					self.L = round(0.1*self.L_original)
+					self.L = round(0.01*self.L_original)
 				else:					# Parámetros en baja temperatura
 					tam_bloque =  int(len(solucion_actual) * self.tb_baja)
 					self.L = self.L_original
-				self.L = self.L_original
 				for _ in range(round(self.L)):
-					escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
+					#escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
 					vecino = self.generar_vecino(solucion_actual, tam_bloque)
 					energia_vecino, camino_vecino = self.energia(vecino)
 					d_E = energia_actual - energia_vecino
@@ -139,10 +138,9 @@ class Recocido:
 						solucion_actual = vecino
 						camino_actual = camino_vecino
 						energia_actual  = energia_vecino
-						
 				it += 1
 				temperatura = self.esquema_enfriamiento(temperatura)
 
-			escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
+			#escritor_csv.writerow([it, temperatura, energia_actual] + solucion_actual)
 			
 		return solucion_actual, camino_actual

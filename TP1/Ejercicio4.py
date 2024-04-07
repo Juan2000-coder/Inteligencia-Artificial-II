@@ -25,22 +25,22 @@ if __name__ == '__main__':
     print_divider()
 
 # Ejemplo de uso
-    tam_poblacion = 10
-    prob_mutacion = 0.01
-    num_generaciones = 10
-    genes = [i+1 for i in range(32)]
-    estanterias = [2, 2]
-    par_recocido = [1e-11, 1e-12, 3, 0.6, 0.6, 0.8]
-    poblacion = Poblacion(tam_poblacion, genes, prob_mutacion, *estanterias, *par_recocido)
+    tam_poblacion    = 50
+    prob_mutacion    = 0.008
+    num_generaciones = 100
+    genes            = [i+1 for i in range(32)]
+    estanterias      = [2, 2]
+    par_recocido     = [0.4, 1e-3, 4, 0.42, 0.81, 0.78]
+    poblacion        = Poblacion(tam_poblacion, genes, prob_mutacion, *estanterias, *par_recocido)
+    ordenes          = poblacion.ordenes
   
     generacion = 1
-    flag = True
-    while flag:
+    while True:
         print(f"Generación {generacion}:")
         
         print("-" * 100)
         if generacion >= num_generaciones:
-            flag = False
+            break
         poblacion.evolucionar()
         
         generacion += 1
@@ -51,5 +51,5 @@ if __name__ == '__main__':
     juego = Game(poblacion.enviroment)
     agent = Agent34((0,0), poblacion.enviroment)
     poblacion.enviroment.ocupied.append(agent.position)
-    juego.run_ej4(agent, mejor_individuo)
+    juego.run_ej4(agent, mejor_individuo, ordenes)
 

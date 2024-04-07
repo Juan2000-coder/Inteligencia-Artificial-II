@@ -245,7 +245,7 @@ class Game():
 
 
 ##############################AGREGADO VALENTIN EJ3############################################    
-    def run_ej4(self, agent:Agent34, individuo:Individuo):
+    def run_ej4(self, agent:Agent34, individuo:Individuo, ordenes:list):
         '''Sumulación del recorrido del montacargas'''
         running = True
         clock   = pygame.time.Clock()
@@ -257,7 +257,7 @@ class Game():
         agent.path      = individuo.caminos.pop(0)
         solucion_optima = individuo.soluciones.pop(0)
         goal            = solucion_optima.pop(0)
-        self.paint_goals(individuo.ordenes.pop(0))
+        self.paint_goals(ordenes.pop(0).estantes)
         i = 1
 
         while running:
@@ -305,7 +305,7 @@ class Game():
                         pygame.display.flip()  # Actualiza la pantalla del juego
                     elif individuo.soluciones:
                         self.grid()
-                        self.paint_goals(individuo.ordenes.pop(0))
+                        self.paint_goals(ordenes.pop(0).estantes)
                         solucion_optima = individuo.soluciones.pop(0)
                         agent.path = individuo.caminos.pop(0)
                         agent.move((0,0))

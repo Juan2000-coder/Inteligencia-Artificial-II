@@ -22,7 +22,7 @@ class Individuo:
         costo = 0
         for numero_orden in self.nro_ordenes:
             # Creación de la instancia de la clase Orden
-            orden = Orden(numero_orden, "ordenes2.txt")
+            orden = Orden(numero_orden, "/TP1/archivos/ordenes2.txt")
             self.ordenes.append(orden.estantes)
             #max_estante = max(orden.estantes)
 

@@ -127,7 +127,7 @@ class Recocido:
 		it = 0
 
 		# Se escriben los datos en un archivo para visualizar la evolución
-		with open('ejecucion_recocido.csv', 'w', newline='') as archivo_csv: 
+		with open('./TP1/archivos/ejecucion_recocido.csv', 'w', newline='') as archivo_csv: 
 			escritor_csv = csv.writer(archivo_csv) 
 			escritor_csv.writerow(['it', 'T','e'] + ['-']*len(orden))
 			while temperatura > self.T_min:

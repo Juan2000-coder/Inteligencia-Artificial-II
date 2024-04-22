@@ -46,7 +46,7 @@ class Recocido:
 		indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 		bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
 		if abs(bloque[0] - bloque[1]) == 2:
-			while abs(bloque[0] - bloque[1]) == 2:
+			while abs(bloque[0] - bloque[1]) == 2 or random.random() > 0.95:
 				indice_inicio = random.randint(0, len(vecino) - tam_bloque)        
 				bloque = vecino[indice_inicio:indice_inicio + tam_bloque]
 			random.shuffle(bloque)
@@ -81,7 +81,7 @@ class Recocido:
 				# Actualiza el camino
 				path       += a_star.solve()
 		
-		#-------APPENDEA EL CAMINO DE VUELTA-----------#
+		#-------APPEND DEL CAMINO DE VUELTA-----------#
 		a_star.problem.start = path[-1]
 		a_star.problem.goal  = start_pos
 		a_star.problem.goal_shelf = None

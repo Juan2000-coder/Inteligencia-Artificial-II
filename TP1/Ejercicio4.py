@@ -28,10 +28,10 @@ if __name__ == '__main__':
 # Ejemplo de uso
     tam_poblacion = 10
     prob_mutacion = 0.01
-    num_generaciones = 100
+    num_generaciones = 10
     genes = [i+1 for i in range(32)]
     estanterias = [2, 2]
-    par_recocido = [100, 1e-5, 3, 0.6, 0.6, 0.8]
+    par_recocido = [1e-11, 1e-12, 3, 0.6, 0.6, 0.8]
     poblacion = Poblacion(tam_poblacion, genes, prob_mutacion, *estanterias, *par_recocido)
   
     generacion = 1

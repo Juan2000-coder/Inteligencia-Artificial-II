@@ -64,9 +64,13 @@ class Poblacion:
         
         for individuo in self.individuos:
             suma = suma + (costo_max-individuo.costo)
-        
-        for individuo in self.individuos:
-            individuo.fitness = (costo_max-individuo.costo)/suma 
+        if suma != 0:
+            for individuo in self.individuos:
+                individuo.fitness = (costo_max-individuo.costo)/suma 
+        else: 
+            n=len(self.individuos)
+            for individuo in self.individuos:
+                individuo.fitness = 1/n
           
         self.probabilidades = [i.fitness for i in self.individuos]
         print("Probabilidades")

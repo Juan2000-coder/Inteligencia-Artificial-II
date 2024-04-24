@@ -2,7 +2,7 @@ class FuncionPertenencia:
 	'''Clase para definir las funciones de pertenencia que
 	vamos a utilizar, osea, triangulares, hombros, etc'''
 	
-	def __init__(self, ValorCaracteristico, Ancho):
+	def __init__(self, ValorCaracteristico = None, Ancho = None):
 		'''Constructor de la clase FuncionPertenencia
 			ValorCaracteristico: 	float, por ejemplo el centro en la triangular o un extremo en los hombros.
 			Ancho: 					 			float, ancho de la pendiente del hombro o del triangulo.
@@ -11,7 +11,7 @@ class FuncionPertenencia:
 		self.ValorCaracteristico = ValorCaracteristico
 		self.Ancho							 = Ancho
 		
-	def evaluar(self, *args):
+	def Evaluar(self, *args):
 		'''
 		Método para evaluar el grado de pertenencia de un 'valor'
 		Devuelve un número entre 0 y 1.
@@ -28,13 +28,13 @@ class HombroIzquierdo(FuncionPertenencia):
 		super().__init__(ValorCaracteristico, Ancho)
 		self.Pendiente = 1/(self.Ancho)		# Pendiente del hombro
 		
-	def evaluar(self, valor):
-		if valor > (self.ValorCaracteristico + self.Ancho):	# Al lado derecho del hombro
+	def Evaluar(self, Valor):
+		if Valor > (self.ValorCaracteristico + self.Ancho):	# Al lado derecho del hombro
 			return 1
-		elif valor < self.ValorCaracteristico:							# Al lado izquiero del hombro
+		elif Valor < self.ValorCaracteristico:							# Al lado izquiero del hombro
 			return 0
 		else:																								# En el hombro
-			return self.Pendiente*(valor - self.ValorCaracteristico)
+			return self.Pendiente*(Valor - self.ValorCaracteristico)
 
 class HombroDerecho(FuncionPertenencia):
 	'''Función de Pertenencia HombroDerecho (pendiente negativa)'''
@@ -42,13 +42,13 @@ class HombroDerecho(FuncionPertenencia):
 		super().__init__(ValorCaracteristico, Ancho)
 		self.Pendiente = -1/(self.Ancho) 		# Pendiente del hombro
 
-	def evaluar(self, valor):
-		if valor > self.ValorCaracteristico:													# Al lado derecho del hombro
+	def Evaluar(self, Valor):
+		if Valor > self.ValorCaracteristico:													# Al lado derecho del hombro
 			return 0
-		elif valor < (self.ValorCaracteristico - self.Ancho): 				# Al lado izquiero del hombro
+		elif Valor < (self.ValorCaracteristico - self.Ancho): 				# Al lado izquiero del hombro
 			return 1
 		else
-			return 1 + self.Pendiente*(valor - self.ValorCaracteristico) # En el hombro
+			return 1 + self.Pendiente*(Valor - self.ValorCaracteristico) # En el hombro
 
 class Triangular(FuncionPertenencia):
 	'''Función de Pertenencia para la Triangular'''
@@ -59,12 +59,12 @@ class Triangular(FuncionPertenencia):
 		self.Inferior		= self.ValorCaracteristico - self.Ancho/2 	# Límite inferior triangulo
 		self.Superior		= self.ValorCaracteristico + self.Ancho/2		# Límite superior triangulo
 		
-	def evaluar(self, valor):
-		if valor > self.Superior:							# A la derecha del triangulo
+	def Evaluar(self, Valor):
+		if Valor > self.Superior:							# A la derecha del triangulo
 			return 0
-		elif valor < self.Inferior:						# A la izquierda del triangulo
+		elif Valor < self.Inferior:						# A la izquierda del triangulo
 			return 0
-		elif self.ValorCaracteristico > valor > self.Inferior:	# En el flanco izquierdo del triangulo
-			return self.PendienteP*(valor - self.Inferior)
-		elif self.ValorCaracteristico < valor < self.Superior:	# En el flanco derecho del triangulo
-			return self.PendienteN*(valor - self.ValorCaracteristico)
+		elif self.ValorCaracteristico > Valor > self.Inferior:	# En el flanco izquierdo del triangulo
+			return self.PendienteP*(Valor - self.Inferior)
+		elif self.ValorCaracteristico < Valor < self.Superior:	# En el flanco derecho del triangulo
+			return self.PendienteN*(Valor - self.ValorCaracteristico)

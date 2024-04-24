@@ -11,7 +11,7 @@ class FuncionPertenencia:
 		self.ValorCaracteristico = ValorCaracteristico
 		self.Ancho							 = Ancho
 		
-	def evaluar(self, valor):
+	def evaluar(self, *args):
 		'''
 		Método para evaluar el grado de pertenencia de un 'valor'
 		Devuelve un número entre 0 y 1.

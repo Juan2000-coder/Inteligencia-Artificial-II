@@ -5,13 +5,13 @@ from Operadores 			import *
 import matplotlib.pyplot as plt
 
 def calcular_centroide():    
-  dx = 0.5
-  pesoTotal = 0
-  pesoPonderado = 0
-  for i in range(200):
-    pesoPonderado = pesoPonderado + (InferenciaDifusa.Evaluar(i*dx) *i*dx)
-    pesoTotal = pesoTotal + (InferenciaDifusa.Evaluar(i*dx))
-  return pesoPonderado/pesoTotal
+	dx = 0.5
+	pesoTotal = 0
+	pesoPonderado = 0
+	for i in range(200):
+		pesoPonderado = pesoPonderado + (InferenciaDifusa.Evaluar(i*dx) * i*dx)
+		pesoTotal = pesoTotal + (InferenciaDifusa.Evaluar(i*dx))
+		return pesoPonderado/pesoTotal
   #print ("El X centroide es: ", Xcen)
 
 if __name__ == '__main__':
@@ -24,7 +24,6 @@ if __name__ == '__main__':
 	ZenfNitida 				= None
 	TpNitida	 			= None
 	HoraNitida 				= None
-	VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, TpNitida, HoraNitida]
 	lista_TiNitida =[]
 	tau = 24*3600*1/5
 	dt=1
@@ -37,13 +36,15 @@ if __name__ == '__main__':
 	TiNitida	= 10# La temperatura interior actual se obtiene por integración del modelo termico
 	
 	pepe = 0
-	while(pepe in range(24)):
+	while(pepe in range(23)):
 		#---------------------------------------MEDICIÓN---------------------------------------
 		HoraNitida	= VectorTiempos.pop()					# Hora actual
 		TeNitida 	= VectorTemperaturaAmbiente.pop()		# Temperatua exterior actual
 		ZNitida 	= (TiNitida - ToNitida)*(TeNitida - TiNitida)
 		ZenfNitida 	= (TiNitida - TenfNitida)*(TeNitida - TiNitida)
 		ZcalNitida	= (TiNitida - TcalNitida)*(TeNitida - TiNitida)
+
+		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, 30, HoraNitida]
 
 		# dia_siguiente 			= [inicio:fin]				# Una forma a ver de cómo obtener estos índices
 		# cantidad_muestras		 	= len(dia_siguiente)	# Cantidad de muestras de temperatura en el dia siguiente
@@ -68,13 +69,13 @@ if __name__ == '__main__':
 		corte3 = min(ValB['Hora']['Dia'], ValB['Z']['ZC'])
 
 		# Falta agregar el término de Tpredicha, se debe calcular el mínimo entre los tres
-		corte4 = min(ValB['Hora']['Noche'], ValB['ZEnf']['ZenfP'])
-		corte5 = min(ValB['Hora']['Noche'], ValB['ZEnf']['ZenfN'])
-		corte6 = min(ValB['Hora']['Noche'], ValB['ZEnf']['ZenfC'])
+		corte4 = min(ValB['Hora']['Noche'], ValB['Tp']['TAlta'], ValB['ZEnf']['ZEnfP'])
+		corte5 = min(ValB['Hora']['Noche'], ValB['Tp']['TAlta'], ValB['ZEnf']['ZEnfN'])
+		corte6 = min(ValB['Hora']['Noche'], ValB['Tp']['TAlta'], ValB['ZEnf']['ZEnfC'])
 
-		corte7 = min(ValB['Hora']['Noche'], ValB['ZCal']['ZenfP'])
-		corte8 = min(ValB['Hora']['Noche'], ValB['ZCal']['ZenfN'])
-		corte9 = min(ValB['Hora']['Noche'], ValB['ZCal']['ZenfC'])
+		corte7 = min(ValB['Hora']['Noche'], ValB['Tp']['TBaja'], ValB['ZCal']['ZCalP'])
+		corte8 = min(ValB['Hora']['Noche'], ValB['Tp']['TBaja'], ValB['ZCal']['ZCalN'])
+		corte9 = min(ValB['Hora']['Noche'], ValB['Tp']['TBaja'], ValB['ZCal']['ZCalC'])
 
 		corteVC = max(corte1, corte4, corte7)
 		corteVM	= max(corte2, corte5, corte8)

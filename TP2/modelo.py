@@ -1,7 +1,7 @@
 import numpy as np
 
 class Habitacion:
-  def __init__(self, , _tau):
+  def __init__(self, _tau):
     
     self.tau = _tau
     

@@ -58,5 +58,6 @@ Zenf  	= VariableLinguistica('ZEnf', {'ZEnfN':ZenfN, 'ZEnfC':ZenfC,'ZEnfP':ZenfP
 Tp 		= VariableLinguistica('Tp', {'TAlta':Talta, 'TBaja':Tbaja}, [-15, 45])
 Hora	= VariableLinguistica('Hora', {'Dia':Dia, 'Noche':Noche}, [0, 24])
 V		= VariableLinguistica('V', {'VA':VA, 'VC':VC, 'VM':VM}, [0, 100])
+InferenciaDifusa = Or(VA, VC, VM)
 
 VariablesBorrosas = [Z, Zcal, Zenf, Tp, Hora]

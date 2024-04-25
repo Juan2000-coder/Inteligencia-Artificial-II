@@ -10,6 +10,7 @@ class FuncionPertenencia:
 		
 		self.ValorCaracteristico = ValorCaracteristico
 		self.Ancho							 = Ancho
+		self.corte							 = 1
 		
 	def Evaluar(self, *args):
 		'''
@@ -28,13 +29,13 @@ class HombroIzquierdo(FuncionPertenencia):
 		super().__init__(ValorCaracteristico, Ancho)
 		self.Pendiente = 1/(self.Ancho)		# Pendiente del hombro
 		
-	def Evaluar(self, Valor, corte = 1):
+	def Evaluar(self, Valor):
 		if Valor > (self.ValorCaracteristico + self.Ancho):	# Al lado derecho del hombro
-			return min(1, corte)
+			return min(1, self.corte)
 		elif Valor < self.ValorCaracteristico:							# Al lado izquiero del hombro
-			return min(0, corte)
+			return min(0, self.corte)
 		else:																								# En el hombro
-			return min(self.Pendiente*(Valor - self.ValorCaracteristico), corte)
+			return min(self.Pendiente*(Valor - self.ValorCaracteristico), self.corte)
 
 class HombroDerecho(FuncionPertenencia):
 	'''Función de Pertenencia HombroDerecho (pendiente negativa)'''
@@ -42,13 +43,13 @@ class HombroDerecho(FuncionPertenencia):
 		super().__init__(ValorCaracteristico, Ancho)
 		self.Pendiente = -1/(self.Ancho) 		# Pendiente del hombro
 
-	def Evaluar(self, Valor, corte = 1):
+	def Evaluar(self, Valor):
 		if Valor > self.ValorCaracteristico:													# Al lado derecho del hombro
-			return min(0, corte)
+			return min(0, self.corte)
 		elif Valor < (self.ValorCaracteristico - self.Ancho): 				# Al lado izquiero del hombro
-			return min(1, corte)
+			return min(1, self.corte)
 		else:
-			return min(1 + self.Pendiente*(Valor - self.ValorCaracteristico), corte) # En el hombro
+			return min(1 + self.Pendiente*(Valor - self.ValorCaracteristico), self.corte) # En el hombro
 
 class Triangular(FuncionPertenencia):
 	'''Función de Pertenencia para la Triangular'''
@@ -59,12 +60,12 @@ class Triangular(FuncionPertenencia):
 		self.Inferior		= self.ValorCaracteristico - self.Ancho/2 	# Límite inferior triangulo
 		self.Superior		= self.ValorCaracteristico + self.Ancho/2		# Límite superior triangulo
 		
-	def Evaluar(self, Valor, corte = 1):
+	def Evaluar(self, Valor):
 		if Valor > self.Superior:							# A la derecha del triangulo
-			return min(0, corte)
+			return min(0, self.corte)
 		elif Valor < self.Inferior:						# A la izquierda del triangulo
-			return min(0, corte)
+			return min(0, self.corte)
 		elif self.ValorCaracteristico > Valor > self.Inferior:	# En el flanco izquierdo del triangulo
-			return min(self.PendienteP*(Valor - self.Inferior), corte)
+			return min(self.PendienteP*(Valor - self.Inferior), self.corte)
 		elif self.ValorCaracteristico < Valor < self.Superior:	# En el flanco derecho del triangulo
-			return min(self.PendienteN*(Valor - self.ValorCaracteristico), corte)
+			return min(self.PendienteN*(Valor - self.ValorCaracteristico), self.corte)

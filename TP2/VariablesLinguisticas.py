@@ -1,3 +1,4 @@
+from FuncionesPertenencia import *
 class VariableLinguistica:
   def __init__(self, Nombre:str, TLinguisticos: dict, limites: tuple):
 	  '''
@@ -6,7 +7,7 @@ class VariableLinguistica:
 		Nombre: 				str, nombre de la variable linguistica
 		TLinguisticos:  dict[str, float], diccionario de tuplas (nombre del término, funcion de pertenencia(objeto))
 		'''
-		self.Nombre  = Nombre
+    self.Nombre  = Nombre
     self.Tling 	 = TLinguisticos
     self.limites = limites
 

@@ -14,3 +14,5 @@ f8 = Then(And(Hora.tling['N'], Tp.tling['TBaja'], ZEnf.tling['ZCalC']), V.tling[
 f9 = Then(And(Hora.tling['N'], Tp.tling['TBaja'], ZEnf.tling['ZCalN']), V.tling['VA'])
 
 Base	= Or(f1, f2, f3, f4, f5, f6, f7, f8, f9)
+f=Or(And(Or(a,b),Or(c,d)), And(Or(e,f),Or(g,h)))
+f.evaluar(1, 2, 3, 4,5,6,7,8)

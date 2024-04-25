@@ -12,7 +12,7 @@ if __name__ == '__main__':
 	ZEnfNitida 				= None
 	TPNitida	 				=	None
 	HoraNitida 				= None
-	VariablesNitidas	= [Znitida, ZCalNitida, ZEnfNitida, TPNitida, HoraNitida]
+	VariablesNitidas	= [ZNitida, ZCalNitida, ZEnfNitida, TPNitida, HoraNitida]
 
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------
 	VectorTemperaturaAmbiente						# Serie de temperatura exterior
@@ -29,8 +29,9 @@ if __name__ == '__main__':
 
 		# dia_siguiente 				= [inicio:fin]				# Una forma a ver de cómo obtener estos índices
 		# cantidad_muestras		 	= len(dia_siguiente)	# Cantidad de muestras de temperatura en el dia siguiente
-		TPNitida 		= sum(VectorTemperaturaAmbiente[dia_siguiente])/cantidad_muestras
+		TPNitida 		= sum(VectorTemperaturaAmbiente[dia_siguiente])/cantidad_muestras #Temperatura pronostico
 
+    
 		#-------------------------------EVALUACIÓN DE LAS REGLAS------------------------------
 		Base.Evaluar()
 		#---------------------------------DESBORROSIFICACIÓN----------------------------------

@@ -19,7 +19,7 @@ class VariableLinguistica:
 		termino	: str, nombre del término
 		'''
 		if Termino in self.Tling:
-			return self.Tling[Termino].evaluar(Valor)
+			return self.Tling[Termino].Evaluar(Valor)
 
 #--------------------------DEFINICIÓN DE TÉRMINOS Y VARIABLES LINGUÍSTICAS DEL PROBLEMA--------------------------
 #-------------------------------------------DEFINICIÓN DE TÉRMINOS-----------------------------------------------

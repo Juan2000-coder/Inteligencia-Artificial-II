@@ -41,7 +41,7 @@ if __name__ == '__main__':
         numero_orden = int(input("Por favor, ingrese un número de orden válido: "))
 
     # Creación de la instancia de la clase Orden
-    orden = Orden(numero_orden, "ordenes.txt")
+    orden = Orden(numero_orden, "./TP1/archivos/ordenes.txt")
     max_estante = max(orden.estantes)
 
     # Configuración del entorno de estanterías
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     elif flag_mode == "E":
         print_instruction("Visualización de estadísticas...")
         # Lee el archivo CSV
-        df = pd.read_csv('ejecucion_recocido.csv')
+        df = pd.read_csv('./TP1/archivos/ejecucion_recocido.csv')
         plt.scatter(df['it'], df['e'])
         plt.grid(True)
         plt.xlabel('Iteración')

@@ -151,3 +151,28 @@ class Almacen(Enviroment):
         p1 = self.shelf2coor(sh1)
         p2 = self.shelf2coor(sh2)
         return abs(p1[0] - p2 [0]) == 2 and abs(p1[1] - p2[1]) == 1 and self.is_invertix(sh1) and self.is_invertix(sh2)
+    
+class U(Enviroment):
+    def __init__(self, size:int):
+        super().__init__()
+        self.height = size
+        self.width  = self.height
+        self.data   = self.get_enviroment()
+        self.ocupied = []
+
+    def get_enviroment(self, gen: list = []):
+        # Crear una matriz cuadrada llena de ceros
+        data = np.zeros((self.height, self.width), dtype=int)
+
+        # Llenar la segunda fila con unos desde la segunda columna hasta la ante-penúltima columna
+        data[1, 1:-2] = 1
+
+        # Llenar la penúltima fila con unos desde la segunda columna hasta la ante-penúltima columna
+        data[-2, 1:-2] = 1
+
+        # Llenar la columna ante-penúltima con unos entre la segunda y la penúltima fila
+        data[1:-1, -3] = 1
+
+        # Poner un 10 en la posición correspondiente a la fila del medio y la última columna
+        data[self.height // 2, -1] = 10
+        return data

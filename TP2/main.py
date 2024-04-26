@@ -5,14 +5,13 @@ from Operadores 			import *
 import matplotlib.pyplot as plt
 
 def calcular_centroide():    
-	dx = 0.5
-	pesoTotal = 0
-	pesoPonderado = 0
+	dx 				= 0.5
+	pesoTotal 		= 0
+	pesoPonderado 	= 0
 	for i in range(200):
-		pesoPonderado = pesoPonderado + (InferenciaDifusa.Evaluar(i*dx) * i*dx)
-		pesoTotal = pesoTotal + (InferenciaDifusa.Evaluar(i*dx))
-		return pesoPonderado/pesoTotal
-  #print ("El X centroide es: ", Xcen)
+		pesoPonderado 	+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx) * i*dx)
+		pesoTotal 		+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx))
+	return pesoPonderado/pesoTotal
 
 if __name__ == '__main__':
 	#--------------------------------Variables nitidas----------------------------------
@@ -24,22 +23,23 @@ if __name__ == '__main__':
 	ZenfNitida 				= None
 	TpNitida	 			= None
 	HoraNitida 				= None
-	lista_TiNitida =[]
-	tau = 24*3600*1/5
-	dt=1
+	lista_TiNitida 			= []
+	tau 					= 24*3600*1/5
+	dt                      = 3600
   
 
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------
 	# Datos del 15 de febrero de 2024 en mendoza
 	VectorTemperaturaAmbiente = [29, 28, 27, 26, 24, 23, 22, 22, 20, 19, 19, 19, 21, 23, 25, 26, 28, 31, 33, 34, 35, 35, 35, 34]						# Serie de temperatura exterior
-	VectorTiempos 			  = list(range(24))											# Serie de tiempos en correspondiente con la Tambiente
-	TiNitida	= 10# La temperatura interior actual se obtiene por integración del modelo termico
+	VectorTiempos 			  = list(range(24)) # Serie de tiempos en correspondiente con la Tambiente
+	TiNitida				  = 10							# La temperatura interior inicial
+	lista_TiNitida.append(TiNitida)
 	
 	pepe = 0
 	while(pepe in range(23)):
 		#---------------------------------------MEDICIÓN---------------------------------------
-		HoraNitida	= VectorTiempos.pop()					# Hora actual
-		TeNitida 	= VectorTemperaturaAmbiente.pop()		# Temperatua exterior actual
+		HoraNitida	= VectorTiempos[pepe]					# Hora actual
+		TeNitida 	= VectorTemperaturaAmbiente[pepe]		# Temperatua exterior actual
 		ZNitida 	= (TiNitida - ToNitida)*(TeNitida - TiNitida)
 		ZenfNitida 	= (TiNitida - TenfNitida)*(TeNitida - TiNitida)
 		ZcalNitida	= (TiNitida - TcalNitida)*(TeNitida - TiNitida)
@@ -92,13 +92,13 @@ if __name__ == '__main__':
     	#Centroide en X - Indica que tanto se abre la ventana entre 0 y 100.
 
 		lista_TiNitida.append(TiNitida)
-		Vp = calcular_centroide() #Ventana Porcentaje
-		tau_instantaneo = tau*(1+0.1*(100-Vp)/100)
-		TiNitida = tau_instantaneo*dt*(TeNitida-TiNitida)+TiNitida
+		Vp 				= calcular_centroide() #Ventana Porcentaje
+		tau_instantaneo = tau*(1 + 0.1*(100 - Vp)/100)
+		TiNitida 		= dt*(TeNitida - TiNitida)/tau_instantaneo + TiNitida
 	
-		pepe = pepe + 1
+		pepe += 1
     
-	plt.plot(VectorTiempos,VectorTemperaturaAmbiente , label='T. Exterior')
+	plt.plot(VectorTiempos, VectorTemperaturaAmbiente , label='T. Exterior')
 
 	# Plotear la segunda gráfica
 	plt.plot(VectorTiempos, lista_TiNitida, label='T. Interior')

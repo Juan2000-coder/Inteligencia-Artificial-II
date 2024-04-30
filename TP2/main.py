@@ -4,11 +4,10 @@ from FuncionesPertenencia  	import *
 from Operadores 			import *
 import matplotlib.pyplot as plt
 
-def calcular_centroide():    
-	dx 				= 0.5
+def calcular_centroide(dx = 0.5):    
 	pesoTotal 		= 0
 	pesoPonderado 	= 0
-	for i in range(200):
+	for i in range(1 + 100/dx):
 		pesoPonderado 	+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx) * i*dx)
 		pesoTotal 		+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx))
 		print(i)
@@ -45,11 +44,11 @@ if __name__ == '__main__':
 	TiNitida				  = 10									# La temperatura interior inicial
 	lista_TiNitida.append(TiNitida)
 	
-	pepe = 0
-	while(pepe in range(47)):
+	i = 0
+	while(i in range(len(VectorTemperaturaAmbiente))):
 		#---------------------------------------MEDICIÓN---------------------------------------
-		HoraNitida	= VectorTiempos[pepe]							# Hora actual
-		TeNitida 	= VectorTemperaturaAmbiente[pepe]				# Temperatua exterior actual
+		HoraNitida	= VectorTiempos[i]							# Hora actual
+		TeNitida 	= VectorTemperaturaAmbiente[i]				# Temperatua exterior actual
 		ZNitida 	= (TiNitida - ToNitida)*(TeNitida - TiNitida)
 		ZenfNitida 	= (TiNitida - TenfNitida)*(TeNitida - TiNitida)
 		ZcalNitida	= (TiNitida - TcalNitida)*(TeNitida - TiNitida)
@@ -106,7 +105,7 @@ if __name__ == '__main__':
 		tau_instantaneo = tau*(1 + 0.1*(100 - Vp)/100)
 		TiNitida 		= dt*(TeNitida - TiNitida)/tau_instantaneo + TiNitida
 	
-		pepe += 1
+		i += 1
     
 	plt.plot(VectorTiempos, VectorTemperaturaAmbiente , label='T. Exterior')
 

@@ -1,6 +1,6 @@
 from FuncionesPertenencia import *
 import matplotlib.pyplot as plt
-from Operadores import Or
+from Operadores import *
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -47,12 +47,12 @@ ZenfC = Triangular(0, 50)		# Hay que ver en qué valores varía	(Zcentro)
 ZenfP = HombroIzquierdo(0, 50)  # Hay que ver en que valores varía	(Zpositivo)
 
 #Terminos linguisticos de Tp (Temperatura pronóstico)
-Talta = HombroIzquierdo(15, 20)  	# Temperatura pronóstico alta
-Tbaja = HombroDerecho(15, 20)		# Temperatura pronóstico baja
+Talta = HombroIzquierdo(15, 10)  	# Temperatura pronóstico alta
+Tbaja = HombroDerecho(20, 10)		# Temperatura pronóstico baja
 
 #Terminos linguisticos de Hora (Hora del día)
-Dia 	= Or(HombroIzquierdo(7, 2), HombroDerecho(23, 2))  	# En horas.
-Noche 	= Or(HombroDerecho(9, 2), HombroIzquierdo(23, 2))	# Temperatura pronóstico baja
+Dia 	= And(HombroIzquierdo(7, 2), HombroDerecho(21, 2))  	# En horas.
+Noche 	= Or(HombroDerecho(9, 2), HombroIzquierdo(19, 2))	# Temperatura pronóstico baja
 
 #--------------------------DEFINICIÓN DE LAS VARIABLES LINGUISTICAS-------------------------------------
 Z 		= VariableLinguistica('Z', {'ZN':ZN, 'ZC':ZC, 'ZP':ZP}, [-1000, 1000]) 	# Ajustar los valores despues
@@ -62,41 +62,24 @@ Tp 		= VariableLinguistica('Tp', {'TAlta':Talta, 'TBaja':Tbaja}, [-15, 45])
 Hora	= VariableLinguistica('Hora', {'Dia':Dia, 'Noche':Noche}, [0, 24])
 V		= VariableLinguistica('V', {'VA':VA, 'VC':VC, 'VM':VM}, [0, 100])
 
-InferenciaDifusa = Or(VA, VC, VM)
+InferenciaDifusa 	= Or(VA, VC, VM)
 
-VariablesBorrosas = [Z, Zcal, Zenf, Tp, Hora]
+VariablesBorrosas 	= [Z, Zcal, Zenf, Tp, Hora]
 
+colores 			= ['red', 'green', 'blue']
 
-
-#Graficar los terminos linguisticos
-ZNgraph = []
-ZCgraph = []
-ZPgraph = []
-
-universoZ = np.linspace(-100, 100, 1001)
-for i in universoZ:
-	ZNgraph.append(ZN.Evaluar(i))
-	ZCgraph.append(ZC.Evaluar(i))
-	ZPgraph.append(ZP.Evaluar(i))
+for variable in VariablesBorrosas:
+	universo = np.linspace(variable.limites[0], variable.limites[1], 1000)
+	graphs = [[] for _ in variable.Tling]
 	
-plt.plot(universoZ, ZNgraph, label= 'Z negativo', color='red')
-plt.plot(universoZ, ZCgraph, label= 'Z centro', color='green')
-plt.plot(universoZ, ZPgraph, label= 'Z positivo', color='blue')
+	for valor in universo:
+		for i, termino in enumerate(variable.Tling):
+			graphs[i].append(variable.es(termino, valor))
 
-plt.show()
-
-#Graficar los terminos linguisticos V
-VAgraph = []
-VCgraph = []
-VMgraph = []
-universoV = np.linspace(0, 100, 101)
-
-for i in universoV:
-	VAgraph.append(VA.Evaluar(i))
-	VCgraph.append(VC.Evaluar(i))
-	VMgraph.append(VM.Evaluar(i))
-
-plt.plot(universoV, VAgraph, label= 'Ventana abrir', color='red')
-plt.plot(universoV, VCgraph, label= 'Ventana cerrar', color='green')
-plt.plot(universoV, VMgraph, label= 'Ventana medio', color='blue')
-plt.show()
+	color = 0
+	for graph, nombre in zip(graphs, variable.Tling.keys()):
+		plt.plot(universo, graph, label = nombre, color=colores[color])
+		color += 1
+	plt.legend()
+	plt.title(variable.Nombre)
+	plt.show()

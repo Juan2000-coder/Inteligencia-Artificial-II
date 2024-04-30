@@ -75,17 +75,17 @@ if __name__ == '__main__':
     	#Calculo de los antecedentes de cada regla de la base de conocimientos
 		#de aca deberia salir un corteVA, corteVC, corteVM
 		corte1 = min(ValB['Hora']['Dia'], ValB['Z']['ZP'])
-		corte2 = min(ValB['Hora']['Dia'], ValB['Z']['ZN'])
-		corte3 = min(ValB['Hora']['Dia'], ValB['Z']['ZC'])
+		corte2 = min(ValB['Hora']['Dia'], ValB['Z']['ZC'])
+		corte3 = min(ValB['Hora']['Dia'], ValB['Z']['ZN'])
 
 		# Falta agregar el término de Tpredicha, se debe calcular el mínimo entre los tres
 		corte4 = min(ValB['Hora']['Noche'], ValB['Tp']['TAlta'], ValB['ZEnf']['ZEnfP'])
-		corte5 = min(ValB['Hora']['Noche'], ValB['Tp']['TAlta'], ValB['ZEnf']['ZEnfN'])
-		corte6 = min(ValB['Hora']['Noche'], ValB['Tp']['TAlta'], ValB['ZEnf']['ZEnfC'])
+		corte5 = min(ValB['Hora']['Noche'], ValB['Tp']['TAlta'], ValB['ZEnf']['ZEnfC'])
+		corte6 = min(ValB['Hora']['Noche'], ValB['Tp']['TAlta'], ValB['ZEnf']['ZEnfN'])
 
 		corte7 = min(ValB['Hora']['Noche'], ValB['Tp']['TBaja'], ValB['ZCal']['ZCalP'])
-		corte8 = min(ValB['Hora']['Noche'], ValB['Tp']['TBaja'], ValB['ZCal']['ZCalN'])
-		corte9 = min(ValB['Hora']['Noche'], ValB['Tp']['TBaja'], ValB['ZCal']['ZCalC'])
+		corte8 = min(ValB['Hora']['Noche'], ValB['Tp']['TBaja'], ValB['ZCal']['ZCalC'])
+		corte9 = min(ValB['Hora']['Noche'], ValB['Tp']['TBaja'], ValB['ZCal']['ZCalN'])
 
 		corteVC = max(corte1, corte4, corte7)
 		corteVM	= max(corte2, corte5, corte8)

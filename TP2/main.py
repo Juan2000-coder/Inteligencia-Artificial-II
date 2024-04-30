@@ -43,12 +43,12 @@ if __name__ == '__main__':
 	VectorTiempos 			  = list(np.arange(0, 24.5, 0.5)) # Serie de tiempos en correspondiente con la Tambiente
 	TiNitida				  = 10									# La temperatura interior inicial
 	i = 0
-
+	lista_TiNitida.append(TiNitida)
 	while(i in range(len(VectorTemperaturaAmbiente)-1)):
 		
 
 		#---------------------------------------MEDICIÓN---------------------------------------
-		lista_TiNitida.append(TiNitida)
+		
 		HoraNitida	= VectorTiempos[i]							# Hora actual
 		TeNitida 	= VectorTemperaturaAmbiente[i]				# Temperatua exterior actual
 		ZNitida 	= (TiNitida - ToNitida)*(TeNitida - TiNitida)
@@ -108,15 +108,15 @@ if __name__ == '__main__':
 		lista_TiNitida.append(TiNitida)
 		lista_vp.append(Vp)
 		i += 1
-		contador +=1
+		#contador +=1
     
-	vector_tiempo = np.arange(0, 24, 0.5) #48 puntos
+	vector_tiempo = np.arange(0, 24.5, 0.5) #48 puntos
 	vector_tiempo2 = np.arange(0, 24, 0.05) #480 puntos
 
 
 	fig, ax1 = plt.subplots()
 	# Plotear la segunda gráfica
-	plt.plot(vector_tiempo, lista_TiNitida, label='T. Interior')
+	plt.plot(VectorTiempos, lista_TiNitida, label='T. Interior')
 	plt.plot(vector_tiempo, lista_vp, label='Ventana', color = 'g')
 	plt.plot(vector_tiempo, VectorTemperaturaAmbiente , label='T. Exterior')
 

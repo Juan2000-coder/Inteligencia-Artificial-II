@@ -22,9 +22,8 @@ if __name__ == '__main__':
 	TpNitida	 			= None
 	HoraNitida 				= None
 	lista_TiNitida 			= []
-	lista_vp				= []
-	primer_vp = calcular_centroide()
-	lista_vp.append(primer_vp)
+	lista_Vp				= []
+	Vp = calcular_centroide()
 	tau 					= 24*3600*1/5
 	dt					    = 3600/2
 
@@ -41,12 +40,15 @@ if __name__ == '__main__':
 	
 	VectorTiempos = np.arange(0, 24.5, 0.5)
 
-	TiNitida				   = 10									# La temperatura interior inicial
-	lista_TiNitida.append(TiNitida)
+	
+
+	TiNitida				   = 10					# La temperatura interior inicial
+	TpNitida				   = 10					# La temperatura pronosticada inicial
+	
 	
 	i = 0
-	while(i in range(len(VectorTemperaturaAmbiente)-1)):
-		
+	while(i in range(len(VectorTemperaturaAmbiente))):
+
 		'''		if contador % 10 == 0:
 			
         # Si el contador es un múltiplo de 10, aumentar j en 1
@@ -55,8 +57,10 @@ if __name__ == '__main__':
         # Reiniciar el contador
 			contador = 0
 		'''
-
+	
 		#---------------------------------------MEDICIÓN---------------------------------------
+		lista_TiNitida.append(TiNitida)
+		lista_Vp.append(Vp)
 		HoraNitida	= VectorTiempos[i]							# Hora actual
 		TeNitida 	= VectorTemperaturaAmbiente[i]				# Temperatua exterior actual
 		ZNitida 	= (TiNitida - ToNitida)*(TeNitida - TiNitida)
@@ -113,8 +117,6 @@ if __name__ == '__main__':
 		Vp 				= calcular_centroide() #Ventana Porcentaje
 		tau_instantaneo = tau*(1 + 0.1*(100 - Vp)/100)
 		TiNitida 		= dt*(TeNitida - TiNitida)/tau_instantaneo + TiNitida
-		lista_TiNitida.append(TiNitida)
-		lista_vp.append(Vp)
 		i += 1
 
 
@@ -122,7 +124,7 @@ if __name__ == '__main__':
 	fig, ax1 = plt.subplots()
 	# Plotear la segunda gráfica
 	plt.plot(VectorTiempos, lista_TiNitida, label='T. Interior')
-	plt.plot(VectorTiempos, lista_vp, label='Ventana', color = 'g')
+	plt.plot(VectorTiempos, lista_Vp, label='Ventana', color = 'g')
 	plt.plot(VectorTiempos, VectorTemperaturaAmbiente , label='T. Exterior')
 
 	# Añadir etiquetas y título

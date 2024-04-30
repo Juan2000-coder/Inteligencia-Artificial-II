@@ -23,7 +23,9 @@ if __name__ == '__main__':
 	TpNitida	 			= None
 	HoraNitida 				= None
 	lista_TiNitida 			= []
-
+	lista_vp			= []
+	primer_vp = calcular_centroide()
+	lista_vp.append(primer_vp)
 	tau 					= 24*3600*1/5
 	dt					    = 3600/2
 
@@ -41,7 +43,20 @@ if __name__ == '__main__':
 	VectorTiempos 			  = list(np.arange(0, 24.5, 0.5)) # Serie de tiempos en correspondiente con la Tambiente
 	TiNitida				  = 10									# La temperatura interior inicial
 	i = 0
+	j = -1
+	contador = 0 
 	while(i in range(len(VectorTemperaturaAmbiente)-1)):
+		
+		'''		if contador % 10 == 0:
+			
+        # Si el contador es un múltiplo de 10, aumentar j en 1
+			j += 1
+			
+        # Reiniciar el contador
+			contador = 0
+		'''
+
+		j = i
 		#---------------------------------------MEDICIÓN---------------------------------------
 		lista_TiNitida.append(TiNitida)
 		HoraNitida	= VectorTiempos[i]							# Hora actual
@@ -100,12 +115,20 @@ if __name__ == '__main__':
 		Vp 				= calcular_centroide() #Ventana Porcentaje
 		tau_instantaneo = tau*(1 + 0.1*(100 - Vp)/100)
 		TiNitida 		= dt*(TeNitida - TiNitida)/tau_instantaneo + TiNitida
+		lista_TiNitida.append(TiNitida)
+		lista_vp.append(Vp)
 		i += 1
+		contador +=1
     
-	plt.plot(VectorTiempos, VectorTemperaturaAmbiente , label='T. Exterior')
+	vector_tiempo = np.arange(0, 24, 0.5) #48 puntos
+	vector_tiempo2 = np.arange(0, 24, 0.05) #480 puntos
 
+
+	fig, ax1 = plt.subplots()
 	# Plotear la segunda gráfica
-	plt.plot(VectorTiempos, lista_TiNitida, label='T. Interior')
+	plt.plot(vector_tiempo, lista_TiNitida, label='T. Interior')
+	plt.plot(vector_tiempo, lista_vp, label='Ventana', color = 'g')
+	plt.plot(vector_tiempo, VectorTemperaturaAmbiente , label='T. Exterior')
 
 	# Añadir etiquetas y título
 	plt.xlabel('Tiempo (h)')
@@ -114,9 +137,15 @@ if __name__ == '__main__':
 
 	# Añadir una leyenda
 	plt.legend()
+	
+	#Plotear los porcentajes de apertura de la ventana
+	ax2 = ax1.twinx()
 
+	
+	
 	# Mostrar el gráfico
 	plt.show()
+	#print(lista_vp)
       
     
 	

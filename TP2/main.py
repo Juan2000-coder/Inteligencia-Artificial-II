@@ -24,9 +24,8 @@ if __name__ == '__main__':
 	TpNitida	 			= None
 	HoraNitida 				= None
 	lista_TiNitida 			= []
-	#tau   					 = 24*3600*1/5
-	tau 					= 24*3600*1/5*0.5
-	#dt                      = 3600
+
+	tau 					= 24*3600*1/5
 	dt					    = 3600/2
 
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------
@@ -100,11 +99,11 @@ if __name__ == '__main__':
 		# Se obtiene el centroide a partir de f que estará definida en un subintervalo del rango de la ventana
     	#Centroide en X - Indica que tanto se abre la ventana entre 0 y 100.
 
-		lista_TiNitida.append(TiNitida)
 		Vp 				= calcular_centroide() #Ventana Porcentaje
 		tau_instantaneo = tau*(1 + 0.1*(100 - Vp)/100)
 		TiNitida 		= dt*(TeNitida - TiNitida)/tau_instantaneo + TiNitida
-	
+		lista_TiNitida.append(TiNitida)
+
 		i += 1
     
 	plt.plot(VectorTiempos, VectorTemperaturaAmbiente , label='T. Exterior')

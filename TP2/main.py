@@ -1,4 +1,3 @@
-#Comentario random<-Panchardo
 from VariablesLinguisticas 	import *
 from FuncionesPertenencia  	import *
 from Operadores 			import *
@@ -23,7 +22,7 @@ if __name__ == '__main__':
 	TpNitida	 			= None
 	HoraNitida 				= None
 	lista_TiNitida 			= []
-	lista_vp			= []
+	lista_vp				= []
 	primer_vp = calcular_centroide()
 	lista_vp.append(primer_vp)
 	tau 					= 24*3600*1/5
@@ -32,30 +31,39 @@ if __name__ == '__main__':
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------
 	
 	# Datos del 15 de febrero de 2024 en mendoza
-	VectorTemperaturaAmbiente = [29, 28.5, 28, 27.5, 27, 26.5, 26, 25, 24, 23.5, 23, 22.5, 22, 22, 22, 21, 20, 19.5, 19, 19, 19, 19, 19, 20, 21, 22, 23, 24, 25, 25.5, 26, 27, 28, 29.5, 31, 32, 33, 33.5, 34, 34.5, 35, 35, 35, 35, 35, 34.5, 34, 33.5, 33.5]
+	#VectorTemperaturaAmbiente = [29, 28.5, 28, 27.5, 27, 26.5, 26, 25, 24, 23.5, 23, 22.5, 22, 22, 22, 21, 20, 19.5, 19, 19, 19, 19, 19, 20, 21, 22, 23, 24, 25, 25.5, 26, 27, 28, 29.5, 31, 32, 33, 33.5, 34, 34.5, 35, 35, 35, 35, 35, 34.5, 34, 33.5, 33.5]
 	
-	#VectorPorEncima25 		   = [29, 28.5, 28, 27.5, 27, 26.5, 26, 26.1, 26.2, 26.3, 26.4, 26.5, 26.6, 26.7, 26.8, 26.9, 27, 27.1, 27.2, 27.3, 27.4, 27.5, 27.6, 27.7, 27.8, 27.9, 28, 28.1, 28.2, 28.3, 28.4, 28.5, 28.6, 28.7, 28.8, 28.9, 29, 29.1, 29.2, 29.3, 29.4, 29.5, 29.6, 29.7, 29.8, 29.9, 30, 30.1]
-	#VectorTemperaturaAmbiente  = VectorPorEncima25
-	
-	#VectorPorDebajo25 		   = [24, 23.5, 23, 22.5, 22, 21.5, 21, 20, 19, 18.5, 18, 17.5, 17, 16.5, 16, 15, 14, 13.5, 13, 12.5, 12, 11.5, 11, 10, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5, 4, 3, 2.5, 2, 1.5, 1, 0, -1, -2, -3, -4, -6, -7, -9, -10, -11]
-	#VectorTemperaturaAmbiente = VectorPorDebajo25
+	#VectorPorEncima25 		   = [29, 28.5, 28, 27.5, 27, 26.5, 26, 26.1, 26.2, 26.3, 26.4, 26.5, 26.6, 26.7, 26.8, 26.9, 27, 27.1, 27.2, 27.3, 27.4, 27.5, 27.6, 27.7, 27.8, 27.9, 28, 28.1, 28.2, 28.3, 28.4, 28.5, 28.6, 28.7, 28.8, 28.9, 29, 29.1, 29.2, 29.3, 29.4, 29.5, 29.6, 29.7, 29.8, 29.9, 30, 30.1, 30.2]
+	#VectorTemperaturaAmbiente  = VectorPorEncima25	
 
-	VectorTiempos 			  = list(np.arange(0, 24.5, 0.5)) # Serie de tiempos en correspondiente con la Tambiente
-	TiNitida				  = 10									# La temperatura interior inicial
-	i = 0
+	VectorPorDebajo25 		   = [24, 23.5, 23, 22.5, 22, 21.5, 21, 20, 19, 18.5, 18, 17.5, 17, 16.5, 16, 15, 14, 13.5, 13, 12.5, 12, 11.5, 11, 10, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5, 4, 3, 2.5, 2, 1.5, 1, 0, -1, -2, -3, -4, -6, -7, -9, -10, -11, -12]
+	VectorTemperaturaAmbiente = VectorPorDebajo25
+	
+	VectorTiempos = np.arange(0, 24.5, 0.5)
+
+	TiNitida				   = 10									# La temperatura interior inicial
 	lista_TiNitida.append(TiNitida)
+	
+	i = 0
 	while(i in range(len(VectorTemperaturaAmbiente)-1)):
 		
+		'''		if contador % 10 == 0:
+			
+        # Si el contador es un múltiplo de 10, aumentar j en 1
+			j += 1
+			
+        # Reiniciar el contador
+			contador = 0
+		'''
 
 		#---------------------------------------MEDICIÓN---------------------------------------
-		
 		HoraNitida	= VectorTiempos[i]							# Hora actual
 		TeNitida 	= VectorTemperaturaAmbiente[i]				# Temperatua exterior actual
 		ZNitida 	= (TiNitida - ToNitida)*(TeNitida - TiNitida)
 		ZenfNitida 	= (TiNitida - TenfNitida)*(TeNitida - TiNitida)
 		ZcalNitida	= (TiNitida - TcalNitida)*(TeNitida - TiNitida)
 
-		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, 18, HoraNitida]
+		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, 30, HoraNitida]
 
 		# dia_siguiente 			= [inicio:fin]				# Una forma a ver de cómo obtener estos índices
 		# cantidad_muestras		 	= len(dia_siguiente)	# Cantidad de muestras de temperatura en el dia siguiente
@@ -108,17 +116,14 @@ if __name__ == '__main__':
 		lista_TiNitida.append(TiNitida)
 		lista_vp.append(Vp)
 		i += 1
-		#contador +=1
-    
-	vector_tiempo = np.arange(0, 24.5, 0.5) #48 puntos
-	vector_tiempo2 = np.arange(0, 24, 0.05) #480 puntos
+
 
 
 	fig, ax1 = plt.subplots()
 	# Plotear la segunda gráfica
 	plt.plot(VectorTiempos, lista_TiNitida, label='T. Interior')
-	plt.plot(vector_tiempo, lista_vp, label='Ventana', color = 'g')
-	plt.plot(vector_tiempo, VectorTemperaturaAmbiente , label='T. Exterior')
+	plt.plot(VectorTiempos, lista_vp, label='Ventana', color = 'g')
+	plt.plot(VectorTiempos, VectorTemperaturaAmbiente , label='T. Exterior')
 
 	# Añadir etiquetas y título
 	plt.xlabel('Tiempo (h)')
@@ -127,6 +132,7 @@ if __name__ == '__main__':
 
 	# Añadir una leyenda
 	plt.legend()
+
 	
 	#Plotear los porcentajes de apertura de la ventana
 	ax2 = ax1.twinx()
@@ -136,9 +142,3 @@ if __name__ == '__main__':
 	# Mostrar el gráfico
 	plt.show()
 	#print(lista_vp)
-      
-    
-	
-	
-    
-      

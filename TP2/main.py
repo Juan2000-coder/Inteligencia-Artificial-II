@@ -8,8 +8,8 @@ def calcular_centroide(dx = 0.5):
 	pesoTotal 		= 0
 	pesoPonderado 	= 0
 	for i in range(1 + int(100/dx)):
-		pesoPonderado 	+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx) * i*dx)
-		pesoTotal 		+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx))
+		pesoPonderado 	+= (InferenciaDifusa.Evaluar(i*dx) * i*dx)
+		pesoTotal 		+= (InferenciaDifusa.Evaluar(i*dx))
 	return pesoPonderado/pesoTotal
 
 if __name__ == '__main__':

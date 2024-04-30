@@ -1,5 +1,7 @@
 from FuncionesPertenencia import *
 from Operadores import Or
+import matplotlib.pyplot as plt
+import numpy as np
 
 class VariableLinguistica:
 	def __init__(self, Nombre:str, TLinguisticos: dict, limites: tuple):
@@ -58,6 +60,40 @@ Zenf  	= VariableLinguistica('ZEnf', {'ZEnfN':ZenfN, 'ZEnfC':ZenfC,'ZEnfP':ZenfP
 Tp 		= VariableLinguistica('Tp', {'TAlta':Talta, 'TBaja':Tbaja}, [-15, 45])
 Hora	= VariableLinguistica('Hora', {'Dia':Dia, 'Noche':Noche}, [0, 24])
 V		= VariableLinguistica('V', {'VA':VA, 'VC':VC, 'VM':VM}, [0, 100])
+
 InferenciaDifusa = Or(VA, VC, VM)
 
 VariablesBorrosas = [Z, Zcal, Zenf, Tp, Hora]
+
+#Graficar los terminos linguisticos
+ZNgraph = []
+ZCgraph = []
+ZPgraph = []
+
+universoZ = np.linspace(-100, 100, 1001)
+for i in universoZ:
+	ZNgraph.append(ZN.Evaluar(i))
+	ZCgraph.append(ZC.Evaluar(i))
+	ZPgraph.append(ZP.Evaluar(i))
+	
+plt.plot(universoZ, ZNgraph, label= 'Z negativo', color='red')
+plt.plot(universoZ, ZCgraph, label= 'Z centro', color='green')
+plt.plot(universoZ, ZPgraph, label= 'Z positivo', color='blue')
+
+plt.show()
+
+#Graficar los terminos linguisticos V
+VAgraph = []
+VCgraph = []
+VMgraph = []
+universoV = np.linspace(0, 100, 101)
+
+for i in universoV:
+	VAgraph.append(VA.Evaluar(i))
+	VCgraph.append(VC.Evaluar(i))
+	VMgraph.append(VM.Evaluar(i))
+
+plt.plot(universoV, VAgraph, label= 'Ventana abrir', color='red')
+plt.plot(universoV, VCgraph, label= 'Ventana cerrar', color='green')
+plt.plot(universoV, VMgraph, label= 'Ventana medio', color='blue')
+plt.show()

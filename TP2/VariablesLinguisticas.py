@@ -66,6 +66,8 @@ InferenciaDifusa = Or(VA, VC, VM)
 
 VariablesBorrosas = [Z, Zcal, Zenf, Tp, Hora]
 
+
+
 #Graficar los terminos linguisticos
 ZNgraph = []
 ZCgraph = []

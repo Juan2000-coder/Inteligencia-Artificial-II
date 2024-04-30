@@ -68,8 +68,9 @@ VariablesBorrosas 	= [Z, Zcal, Zenf, Tp, Hora]
 
 colores 			= ['red', 'green', 'blue']
 
-for variable in VariablesBorrosas:
-	universo = np.linspace(variable.limites[0], variable.limites[1], 1000)
+
+'''for variable in VariablesBorrosas:
+	universo = np.linspace(variable.limites[0], variable.limites[1], 2001)
 	graphs = [[] for _ in variable.Tling]
 	
 	for valor in universo:
@@ -83,3 +84,4 @@ for variable in VariablesBorrosas:
 	plt.legend()
 	plt.title(variable.Nombre)
 	plt.show()
+'''

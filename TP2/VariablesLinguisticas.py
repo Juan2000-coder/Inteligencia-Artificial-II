@@ -27,14 +27,14 @@ class VariableLinguistica:
 #--------------------------DEFINICIÓN DE TÉRMINOS Y VARIABLES LINGUÍSTICAS DEL PROBLEMA--------------------------
 #-------------------------------------------DEFINICIÓN DE TÉRMINOS-----------------------------------------------
 #Terminos linguisticos de Z
-ZN = HombroDerecho(0, 50)   # Hay que ver en que valores varia (Znegativo)
-ZC = Triangular(0, 50)		# Hay que ver en qué valores varía	(Zcentro)
-ZP = HombroIzquierdo(0, 50) # Hay que ver en que valores varía	(Zpositivo)
+ZN = HombroDerecho(0, 10)   # Hay que ver en que valores varia (Znegativo)
+ZC = Triangular(0, 5)		# Hay que ver en qué valores varía	(Zcentro)
+ZP = HombroIzquierdo(0, 10) # Hay que ver en que valores varía	(Zpositivo)
 
 #Terminos linguisticos de V (ventana)
-VA	= HombroIzquierdo(50, 20)   # Ventana abrir
-VC	= HombroDerecho(50, 20)		# Ventana cerrar
-VM	= Triangular(50, 20)		# Ventana medio
+VA	= HombroIzquierdo(50, 30)   # Ventana abrir
+VC	= HombroDerecho(50, 30)		# Ventana cerrar
+VM	= Triangular(50, 10)		# Ventana medio
 
 #Terminos linguisticos de Zcal
 ZcalN = HombroDerecho(0, 50)   	# Hay que ver en que valores varia (Znegativo)

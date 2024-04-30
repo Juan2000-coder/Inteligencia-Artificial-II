@@ -7,10 +7,9 @@ import matplotlib.pyplot as plt
 def calcular_centroide(dx = 0.5):    
 	pesoTotal 		= 0
 	pesoPonderado 	= 0
-	for i in range(1 + 100/dx):
+	for i in range(1 + int(100/dx)):
 		pesoPonderado 	+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx) * i*dx)
 		pesoTotal 		+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx))
-		print(i)
 	return pesoPonderado/pesoTotal
 
 if __name__ == '__main__':
@@ -44,7 +43,7 @@ if __name__ == '__main__':
 	lista_TiNitida.append(TiNitida)
 	
 	i = 0
-	while(i in range(len(VectorTemperaturaAmbiente))):
+	while(i in range(len(VectorTemperaturaAmbiente)-1)):
 		#---------------------------------------MEDICIÓN---------------------------------------
 		HoraNitida	= VectorTiempos[i]							# Hora actual
 		TeNitida 	= VectorTemperaturaAmbiente[i]				# Temperatua exterior actual

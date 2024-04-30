@@ -52,7 +52,7 @@ Tbaja = HombroDerecho(15, 20)		# Temperatura pronóstico baja
 
 #Terminos linguisticos de Hora (Hora del día)
 Dia 	= Or(HombroIzquierdo(7, 2), HombroDerecho(23, 2))  	# En horas.
-Noche 	= Or(HombroDerecho(7, 2), HombroIzquierdo(23, 2))	# Temperatura pronóstico baja
+Noche 	= Or(HombroDerecho(9, 2), HombroIzquierdo(23, 2))	# Temperatura pronóstico baja
 
 #--------------------------DEFINICIÓN DE LAS VARIABLES LINGUISTICAS-------------------------------------
 Z 		= VariableLinguistica('Z', {'ZN':ZN, 'ZC':ZC, 'ZP':ZP}, [-1000, 1000]) 	# Ajustar los valores despues

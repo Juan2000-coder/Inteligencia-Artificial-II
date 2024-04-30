@@ -11,7 +11,7 @@ def calcular_centroide():
 	for i in range(200):
 		pesoPonderado 	+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx) * i*dx)
 		pesoTotal 		+= (InferenciaDifusa.Evaluar(i*dx, i*dx, i*dx))
-		print(i)
+		#print(i)
 	return pesoPonderado/pesoTotal
 
 if __name__ == '__main__':
@@ -101,13 +101,14 @@ if __name__ == '__main__':
 		# Se obtiene el centroide a partir de f que estará definida en un subintervalo del rango de la ventana
     	#Centroide en X - Indica que tanto se abre la ventana entre 0 y 100.
 
-		lista_TiNitida.append(TiNitida)
+		
 		Vp 				= calcular_centroide() #Ventana Porcentaje
 		tau_instantaneo = tau*(1 + 0.1*(100 - Vp)/100)
 		TiNitida 		= dt*(TeNitida - TiNitida)/tau_instantaneo + TiNitida
-	
+		lista_TiNitida.append(TiNitida)
 		pepe += 1
-    
+
+	print(lista_TiNitida)
 	plt.plot(VectorTiempos, VectorTemperaturaAmbiente , label='T. Exterior')
 
 	# Plotear la segunda gráfica

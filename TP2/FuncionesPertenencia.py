@@ -52,6 +52,7 @@ class HombroDerecho(FuncionPertenencia):
 			aux = -(Valor - self.ValorCaracteristico)/((self.ValorCaracteristico + self.Ancho) - self.ValorCaracteristico)
 			return min(aux , self.corte) # En el hombro
 
+
 class Triangular(FuncionPertenencia):
 	'''Función de Pertenencia para la Triangular'''
 	def __init__(self, ValorCaracteristico, Ancho):
@@ -66,7 +67,9 @@ class Triangular(FuncionPertenencia):
 			return min(0, self.corte)
 		elif Valor < self.Inferior:						# A la izquierda del triangulo
 			return min(0, self.corte)
+
 		elif self.ValorCaracteristico >= Valor >= self.Inferior:	# En el flanco izquierdo del triangulo
 			return min((Valor - self.Inferior)/(self.ValorCaracteristico-self.Inferior), self.corte)
 		elif self.ValorCaracteristico < Valor <= self.Superior:	# En el flanco derecho del triangulo
 			return min((self.Superior - Valor)/(self.Superior - self.ValorCaracteristico), self.corte)
+

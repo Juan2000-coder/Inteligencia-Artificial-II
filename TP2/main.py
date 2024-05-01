@@ -32,16 +32,23 @@ if __name__ == '__main__':
 	# Datos del 15 de febrero de 2024 en mendoza
 	#VectorTemperaturaAmbiente = [29, 28.5, 28, 27.5, 27, 26.5, 26, 25, 24, 23.5, 23, 22.5, 22, 22, 22, 21, 20, 19.5, 19, 19, 19, 19, 19, 20, 21, 22, 23, 24, 25, 25.5, 26, 27, 28, 29.5, 31, 32, 33, 33.5, 34, 34.5, 35, 35, 35, 35, 35, 34.5, 34, 33.5, 33.5]
 	
-	#VectorPorEncima25 		   = [29, 28.5, 28, 27.5, 27, 26.5, 26, 26.1, 26.2, 26.3, 26.4, 26.5, 26.6, 26.7, 26.8, 26.9, 27, 27.1, 27.2, 27.3, 27.4, 27.5, 27.6, 27.7, 27.8, 27.9, 28, 28.1, 28.2, 28.3, 28.4, 28.5, 28.6, 28.7, 28.8, 28.9, 29, 29.1, 29.2, 29.3, 29.4, 29.5, 29.6, 29.7, 29.8, 29.9, 30, 30.1, 30.2]
-	#VectorTemperaturaAmbiente  = VectorPorEncima25	
+	VectorPorEncima25 		   = [29, 28.5, 28, 27.5, 27, 26.5, 26, 26.1, 26.2, 26.3, 26.4, 26.5, 26.6, 26.7, 26.8, 26.9, 27, 27.1, 27.2, 27.3, 27.4, 27.5, 27.6, 27.7, 27.8, 27.9, 28, 28.1, 28.2, 28.3, 28.4, 28.5, 28.6, 28.7, 28.8, 28.9, 29, 29.1, 29.2, 29.3, 29.4, 29.5, 29.6, 29.7, 29.8, 29.9, 30, 30.1, 30.2]
+	VectorTemperaturaAmbiente  = VectorPorEncima25	
 
-	VectorPorDebajo25 		   = [24, 23.5, 23, 22.5, 22, 21.5, 21, 20, 19, 18.5, 18, 17.5, 17, 16.5, 16, 15, 14, 13.5, 13, 12.5, 12, 11.5, 11, 10, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5, 4, 3, 2.5, 2, 1.5, 1, 0, -1, -2, -3, -4, -6, -7, -9, -10, -11, -12]
-	VectorTemperaturaAmbiente = VectorPorDebajo25
+	#VectorPorDebajo25 		   = [24, 23.5, 23, 22.5, 22, 21.5, 21, 20, 19, 18.5, 18, 17.5, 17, 16.5, 16, 15, 14, 13.5, 13, 12.5, 12, 11.5, 11, 10, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5, 4, 3, 2.5, 2, 1.5, 1, 0, -1, -2, -3, -4, -6, -7, -9, -10, -11, -12]
+	#VectorTemperaturaAmbiente = VectorPorDebajo25
 	
 	VectorTiempos = np.arange(0, 24.5, 0.5)
 
-	TiNitida				   = 10					# La temperatura interior inicial
-	
+
+	TiNitida		= 10					# La temperatura interior inicial
+	inicio_dia = int(len(VectorTemperaturaAmbiente)/3)
+	final_dia  = int(len(VectorTemperaturaAmbiente)*5/6)
+
+	Tp_dia = VectorTemperaturaAmbiente[inicio_dia:final_dia]
+	TpNitida		= sum(Tp_dia)/len(Tp_dia)	# La temperatura pronosticada inicial
+
+
 	i = 0
 	while(i in range(len(VectorTemperaturaAmbiente))):
 
@@ -63,7 +70,7 @@ if __name__ == '__main__':
 		ZenfNitida 	= (TiNitida - TenfNitida)*(TeNitida - TiNitida)
 		ZcalNitida	= (TiNitida - TcalNitida)*(TeNitida - TiNitida)
 
-		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, 30, HoraNitida]
+		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, TpNitida, HoraNitida]
 
 		#-----------------------------------BORROSIFICAR--------------------------------------
 		# diccionario de valores borrosos con claves los nombres de las variables y los valores son  un diccionario por cada variable
@@ -102,7 +109,6 @@ if __name__ == '__main__':
 		VM.corte = corteVM
 		
 		#---------------------------------DESBORROSIFICACIÓN----------------------------------
-
 		# Se obtiene el centroide a partir de f que estará definida en un subintervalo del rango de la ventana
     	#Centroide en X - Indica que tanto se abre la ventana entre 0 y 100.
 
@@ -136,3 +142,4 @@ if __name__ == '__main__':
 	# Mostrar el gráfico
 	plt.show()
 	#print(lista_vp)
+      

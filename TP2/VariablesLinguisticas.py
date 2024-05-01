@@ -32,9 +32,9 @@ ZC = Triangular(0, 5)		# Hay que ver en qué valores varía	(Zcentro)
 ZP = HombroIzquierdo(0, 10) # Hay que ver en que valores varía	(Zpositivo)
 
 #Terminos linguisticos de V (ventana)
-VA	= HombroIzquierdo(50, 30)   # Ventana abrir
-VC	= HombroDerecho(50, 30)		# Ventana cerrar
-VM	= Triangular(50, 10)		# Ventana medio
+VA	= HombroIzquierdo(90, 10)   # Ventana abrir
+VC	= HombroDerecho(10, 10)		# Ventana cerrar
+VM	= Triangular(50, 82)		# Ventana medio
 
 #Terminos linguisticos de Zcal
 ZcalN = HombroDerecho(0, 50)   	# Hay que ver en que valores varia (Znegativo)
@@ -55,9 +55,9 @@ Dia 	= And(HombroIzquierdo(7, 2), HombroDerecho(21, 2))  	# En horas.
 Noche 	= Or(HombroDerecho(9, 2), HombroIzquierdo(19, 2))	# Temperatura pronóstico baja
 
 #--------------------------DEFINICIÓN DE LAS VARIABLES LINGUISTICAS-------------------------------------
-Z 		= VariableLinguistica('Z', {'ZN':ZN, 'ZC':ZC, 'ZP':ZP}, [-1000, 1000]) 	# Ajustar los valores despues
-Zcal  	= VariableLinguistica('ZCal', {'ZCalN':ZcalN, 'ZCalC':ZcalC,'ZCalP':ZcalP}, [-1000, 1000]) # Ajustar 
-Zenf  	= VariableLinguistica('ZEnf', {'ZEnfN':ZenfN, 'ZEnfC':ZenfC,'ZEnfP':ZenfP}, [-1000, 1000]) # Ajustar
+Z 		= VariableLinguistica('Z', {'ZN':ZN, 'ZC':ZC, 'ZP':ZP}, [-400, 400]) 	# Ajustar los valores despues
+Zcal  	= VariableLinguistica('ZCal', {'ZCalN':ZcalN, 'ZCalC':ZcalC,'ZCalP':ZcalP}, [-400, 400]) # Ajustar 
+Zenf  	= VariableLinguistica('ZEnf', {'ZEnfN':ZenfN, 'ZEnfC':ZenfC,'ZEnfP':ZenfP}, [-400, 400]) # Ajustar
 Tp 		= VariableLinguistica('Tp', {'TAlta':Talta, 'TBaja':Tbaja}, [-15, 45])
 Hora	= VariableLinguistica('Hora', {'Dia':Dia, 'Noche':Noche}, [0, 24])
 V		= VariableLinguistica('V', {'VA':VA, 'VC':VC, 'VM':VM}, [0, 100])
@@ -67,7 +67,6 @@ InferenciaDifusa 	= Or(VA, VC, VM)
 VariablesBorrosas 	= [Z, Zcal, Zenf, Tp, Hora]
 
 colores 			= ['red', 'green', 'blue']
-
 
 '''for variable in VariablesBorrosas:
 	universo = np.linspace(variable.limites[0], variable.limites[1], 2001)

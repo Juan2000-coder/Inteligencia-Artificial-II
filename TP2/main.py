@@ -2,73 +2,71 @@ from VariablesLinguisticas 	import *
 from FuncionesPertenencia  	import *
 from Operadores 			import *
 import matplotlib.pyplot as plt
+import math
+from modelo import *
 
-def calcular_centroide(dx = 0.5):    
-	pesoTotal 		= 0
-	pesoPonderado 	= 0
+
+def CalcularCentroide(dx = 0.5):    
+	PesoTotal 		= 0
+	PesoPonderado 	= 0
 	for i in range(1 + int(100/dx)):
-		pesoPonderado 	+= (InferenciaDifusa.Evaluar(i*dx) * i*dx)
-		pesoTotal 		+= (InferenciaDifusa.Evaluar(i*dx))
-	return pesoPonderado/pesoTotal
+		PesoPonderado 	+= (InferenciaDifusa.Evaluar(i*dx) * i*dx)
+		PesoTotal 		+= (InferenciaDifusa.Evaluar(i*dx))
+	return PesoPonderado/PesoTotal
+
+def EvolucionTe(Dia, HoraNitida, MediaLarga = 25, RangoLargo = 30, RangoCorto = 5, PeriodoLargo = 24, PeriodoCorto = 6):
+	return RangoLargo*math.sin((2*math.pi/PeriodoLargo)*(HoraNitida + Dia*24)) + RangoCorto*math.sin((2*math.pi/PeriodoCorto)*(HoraNitida + Dia*24))+ MediaLarga
+
+def CalcularTp(Dia, Hora):
+	if Hora < 8:
+		return np.mean([EvolucionTe(Dia, HoraPronostico) for HoraPronostico in np.arange(8, 20.5, 0.5)])
+	else:
+		return np.mean([EvolucionTe(Dia + 1, HoraPronostico) for HoraPronostico in np.arange(8, 20.5, 0.5)])
+
 
 if __name__ == '__main__':
 	#--------------------------------Variables nitidas----------------------------------
-	TenfNitida				= 25
+	TenfNitida				= 10
 	TcalNitida				= 50
-	ToNitida				= 10							# La temperatura objetivo
+	ToNitida				= 25							# La temperatura objetivo
 	ZNitida 				= None
 	ZcalNitida 				= None
 	ZenfNitida 				= None
 	TpNitida	 			= None
-	HoraNitida 				= None
-	lista_TiNitida 			= []
-	lista_Vp				= []
-	Vp = calcular_centroide()
-	tau 					= 24*3600*1/5
-	dt					    = 3600/2
+	HoraNitida 				= 0
+	TiNitida				= 10					# La temperatura interior inicial
+	TiNitidaVabierta 		= TiNitida
+	TiNitidaVcerrada 		= TiNitida
+	Vp 						= 50
+	Tau 					= 24*3600*1/5
+	Dt					    = 3600/2
+	Dia						= 0
+	LimiteDias				= 14
+	Hab						= Habitacion(Tau)
+
+	ListaTiNitida 				= []
+	ListaTeNitida				= []
+	ListaTiNitidaVabierta 		= []
+	ListaTiNitidaVcerrada		= []
+	ListaVp						= []
+	VectorTiempos				= []
 
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------
-	
-	# Datos del 15 de febrero de 2024 en mendoza
-	#VectorTemperaturaAmbiente = [29, 28.5, 28, 27.5, 27, 26.5, 26, 25, 24, 23.5, 23, 22.5, 22, 22, 22, 21, 20, 19.5, 19, 19, 19, 19, 19, 20, 21, 22, 23, 24, 25, 25.5, 26, 27, 28, 29.5, 31, 32, 33, 33.5, 34, 34.5, 35, 35, 35, 35, 35, 34.5, 34, 33.5, 33.5]
-	
-	VectorPorEncima25 		   = [29, 28.5, 28, 27.5, 27, 26.5, 26, 26.1, 26.2, 26.3, 26.4, 26.5, 26.6, 26.7, 26.8, 26.9, 27, 27.1, 27.2, 27.3, 27.4, 27.5, 27.6, 27.7, 27.8, 27.9, 28, 28.1, 28.2, 28.3, 28.4, 28.5, 28.6, 28.7, 28.8, 28.9, 29, 29.1, 29.2, 29.3, 29.4, 29.5, 29.6, 29.7, 29.8, 29.9, 30, 30.1, 30.2]
-	VectorTemperaturaAmbiente  = VectorPorEncima25	
+	while(Dia < LimiteDias):
 
-	#VectorPorDebajo25 		   = [24, 23.5, 23, 22.5, 22, 21.5, 21, 20, 19, 18.5, 18, 17.5, 17, 16.5, 16, 15, 14, 13.5, 13, 12.5, 12, 11.5, 11, 10, 9, 8.5, 8, 7.5, 7, 6.5, 6, 5, 4, 3, 2.5, 2, 1.5, 1, 0, -1, -2, -3, -4, -6, -7, -9, -10, -11, -12]
-	#VectorTemperaturaAmbiente = VectorPorDebajo25
-	
-	VectorTiempos = np.arange(0, 24.5, 0.5)
-
-
-	TiNitida		= 10					# La temperatura interior inicial
-	inicio_dia = int(len(VectorTemperaturaAmbiente)/3)
-	final_dia  = int(len(VectorTemperaturaAmbiente)*5/6)
-
-	Tp_dia = VectorTemperaturaAmbiente[inicio_dia:final_dia]
-	TpNitida		= sum(Tp_dia)/len(Tp_dia)	# La temperatura pronosticada inicial
-
-
-	i = 0
-	while(i in range(len(VectorTemperaturaAmbiente))):
-
-		'''		if contador % 10 == 0:
-			
-        # Si el contador es un múltiplo de 10, aumentar j en 1
-			j += 1
-			
-        # Reiniciar el contador
-			contador = 0
-		'''
-	
 		#---------------------------------------MEDICIÓN---------------------------------------
-		lista_TiNitida.append(TiNitida)
-		lista_Vp.append(Vp)
-		HoraNitida	= VectorTiempos[i]							# Hora actual
-		TeNitida 	= VectorTemperaturaAmbiente[i]				# Temperatua exterior actual
+		TeNitida 	= EvolucionTe(Dia, HoraNitida, MediaLarga = -5, RangoLargo=10, RangoCorto=2, PeriodoCorto=4)
+
+		VectorTiempos.append(HoraNitida + Dia*24)
+		ListaTiNitida.append(TiNitida)
+		ListaTiNitidaVabierta.append(TiNitidaVabierta)
+		ListaTiNitidaVcerrada.append(TiNitidaVcerrada)
+		ListaTeNitida.append(TeNitida)
+
 		ZNitida 	= (TiNitida - ToNitida)*(TeNitida - TiNitida)
 		ZenfNitida 	= (TiNitida - TenfNitida)*(TeNitida - TiNitida)
 		ZcalNitida	= (TiNitida - TcalNitida)*(TeNitida - TiNitida)
+		TpNitida	= CalcularTp(HoraNitida, Dia)
 
 		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, TpNitida, HoraNitida]
 
@@ -109,21 +107,37 @@ if __name__ == '__main__':
 		VM.corte = corteVM
 		
 		#---------------------------------DESBORROSIFICACIÓN----------------------------------
-		# Se obtiene el centroide a partir de f que estará definida en un subintervalo del rango de la ventana
-    	#Centroide en X - Indica que tanto se abre la ventana entre 0 y 100.
+		Vp 				= CalcularCentroide() #Ventana Porcentaje
+		if Vp > 50:
+			Vp = 100
+		else:
+			Vp = 0
+		
+		ListaVp.append(Vp)
+		# Euler
+		'''TauInstantaneo 	= Tau*(1 + 0.1*(100 - Vp)/100)
+		TiNitida 		= Dt*(TeNitida - TiNitida)/TauInstantaneo + TiNitida
+		TiNitidaSinCorreccion += Dt*(TeNitida - TiNitida)/Tau'''
 
-		Vp 				= calcular_centroide() #Ventana Porcentaje
-		tau_instantaneo = tau*(1 + 0.1*(100 - Vp)/100)
-		TiNitida 		= dt*(TeNitida - TiNitida)/tau_instantaneo + TiNitida
-		i += 1
+		#RK
+		TiNitida 				= Hab.runge_kutta_4(HoraNitida, TiNitida, Dt, TeNitida, Vp)
+		TiNitidaVabierta 		= Hab.runge_kutta_4(HoraNitida, TiNitida, Dt, TeNitida, 0)
+		TiNitidaVcerrada		= Hab.runge_kutta_4(HoraNitida, TiNitida, Dt, TeNitida, 100)
 
-
+		if HoraNitida == 23.5:
+			HoraNitida  = 0
+			Dia		+=1
+		else:
+			HoraNitida		+= 0.5						# Hora actual
 
 	fig, ax1 = plt.subplots()
 	# Plotear la segunda gráfica
-	plt.plot(VectorTiempos, lista_TiNitida, label='T. Interior')
-	plt.plot(VectorTiempos, lista_Vp, label='Ventana', color = 'g')
-	plt.plot(VectorTiempos, VectorTemperaturaAmbiente , label='T. Exterior')
+	plt.grid(True)
+	plt.plot(VectorTiempos, ListaTiNitida, label='T. Interior')
+	plt.plot(VectorTiempos, ListaTiNitidaVabierta, label='T. Interior V abieta', color ='cyan')
+	plt.plot(VectorTiempos, ListaTiNitidaVcerrada, label='T. Interior V cerrada', color ='yellow')
+	plt.plot(VectorTiempos, ListaVp, label='Ventana', color = 'g')
+	plt.plot(VectorTiempos, ListaTeNitida , label='T. Exterior')
 
 	# Añadir etiquetas y título
 	plt.xlabel('Tiempo (h)')
@@ -142,4 +156,24 @@ if __name__ == '__main__':
 	# Mostrar el gráfico
 	plt.show()
 	#print(lista_vp)
-      
+	plt.grid(True)
+	plt.plot(VectorTiempos, [Tic-TiVa for Tic, TiVa in zip(ListaTiNitida, ListaTiNitidaVabierta)], label='Diferencia Vcorregida - Vabieta', color='red')
+	plt.plot(VectorTiempos, [Tic-TiVc for Tic, TiVc in zip(ListaTiNitida, ListaTiNitidaVcerrada)], label='Diferencia Vcorregida - Vcerrada', color='green')
+	plt.plot(VectorTiempos, [TiVa-TiVc for TiVa, TiVc in zip(ListaTiNitidaVabierta, ListaTiNitidaVcerrada)], label='Diferencia Vabierta - Vcerrada', color='blue')
+	plt.legend()
+	plt.title('Comparación de la correccion/No corrección')
+	plt.xlabel('Tiempo (h)')
+	plt.ylabel('Temperatura (°C)')
+	plt.show()
+
+	plt.show()
+	#print(lista_vp)
+	plt.grid(True)
+	plt.plot(VectorTiempos, [Tic-ToNitida for Tic in ListaTiNitida], label='Diferencia Vcorregida - Vobjetivo', color='red')
+	plt.plot(VectorTiempos, [TiVc-ToNitida for TiVc in ListaTiNitidaVcerrada], label='Diferencia Vcerrada - Vobjetivo', color='green')
+	plt.plot(VectorTiempos, [TiVa-ToNitida for TiVa in ListaTiNitidaVabierta], label='Diferencia Vabierta - Vobjetivo', color='blue')
+	plt.legend()
+	plt.title('Comparación de la correccion/No corrección')
+	plt.xlabel('Tiempo (h)')
+	plt.ylabel('Temperatura (°C)')
+	plt.show()

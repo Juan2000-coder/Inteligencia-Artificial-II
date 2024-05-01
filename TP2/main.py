@@ -65,10 +65,6 @@ if __name__ == '__main__':
 
 		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, 30, HoraNitida]
 
-		# dia_siguiente 			= [inicio:fin]				# Una forma a ver de cómo obtener estos índices
-		# cantidad_muestras		 	= len(dia_siguiente)	# Cantidad de muestras de temperatura en el dia siguiente
-		#TpNitida 		= sum(VectorTemperaturaAmbiente[dia_siguiente])/cantidad_muestras #Temperatura pronostico
-
 		#-----------------------------------BORROSIFICAR--------------------------------------
 		# diccionario de valores borrosos con claves los nombres de las variables y los valores son  un diccionario por cada variable
   		# que tiene por clave los nombres de los terminos y por valores las evaluaciones de las funciones de pertenencia

@@ -40,12 +40,15 @@ if __name__ == '__main__':
 	
 	VectorTiempos = np.arange(0, 24.5, 0.5)
 
-	
 
-	TiNitida				   = 10					# La temperatura interior inicial
-	TpNitida				   = 10					# La temperatura pronosticada inicial
-	
-	
+	TiNitida		= 10					# La temperatura interior inicial
+	inicio_dia = int(len(VectorTemperaturaAmbiente)/3)
+	final_dia  = int(len(VectorTemperaturaAmbiente)*5/6)
+
+	Tp_dia = VectorTemperaturaAmbiente[inicio_dia:final_dia]
+	TpNitida		= sum(Tp_dia)/len(Tp_dia)	# La temperatura pronosticada inicial
+
+
 	i = 0
 	while(i in range(len(VectorTemperaturaAmbiente))):
 
@@ -67,11 +70,7 @@ if __name__ == '__main__':
 		ZenfNitida 	= (TiNitida - TenfNitida)*(TeNitida - TiNitida)
 		ZcalNitida	= (TiNitida - TcalNitida)*(TeNitida - TiNitida)
 
-		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, 30, HoraNitida]
-
-		# dia_siguiente 			= [inicio:fin]				# Una forma a ver de cómo obtener estos índices
-		# cantidad_muestras		 	= len(dia_siguiente)	# Cantidad de muestras de temperatura en el dia siguiente
-		#TpNitida 		= sum(VectorTemperaturaAmbiente[dia_siguiente])/cantidad_muestras #Temperatura pronostico
+		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, TpNitida, HoraNitida]
 
 		#-----------------------------------BORROSIFICAR--------------------------------------
 		# diccionario de valores borrosos con claves los nombres de las variables y los valores son  un diccionario por cada variable
@@ -110,7 +109,6 @@ if __name__ == '__main__':
 		VM.corte = corteVM
 		
 		#---------------------------------DESBORROSIFICACIÓN----------------------------------
-
 		# Se obtiene el centroide a partir de f que estará definida en un subintervalo del rango de la ventana
     	#Centroide en X - Indica que tanto se abre la ventana entre 0 y 100.
 

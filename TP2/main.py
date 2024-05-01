@@ -25,9 +25,10 @@ if __name__ == '__main__':
 	lista_TiNitida 			= []
 	lista_Vp				= []
 	Vp = calcular_centroide()
-	tau 					= 24*3600*1/14
+	tau 					= 24*3600*1/5
 	dt					    = 3600/2
 	hab = Habitacion(tau)
+
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------
 	
 	# Datos del 15 de febrero de 2024 en mendoza
@@ -43,38 +44,21 @@ if __name__ == '__main__':
 
 
 	TiNitida		= 10					# La temperatura interior inicial
-	inicio_dia = int(len(VectorTemperaturaAmbiente)/3)
-	final_dia  = int(len(VectorTemperaturaAmbiente)*5/6)
+	inicio_dia 		= int(len(VectorTemperaturaAmbiente)/3)
+	final_dia  		= int(len(VectorTemperaturaAmbiente)*5/6)
 
-	Tp_dia = VectorTemperaturaAmbiente[inicio_dia:final_dia]
+	Tp_dia 			= VectorTemperaturaAmbiente[inicio_dia:final_dia]
 	TpNitida		= sum(Tp_dia)/len(Tp_dia)	# La temperatura pronosticada inicial
-	zmax = 0
-	zmin = 9999
 
 	i = 0
 	while(i in range(len(VectorTemperaturaAmbiente))):
-
-		'''		if contador % 10 == 0:
-			
-        # Si el contador es un múltiplo de 10, aumentar j en 1
-			j += 1
-			
-        # Reiniciar el contador
-			contador = 0
-		'''
-	
 		#---------------------------------------MEDICIÓN---------------------------------------
 		lista_TiNitida.append(TiNitida)
-		lista_Vp.append(Vp)
 		HoraNitida	= VectorTiempos[i]							# Hora actual
 		TeNitida 	= VectorTemperaturaAmbiente[i]				# Temperatua exterior actual
 		ZNitida 	= (TiNitida - ToNitida)*(TeNitida - TiNitida)
 		ZenfNitida 	= (TiNitida - TenfNitida)*(TeNitida - TiNitida)
 		ZcalNitida	= (TiNitida - TcalNitida)*(TeNitida - TiNitida)
-		if ZNitida > zmax:
-			zmax = ZNitida
-		if ZNitida < zmin:
-			zmin = ZNitida
 
 		VariablesNitidas		= [ZNitida, ZcalNitida, ZenfNitida, TpNitida, HoraNitida]
 
@@ -120,16 +104,11 @@ if __name__ == '__main__':
     	#Centroide en X - Indica que tanto se abre la ventana entre 0 y 100.
 
 		Vp 				= calcular_centroide() #Ventana Porcentaje
-		#print(Vp)
-		#tau_instantaneo = tau*(1 + 0.1*(100 - Vp)/100)
-		#TiNitida 		= dt*(TeNitida - TiNitida)/tau_instantaneo + TiNitida
-  		
-		TiNitida = hab.runge_kutta_4(HoraNitida, TiNitida, dt, TeNitida,Vp)
+		lista_Vp.append(Vp)
+		TiNitida 		= hab.runge_kutta_4(HoraNitida, TiNitida, dt, TeNitida,Vp)
 		
 		i += 1
 
-
-	print(zmax, zmin)
 	fig, ax1 = plt.subplots()
 	plt.grid(True)
 	# Plotear la segunda gráfica
@@ -149,9 +128,6 @@ if __name__ == '__main__':
 	#Plotear los porcentajes de apertura de la ventana
 	ax2 = ax1.twinx()
 
-	
-	
 	# Mostrar el gráfico
 	plt.show()
-	#print(lista_vp)
       

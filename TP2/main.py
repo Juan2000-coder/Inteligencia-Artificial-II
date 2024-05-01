@@ -27,7 +27,7 @@ if __name__ == '__main__':
 	Vp = calcular_centroide()
 	tau 					= 24*3600*1/5
 	dt					    = 3600/2
-	ventana					= 0.5
+	ventana					= 0.1
 	hab 					= Habitacion(tau, ventana)
 
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------

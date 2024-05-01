@@ -16,7 +16,7 @@ if __name__ == '__main__':
 	#--------------------------------Variables nitidas----------------------------------
 	TenfNitida				= -10
 	TcalNitida				= 50
-	ToNitida				= 7							# La temperatura objetivo
+	ToNitida				= 25						# La temperatura objetivo
 	ZNitida 				= None
 	ZcalNitida 				= None
 	ZenfNitida 				= None
@@ -27,7 +27,8 @@ if __name__ == '__main__':
 	Vp = calcular_centroide()
 	tau 					= 24*3600*1/5
 	dt					    = 3600/2
-	hab = Habitacion(tau)
+	ventana					= 0.5
+	hab 					= Habitacion(tau, ventana)
 
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------
 	

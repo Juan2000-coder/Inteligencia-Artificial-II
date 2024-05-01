@@ -47,11 +47,11 @@ ZenfC = Triangular(0, 50)		# Hay que ver en qué valores varía	(Zcentro)
 ZenfP = HombroIzquierdo(0, 50)  # Hay que ver en que valores varía	(Zpositivo)
 
 #Terminos linguisticos de Tp (Temperatura pronóstico)
-Talta = HombroIzquierdo(20, 10)  	# Temperatura pronóstico alta
-Tbaja = HombroDerecho(30, 10)		# Temperatura pronóstico baja
+Talta = HombroIzquierdo(15, 10)  	# Temperatura pronóstico alta
+Tbaja = HombroDerecho(20, 10)		# Temperatura pronóstico baja
 
 #Terminos linguisticos de Hora (Hora del día)
-Dia 	= And(HombroIzquierdo(7, 2), HombroDerecho(21, 2))  	# En horas.
+Dia 	= And(HombroIzquierdo(7, 2), HombroDerecho(21, 2))  # En horas.
 Noche 	= Or(HombroDerecho(9, 2), HombroIzquierdo(19, 2))	# Temperatura pronóstico baja
 
 #--------------------------DEFINICIÓN DE LAS VARIABLES LINGUISTICAS-------------------------------------

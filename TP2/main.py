@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
 	Tp_dia 			= VectorTemperaturaAmbiente[inicio_dia:final_dia]
 	TpNitida		= sum(Tp_dia)/len(Tp_dia)	# La temperatura pronosticada inicial
-
+	print(TpNitida)
 	i = 0
 	while(i in range(len(VectorTemperaturaAmbiente))):
 		#---------------------------------------MEDICIÓN---------------------------------------

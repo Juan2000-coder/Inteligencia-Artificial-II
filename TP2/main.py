@@ -27,7 +27,7 @@ if __name__ == '__main__':
 	Vp = calcular_centroide()
 	tau 					= 24*3600*1/5
 	dt					    = 3600/2
-	ventana					= 10000
+	ventana					= 0.1
 	hab 					= Habitacion(tau, ventana)
 
 	#----------------------ITERACIÓN EN EL TIEMPO--------------------------------------------
@@ -50,7 +50,6 @@ if __name__ == '__main__':
 
 	Tp_dia 			= VectorTemperaturaAmbiente[inicio_dia:final_dia]
 	TpNitida		= sum(Tp_dia)/len(Tp_dia)	# La temperatura pronosticada inicial
-	print(TpNitida)
 	i = 0
 	while(i in range(len(VectorTemperaturaAmbiente))):
 		#---------------------------------------MEDICIÓN---------------------------------------

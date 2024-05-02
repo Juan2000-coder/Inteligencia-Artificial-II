@@ -26,8 +26,8 @@ def CalcularTp(Dia, Hora):
 
 if __name__ == '__main__':
 	#--------------------------------Variables nitidas----------------------------------
-	TenfNitida				= 10
-	TcalNitida				= 50
+	TenfNitida				= 25
+	TcalNitida				= 25
 	ToNitida				= 25							# La temperatura objetivo
 	ZNitida 				= None
 	ZcalNitida 				= None
@@ -41,8 +41,8 @@ if __name__ == '__main__':
 	Tau 					= 24*3600*1/5
 	Dt					    = 3600/2
 	Dia						= 0
-	LimiteDias				= 14
-	ventana					= 0.1
+	LimiteDias				= 28
+	ventana					= 20
 	Hab						= Habitacion(Tau, ventana)
 
 	ListaTiNitida 				= []
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 	while(Dia < LimiteDias):
 
 		#---------------------------------------MEDICIÓN---------------------------------------
-		TeNitida 	= EvolucionTe(Dia, HoraNitida, MediaLarga = -5, RangoLargo=10, RangoCorto=2, PeriodoCorto=4)
+		TeNitida 	= EvolucionTe(Dia, HoraNitida, PeriodoLargo=14, MediaLarga = 28, RangoLargo=10, RangoCorto=2, PeriodoCorto=24)
 
 		VectorTiempos.append(HoraNitida + Dia*24)
 		ListaTiNitida.append(TiNitida)
@@ -122,8 +122,8 @@ if __name__ == '__main__':
 
 		#RK
 		TiNitida 				= Hab.runge_kutta_4(HoraNitida, TiNitida, Dt, TeNitida, Vp)
-		TiNitidaVabierta 		= Hab.runge_kutta_4(HoraNitida, TiNitida, Dt, TeNitida, 0)
-		TiNitidaVcerrada		= Hab.runge_kutta_4(HoraNitida, TiNitida, Dt, TeNitida, 100)
+		TiNitidaVabierta 		= Hab.runge_kutta_4(HoraNitida, TiNitida, Dt, TeNitida, 100)
+		TiNitidaVcerrada		= Hab.runge_kutta_4(HoraNitida, TiNitida, Dt, TeNitida, 0)
 
 		if HoraNitida == 23.5:
 			HoraNitida  = 0

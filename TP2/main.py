@@ -42,7 +42,8 @@ if __name__ == '__main__':
 	Dt					    = 3600/2
 	Dia						= 0
 	LimiteDias				= 14
-	Hab						= Habitacion(Tau)
+	ventana					= 0.1
+	Hab						= Habitacion(Tau, ventana)
 
 	ListaTiNitida 				= []
 	ListaTeNitida				= []

@@ -1,8 +1,8 @@
 import numpy as np
 
 class Habitacion:
-  def __init__(self, _tau):
-    
+  def __init__(self, _tau, ventana = 0.1):
+    self.ventana = ventana
     self.tau = _tau
     
 
@@ -22,7 +22,7 @@ class Habitacion:
       """
       Ecuación diferencial: dy/dx = x - y
       """
-      return (_tempE - _tempI)/(self.tau*(1.1 - (0.1*_porcentaje/100)))
+      return (_tempE - _tempI)/(self.tau*(1 + self.ventana*(100 - _porcentaje)/100))
 
   """
   Método de Runge-Kutta de cuarto orden para resolver EDOs.

@@ -21,9 +21,14 @@ import numpy as np
 X_train = X_train.reshape(X_train.shape[0], -1) / 255.0
 X_test = X_test.reshape(X_test.shape[0], -1) / 255.0
 
+print("X_train shape:", X_train.shape)
+print("y_train shape:", y_train.shape)
+print("X_test shape:", X_test.shape)
+print("y_test shape:", y_test.shape)
+
+
 # Dividir los datos en conjuntos de entrenamiento y prueba
 X_train_split, X_val_split, y_train_split, y_val_split = train_test_split(X_train, y_train, test_size=0.2, random_state=42)
-
 
 
 #------------------------------------------- Clasificacion --------------------------------------------#

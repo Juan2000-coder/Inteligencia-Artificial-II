@@ -1,35 +1,82 @@
-from NeuralNetwork import NeuralNetwork
 from Dinosaur import Dinosaur
 import numpy as np
 import random
 
+
+'''
+Actualemnte esto está funcionando de la siguiente manera:
+    Se tiene una población con sus weights, biases y score.
+    Se selecciona al 10% mejor puntuado a partir de su score y se les llama élite.
+    Se agregan los individuos de la élite a la nueva población.
+    Se generan hijos a partir de cruces entre los individuos de la élite (50% de la población restante).
+    Se agregan los hijos de la elite a la nueva población.
+    Se generan los hijos restantes a partir de cruces random en la población (elite + no elite).
+    Se agregan los hijos restantes a la nueva población.
+
+    Por último, se reemplazan los valores de weights y biases de la población con los encontrados para la nueva.
+
+    
+    De modo que si se tenía una población de 100 individuos:
+        - 10 nuevos individuos serán los 10 mejores de la élite.
+        - 45 nuevos individuos serán hijos de la élite con la elite.  (en realidad 46, se crean de a dos los hijos)
+        - 45 nuevos individuos serán hijos de cruces random entre los individuos de la población. (44 en realidad)
+'''
+
+
 def updateNetwork(population):
     # ===================== ESTA FUNCIÓN RECIBE UNA POBLACIÓN A LA QUE SE DEBEN APLICAR MECANISMOS DE SELECCIÓN, =================
     # ===================== CRUCE Y MUTACIÓN. LA ACTUALIZACIÓN DE LA POBLACIÓN SE APLICA EN LA MISMA VARIABLE ====================
-    # Seleccionamos los dinosaurios más aptos
+    # Ordenamos a la población en función de su score
     fittest = select_fittest(population)
+
+    # Determinamos el número de individuos en la élite (10% de la población) y aseguramos que sea un número par
+    elite_count = max(1, len(population) // 10)  # Al menos un individuo en la élite
+    if elite_count % 2 != 0:
+        elite_count -= 1  # Nos aseguramos de que sea par, por la forma en que se crean los hijos
+
+    # Número de individuos no pertenecientes a la élite que necesitamos generar
+    non_elite_count = len(population) - elite_count
     
-    # Generamos la nueva población mediante cruce y mutación
-    # Incluimos a los dos mejores de la elite
-    new_population = [fittest[0], fittest[1]]
+    # Número de individuos generados por cruces de la élite con la elite (50% de non_elite_count)
+    elite_cross_count = non_elite_count // 2
 
-    id = list(range(39))
-    id.remove(fittest[0].id)
-    id.remove(fittest[1].id) 
+    # Generamos la nueva población, incluyendo a los individuos de la élite
+    elite = fittest[:elite_count]
+    new_population_data = [(ind.weights, ind.biases) for ind in elite]
 
+    # Generar hijos a partir de padres: elite con elite
+    while len(new_population_data) < elite_count + elite_cross_count:
+        parent1 = random.choice(elite)
+        parent2 = random.choice(elite)
+        
+        # Asegurarse de que los padres no sean el mismo individuo
+        while parent1 == parent2:
+            parent2 = random.choice(elite)
+        
+        # Crear dos hijos
+        child1_weights, child1_biases, child2_weights, child2_biases = evolve(parent1, parent2)
+        new_population_data.append((child1_weights, child1_biases))
+        if len(new_population_data) < len(population):
+            new_population_data.append((child2_weights, child2_biases))
 
-    for i in range((len(population) // 2) - 1):
-        parent1 = random.choice(fittest)
-        parent2 = random.choice(fittest)
-        child1, child2 = evolve(parent1, parent2, id[i])
-        new_population.append(child1)
-        new_population.append(child2)
+    # Generar hijos por cruces aleatorios entre todos los individuos
+    while len(new_population_data) < len(population):
+        parent1 = random.choice(population)
+        parent2 = random.choice(population)
+        
+        # Asegurarse de que los padres no sean el mismo individuo
+        while parent1 == parent2:
+            parent2 = random.choice(population)
+        
+        # Crear dos hijos
+        child1_weights, child1_biases, child2_weights, child2_biases = evolve(parent1, parent2)
+        new_population_data.append((child1_weights, child1_biases))
+        if len(new_population_data) < len(population):
+            new_population_data.append((child2_weights, child2_biases))
 
-    # Reemplazamos la población antigua con la nueva
-    for i in range(len(population) - 1):
-        population[i] = new_population[i]
-
-
+    # Reemplazar la población antigua con la nueva
+    for i in range(len(population)):
+        population[i].weights, population[i].biases = new_population_data[i]
 
     # =============================================================================================================================
 
@@ -45,74 +92,48 @@ def select_fittest(population):
     return fittest
     # ================================================================
 
-def evolve(parent1, parent2, i):
-    # ================= FUNCIÓN DE CRUCE Y MUTACIÓN ==================
-    # Le damos a los hijos la estructura de la red neuronal. A pesar de que tengan valores random, luego los cambiamos
-    R = random.randint(0, 255)
-    G = random.randint(0, 255)
-    if (R < 20 and G < 20):
-        B = 255
-    else:
-        B = random.randint(0, 255)
-    color = (R, G, B)
+def evolve(parent1, parent2):
+    child1_weights = [np.copy(w) for w in parent1.weights]
+    child1_biases = [np.copy(b) for b in parent1.biases]
+    child2_weights = [np.copy(w) for w in parent2.weights]
+    child2_biases = [np.copy(b) for b in parent2.biases]
 
-    child1 = Dinosaur(i, color, True)
-    child2 = Dinosaur(i+1, color, True)
-    
-    # Realizamos el cruce y la mutación
-    for i in range(len(parent1.weights_input_hidden)):
-        if random.random() > 0.5:
-            child1.weights_input_hidden[i] = parent1.weights_input_hidden[i]
-            child2.weights_input_hidden[i] = parent2.weights_input_hidden[i]
-        else:
-            child1.weights_input_hidden[i] = parent2.weights_input_hidden[i]
-            child2.weights_input_hidden[i] = parent1.weights_input_hidden[i]
-    
-    for i in range(len(parent1.weights_hidden_output)):
-        if random.random() > 0.5:
-            child1.weights_hidden_output[i] = parent1.weights_hidden_output[i]
-            child2.weights_hidden_output[i] = parent2.weights_hidden_output[i]
-        else:
-            child1.weights_hidden_output[i] = parent2.weights_hidden_output[i]
-            child2.weights_hidden_output[i] = parent1.weights_hidden_output[i]
-    
-    for i in range(len(parent1.bias_hidden)):
-        if random.random() > 0.5:
-            child1.bias_hidden[i] = parent1.bias_hidden[i]
-            child2.bias_hidden[i] = parent2.bias_hidden[i]
-        else:
-            child1.bias_hidden[i] = parent2.bias_hidden[i]
-            child2.bias_hidden[i] = parent1.bias_hidden[i]
-    
-    for i in range(len(parent1.bias_output)):
-        if random.random() > 0.5:
-            child1.bias_output[i] = parent1.bias_output[i]
-            child2.bias_output[i] = parent2.bias_output[i]
-        else:
-            child1.bias_output[i] = parent2.bias_output[i]
-            child2.bias_output[i] = parent1.bias_output[i]
-    
+    # Cruce
+    for i in range(len(parent1.weights)):
+        for j in range(len(parent1.weights[i][0])):
+            if random.random() > 0.5:
+                child1_weights[i][:, j] = parent1.weights[i][:, j]
+                child1_biases[i][j] = parent1.biases[i][j]
+                
+                child2_weights[i][:, j] = parent2.weights[i][:, j]
+                child2_biases[i][j] = parent2.biases[i][j]
+            else:
+                child1_weights[i][:, j] = parent2.weights[i][:, j]
+                child1_biases[i][j] = parent2.biases[i][j]
+                
+                child2_weights[i][:, j] = parent1.weights[i][:, j]
+                child2_biases[i][j] = parent1.biases[i][j]
+
     # Mutación
-    mutate(child1)
-    mutate(child2)
+    mutate(child1_weights, child1_biases)
+    mutate(child2_weights, child2_biases)
     
-    return child1, child2
+    return child1_weights, child1_biases, child2_weights, child2_biases
 
-def mutate(child, mutation_rate=0.1):
-    for i in range(len(child.weights_input_hidden)):
-        if random.random() < mutation_rate:
-            child.weights_input_hidden[i] += np.random.randn() * mutation_rate
+
+def mutate(weights, biases, mutation_rate=0.3):
+    # ===================== FUNCIÓN DE MUTACIÓN =====================
+    # Mutar pesos
+    for layer_weights in weights:
+        for neuron_weights in layer_weights:
+            for i in range(len(neuron_weights)):
+                if random.random() < mutation_rate:
+                    neuron_weights[i] += np.random.randn() * mutation_rate
     
-    for i in range(len(child.weights_hidden_output)):
-        if random.random() < mutation_rate:
-            child.weights_hidden_output[i] += np.random.randn() * mutation_rate
-    
-    for i in range(len(child.bias_hidden)):
-        if random.random() < mutation_rate:
-            child.bias_hidden[i] += np.random.randn() * mutation_rate
-    
-    for i in range(len(child.bias_output)):
-        if random.random() < mutation_rate:
-            child.bias_output[i] += np.random.randn() * mutation_rate
+    # Mutar biases
+    for neuron_bias in biases:
+        for i in range(len(neuron_bias)):
+            if random.random() < mutation_rate:
+                neuron_bias[i] += np.random.randn() * mutation_rate
 
     # ===============================================================

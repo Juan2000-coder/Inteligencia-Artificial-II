@@ -26,7 +26,7 @@ SCREEN_HEIGHT = 600
 SCREEN_WIDTH = 1100
 SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("DinoGame")
-generation = 2
+generation = 1
 bestScore = 0
 playMode = "X"
 
@@ -48,7 +48,7 @@ def populate(population_size):
     return population
 
 # ======================== SELECT THE POPULATION NUMBER PLAYING AT THE SAME TIME ======================
-population_number = 40
+population_number = 100
 # =====================================================================================================
 population = populate(population_number)
 player = Dinosaur(0)
@@ -125,7 +125,9 @@ def gameScreen():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
+                pygame.quit()
+                return
+    
         SCREEN.fill((255, 255, 255))
 
         if playMode == 'm' or playMode == 'c':
@@ -150,7 +152,8 @@ def gameScreen():
                     obstacle_params = obstacle.rect
                     dino_params = dino.dino_rect
                     # ========================== ACTUALIZAR LA FUNCIÓN 'think' CON LOS PARÁMETROS DE ENTRADA DE LA RED ===================
-                    dino.update(dino.think(np.array([dino_params.x, dino_params.y, obstacle_params.x, obstacle_params.y])))
+                    dino.update(dino.think(np.array([dino_params.x, dino_params.y, obstacle_params.x, obstacle_params.y, (dino_params.x - obstacle_params.x), (dino_params.y - obstacle_params.y)])))
+                    #print(np.array([dino_params.x, dino_params.y, obstacle_params.x, obstacle_params.y, (dino_params.x - obstacle_params.x), (dino_params.y - obstacle_params.y)]))
                     # ====================================================================================================================
 
         if len(obstacles) == 0:
@@ -248,7 +251,10 @@ def menu():
         textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         SCREEN.blit(text, textRect)
         pygame.display.update()
-        for event in pygame.event.get():
+
+        gameScreen()
+
+        '''for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
             if event.type == pygame.KEYDOWN:
@@ -257,7 +263,7 @@ def menu():
 
                     if playMode == 'm' or playMode == 'c' or playMode == 'a':
                         population = []
-                gameScreen()
+                gameScreen()'''
 
 def count_alive(population):
     alive = 0

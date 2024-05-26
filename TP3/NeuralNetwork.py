@@ -28,14 +28,18 @@ import pickle
         - Para inicializar un nuevo modelo:
                         flag_modelo   = False
                         nombre_modelo = "nombre_del_modelo_a_guardar.pkl"
+
+    
+    Uso:            modelo_entrenado2.pkl : modelo copado y mínimo 2.5k puntos
+                    modelo_entrenado.pkl : modelo para arrancar de 0 puntos 
 '''
 
 
 class NeuralNetwork:
     def __init__(self, id):
 
-        flag_modelo = False                 # Encender si se pretende usar un modelo ya entrenado
-        self.nombre_modelo = "modelo_entrenado.pkl"    # Nombre del modelo a cargar/gaurdar
+        flag_modelo = True                 # Encender si se pretende usar un modelo ya entrenado
+        self.nombre_modelo = "modelo_entrenado2.pkl"    # Nombre del modelo a cargar/gaurdar
 
         if flag_modelo:
             # Implementación de cargar un modelo ya entrenado

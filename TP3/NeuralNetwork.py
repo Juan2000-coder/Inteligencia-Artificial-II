@@ -4,9 +4,9 @@ import numpy as np
     Esta clase incluye la definición de la forma de la red y el tipo de funciones que se aplican en cada capa.
         Actualmente la red tiene 6 entradas, 2 capas ocultas con 2 y 3 neuronas respectivamente y 2 salidas.
         La función de activación de las capas internas es "ReLu".
-            - (Se pueden cambiar las funciones de activación en la función think, modificando self.lineal por la función deseada)
+            - (Se pueden cambiar las funciones de activación en la función think, modificando self.ReLu por la función deseada)
         La función de activación de la capa de salida es "softmax".
-            - (Se pueden cambiar las funciones de activación en la función think, modificando self.tanh por la función deseada)
+            - (Se pueden cambiar las funciones de activación en la función think, modificando self.softmax por la función deseada)
 
             
     Tener en cuenta que se puede modificar lo que recibe la función think, desde el main (línea 155 aprox)

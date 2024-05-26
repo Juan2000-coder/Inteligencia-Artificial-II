@@ -1,5 +1,5 @@
-from Dinosaur import Dinosaur
 import numpy as np
+import pickle
 import random
 
 
@@ -78,6 +78,10 @@ def updateNetwork(population):
     for i in range(len(population)):
         population[i].weights, population[i].biases = new_population_data[i]
 
+
+    # Guardar el modelo de la red neuronal
+    save_population_data(population, population[0].nombre_modelo)
+
     # =============================================================================================================================
 
 def select_fittest(population):
@@ -137,3 +141,22 @@ def mutate(weights, biases, mutation_rate=0.3):
                 neuron_bias[i] += np.random.randn() * mutation_rate
 
     # ===============================================================
+
+
+
+
+
+
+
+def save_population_data(population, file_path):
+    population_data = {}
+
+    for i, individual in enumerate(population):
+        individual_data = {
+            "weights": individual.weights,
+            "biases": individual.biases
+        }
+        population_data[f"individual_{i}"] = individual_data
+
+    with open(file_path, "wb") as file:
+        pickle.dump(population_data, file)

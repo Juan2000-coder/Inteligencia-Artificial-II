@@ -30,7 +30,7 @@ class Dinosaur(NeuralNetwork):
 
     def __init__(self, id, mask_color = None, autoplay = False):
         # As 'NeuralNetwork' serves as base class for the dinosaur, start its 'brain'
-        super().__init__()
+        super().__init__(id=id)  # Pasar el id a la clase base "NeuralNetwork"
         
         self.id = id
         self.color = mask_color

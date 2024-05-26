@@ -1,4 +1,5 @@
 import numpy as np
+import pickle
 
 '''
     Esta clase incluye la definición de la forma de la red y el tipo de funciones que se aplican en cada capa.
@@ -18,22 +19,40 @@ import numpy as np
                 -- Pos en y del obstaculo: obstacle_params.y
                 -- Delta de pos en x: (dino_params.x - obstacle_params.x)
                 -- Delta de pos en y: (dino_params.y - obstacle_params.y)
+
+
+    Por otro lado, aquí se indica si se va a usar un modelo ya entrenado o si se va a inicializar uno nuevo.
+        - Para usar de un modelo ya entrenado:
+                        flag_modelo   = True 
+                        nombre_modelo = "nombre_del_modelo_a_cargar.pkl"
+        - Para inicializar un nuevo modelo:
+                        flag_modelo   = False
+                        nombre_modelo = "nombre_del_modelo_a_guardar.pkl"
 '''
 
 
 class NeuralNetwork:
-    def __init__(self):
+    def __init__(self, id):
 
-        self.red_neuronal = [6, 2, 3, 2]
-            # Neuronas Entrada, Capa Oculta 1: Neuronas, ... , Capa Oculta N-1: Neuronas, Neuronas Salida        
+        flag_modelo = True                 # Encender si se pretende usar un modelo ya entrenado
+        self.nombre_modelo = "modelo_entrenado.pkl"    # Nombre del modelo a cargar/gaurdar
 
-        # Lista de matrices de peso de cada capa
-        self.weights = []              # Cada matriz tiene: en filas las neuronas de la capa anterior
-                                                          # en columnas las neuronas de la capa siguiente
-        # Lista de vectores de bias de cada capa
-        self.biases = []               # Cada vector tiene tantos elementos como neuronas en la capa
+        if flag_modelo:
+            # Implementación de cargar un modelo ya entrenado
+            self.load_model_pkl(model_path=self.nombre_modelo, id=id)
+        
+        else:
+            self.red_neuronal = [6, 2, 3, 2]
+                # Neuronas Entrada, Capa Oculta 1: Neuronas, ... , Capa Oculta N-1: Neuronas, Neuronas Salida        
 
-        self.initialize()
+            # Lista de matrices de peso de cada capa
+            self.weights = []              # Cada matriz tiene: en filas las neuronas de la capa anterior
+                                                            # en columnas las neuronas de la capa siguiente
+            # Lista de vectores de bias de cada capa
+            self.biases = []               # Cada vector tiene tantos elementos como neuronas en la capa
+
+            self.initialize()
+
 
     def initialize(self):
         # ====================== INITIALIZE NETWORK WEIGTHS AND BIASES ===========================
@@ -45,6 +64,9 @@ class NeuralNetwork:
             self.weights.append(weight_matrix)
             self.biases.append(bias_vector)
 
+
+        # Guardar el modelo inicializado
+        self.save_model_pkl(model_path=self.nombre_modelo)
         # ========================================================================================
 
 
@@ -95,3 +117,32 @@ class NeuralNetwork:
         #elif (action == 2):
         #    return "RUN"
         # =========================================================================================
+
+
+
+
+
+
+    def save_model_pkl(self, model_path="modelo_entrenado.pkl"):
+            # ================= GUARDAR LOS PESOS Y BIASES DE LA RED EN UN PKL ======================
+            model_data = {
+                "weights": self.weights,
+                "biases": self.biases
+            }
+            with open(model_path, "wb") as f:
+                pickle.dump(model_data, f)
+            # =======================================================================================
+
+    def load_model_pkl(self, model_path, id):
+        # =============== CARGAR LOS PESOS Y BIASES DE UNA RED GUARDADA =========================
+        with open(model_path, "rb") as f:
+            population_data = pickle.load(f)
+            
+            individual_key = f"individual_{id}"
+            if individual_key in population_data:
+                individual_data = population_data[individual_key]
+                self.weights = individual_data["weights"]
+                self.biases = individual_data["biases"]
+            else:
+                raise ValueError(f"Individual with id {id} not found in the model data.")
+        # =======================================================================================

@@ -39,7 +39,7 @@ class NeuralNetwork:
     def __init__(self, id):
 
         flag_modelo = True                 # Encender si se pretende usar un modelo ya entrenado
-        self.nombre_modelo = "modelo_entrenado2.pkl"    # Nombre del modelo a cargar/gaurdar
+        self.nombre_modelo = "TP3/modelo_entrenado2.pkl"    # Nombre del modelo a cargar/gaurdar
 
         if flag_modelo:
             # Implementación de cargar un modelo ya entrenado

@@ -3,8 +3,8 @@ import os
 from Obstacle import Obstacle
 
 # Bring images from assets
-BIRD = [pygame.image.load(os.path.join("Assets/Bird", "Bird1.png")),
-        pygame.image.load(os.path.join("Assets/Bird", "Bird2.png"))]
+BIRD = [pygame.image.load(os.path.join("TP3/Assets/Bird", "Bird1.png")),
+        pygame.image.load(os.path.join("TP3/Assets/Bird", "Bird2.png"))]
 
 class Bird(Obstacle):
     def __init__(self, screen_width, game_speed, obstacles):

@@ -4,9 +4,9 @@ import random
 from Obstacle import Obstacle
 
 # Bring images from assets
-LARGE_CACTUS = [pygame.image.load(os.path.join("Assets/Cactus", "LargeCactus1.png")),
-                pygame.image.load(os.path.join("Assets/Cactus", "LargeCactus2.png")),
-                pygame.image.load(os.path.join("Assets/Cactus", "LargeCactus3.png"))]
+LARGE_CACTUS = [pygame.image.load(os.path.join("TP3/Assets/Cactus", "LargeCactus1.png")),
+                pygame.image.load(os.path.join("TP3/Assets/Cactus", "LargeCactus2.png")),
+                pygame.image.load(os.path.join("TP3/Assets/Cactus", "LargeCactus3.png"))]
 
 class LargeCactus(Obstacle):
     def __init__(self, screen_width, game_speed, obstacles):

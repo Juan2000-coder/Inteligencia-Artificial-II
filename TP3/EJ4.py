@@ -32,7 +32,7 @@ playMode = "X"
 
 imageCapture = ImageCapture(screen_spawn_position)
 
-BG = pygame.image.load(os.path.join("Assets/Other", "Track.png"))
+BG = pygame.image.load(os.path.join("TP3/Assets/Other", "Track.png"))
 
 def populate(population_size):
     population = []
@@ -161,7 +161,7 @@ def gameScreen():
                 obstacles.append(SmallCactus(SCREEN_WIDTH, game_speed, obstacles))
             elif random.randint(0, 2) == 1:
                 obstacles.append(LargeCactus(SCREEN_WIDTH, game_speed, obstacles))
-            elif random.randint(0, 2) == 2: 
+            elif random.randint(0, 2) == 2:
                 obstacles.append(Bird(SCREEN_WIDTH, game_speed, obstacles))
         
 
@@ -252,7 +252,7 @@ def menu():
         SCREEN.blit(text, textRect)
         pygame.display.update()
 
-        #gameScreen()
+        gameScreen()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

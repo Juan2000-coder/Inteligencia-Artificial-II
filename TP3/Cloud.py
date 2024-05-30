@@ -3,7 +3,7 @@ import os
 import random
 
 # Bring images from assets
-CLOUD = pygame.image.load(os.path.join("Assets/Other", "Cloud.png"))
+CLOUD = pygame.image.load(os.path.join("TP3/Assets/Other", "Cloud.png"))
 
 class Cloud:
     def __init__(self, screen_width, game_speed):

@@ -14,11 +14,11 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 # Bring images from assets
-RUNNING = [os.path.join("Assets/Dino", "DinoRun1.png"),
-           os.path.join("Assets/Dino", "DinoRun2.png")]
-JUMPING = [os.path.join("Assets/Dino", "DinoJump.png")]
-DUCKING = [os.path.join("Assets/Dino", "DinoDuck1.png"),
-           os.path.join("Assets/Dino", "DinoDuck2.png")]
+RUNNING = [os.path.join("TP3/Assets/Dino", "DinoRun1.png"),
+           os.path.join("TP3/Assets/Dino", "DinoRun2.png")]
+JUMPING = [os.path.join("TP3/Assets/Dino", "DinoJump.png")]
+DUCKING = [os.path.join("TP3/Assets/Dino", "DinoDuck1.png"),
+           os.path.join("TP3/Assets/Dino", "DinoDuck2.png")]
 CLASSES = ["JUMP", "DUCK", "RIGHT"]
 
 class Dinosaur(NeuralNetwork):

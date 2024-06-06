@@ -38,12 +38,13 @@ import pickle
 class NeuralNetwork:
     def __init__(self, id):
 
-        flag_model = False            # Encender si se pretende usar un modelo ya entrenado
-        self.model_name = "modelo_entrenado.pkl"    # Nombre del modelo a cargar/gaurdar
+        flag_model = True            # Encender si se pretende usar un modelo ya entrenado
+        self.model_name = "modelo_entrenado_2.pkl"    # Nombre del modelo a cargar/gaurdar
+        self.flag_train = False        # Encender si se pretende entrenar la red
 
         if flag_model:
             # Implementación de cargar un modelo ya entrenado
-            self.load_model_pkl(model_path=self.model_name, id=id)
+            self.load_model_pkl(model_path=self.model_name, id=id, flag_train=self.flag_train)
         
         else:
             self.red_neuronal = [6, 2, 3, 2]
@@ -137,12 +138,16 @@ class NeuralNetwork:
             pickle.dump(model_data, f)
         # =======================================================================================
 
-    def load_model_pkl(self, model_path, id):
+    def load_model_pkl(self, model_path, id, flag_train):
         # =============== CARGAR LOS PESOS Y BIASES DE UNA RED GUARDADA =========================
         with open(model_path, "rb") as f:
             population_data = pickle.load(f)
             
-            individual_key = f"individual_{id}"
+            if flag_train:
+                individual_key = f"individual_{id}"
+            else:
+                individual_key = f"individual_{0}"
+
             if individual_key in population_data:
                 individual_data = population_data[individual_key]
                 self.weights = individual_data["weights"]

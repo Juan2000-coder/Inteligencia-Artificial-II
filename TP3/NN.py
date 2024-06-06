@@ -155,6 +155,9 @@ class NeuralNetwork:
 				self.model[i].b = self.model[i].b - np.mean(deltas[0], axis = 0, keepdims = True) * learning_rate
 				self.model[i].w = self.model[i].w - out[i][1].T @ deltas[0] * learning_rate
 			print(k)
+			#if k>1000:
+			#	 learning_rate = 0.5*learning_rate
+			
 			error.append(MSE(out[-1][1],Y,))
 			error_t.append(MSE(self.predict(X_t),Y_t))
 
@@ -181,10 +184,13 @@ def main():
 	x = np.linspace(0, 10, num_puntos)
 
     # Calcular valores de y para la parte positiva de la parábola y = x^2
+	#y = np.sin(x)+1#**2
 	y = x**2
 
     # Añadir algo de ruido a los puntos para hacer la nube más realista
-	ruido = np.random.normal(0, 10, num_puntos)
+	#ruido = np.random.normal(0, 10, num_puntos)
+	ruido = np.random.normal(0, 10, y.shape)
+	#ruido = np.random.normal(0, 0.2, y.shape)
 	y_ruidoso = y + ruido
 	n = round(0.2*1000)
 	x_t, y_ruidoso_t,x, y_ruidoso = random_indices_selection(x,y_ruidoso, n)
@@ -205,8 +211,10 @@ def main():
 	
 	 
 	NN = NeuralNetwork(top = [1, 30,20,10, 1], act_fun = [leaky_ReLU,leaky_ReLU,leaky_ReLU,sigmoid])
+	#NN = NeuralNetwork(top = [1, 150,50,10, 1], act_fun = [leaky_ReLU,leaky_ReLU,leaky_ReLU,sigmoid])
 	
 	NN.fit(X = x_positivos, Y = y_positivos,X_t = x_positivos_t, Y_t = y_positivos_t, epochs = 700, learning_rate = 0.0005)
+	#NN.fit(X = x_positivos, Y = y_positivos,X_t = x_positivos_t, Y_t = y_positivos_t, epochs = 1000, learning_rate = 0.00005)
 
 	#x_test = random_points(n = 5000)
 	#y_test = brain_xor.predict(x_test)

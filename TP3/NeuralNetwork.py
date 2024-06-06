@@ -23,11 +23,11 @@ import pickle
 
     Por otro lado, aquí se indica si se va a usar un modelo ya entrenado o si se va a inicializar uno nuevo.
         - Para usar de un modelo ya entrenado:
-                        flag_modelo   = True 
-                        nombre_modelo = "nombre_del_modelo_a_cargar.pkl"
+                        flag_model   = True 
+                        model_name = "nombre_del_modelo_a_cargar.pkl"
         - Para inicializar un nuevo modelo:
-                        flag_modelo   = False
-                        nombre_modelo = "nombre_del_modelo_a_guardar.pkl"
+                        flag_model   = False
+                        model_name = "nombre_del_modelo_a_guardar.pkl"
 
     
     Uso:            modelo_entrenado2.pkl : modelo copado y mínimo 2.5k puntos
@@ -38,16 +38,16 @@ import pickle
 class NeuralNetwork:
     def __init__(self, id):
 
-        flag_modelo = True                 # Encender si se pretende usar un modelo ya entrenado
-        self.nombre_modelo = "TP3/modelo_entrenado2.pkl"    # Nombre del modelo a cargar/gaurdar
+        flag_model = False            # Encender si se pretende usar un modelo ya entrenado
+        self.model_name = "modelo_entrenado.pkl"    # Nombre del modelo a cargar/gaurdar
 
-        if flag_modelo:
+        if flag_model:
             # Implementación de cargar un modelo ya entrenado
-            self.load_model_pkl(model_path=self.nombre_modelo, id=id)
+            self.load_model_pkl(model_path=self.model_name, id=id)
         
         else:
             self.red_neuronal = [6, 2, 3, 2]
-                # Neuronas Entrada, Capa Oculta 1: Neuronas, ... , Capa Oculta N-1: Neuronas, Neuronas Salida        
+            # Neuronas Entrada, Capa Oculta 1: Neuronas, ... , Capa Oculta N-1: Neuronas, Neuronas Salida        
 
             # Lista de matrices de peso de cada capa
             self.weights = []              # Cada matriz tiene: en filas las neuronas de la capa anterior
@@ -70,7 +70,7 @@ class NeuralNetwork:
 
 
         # Guardar el modelo inicializado
-        self.save_model_pkl(model_path=self.nombre_modelo)
+        self.save_model_pkl(model_path=self.model_name)
         # ========================================================================================
 
 
@@ -128,14 +128,14 @@ class NeuralNetwork:
 
 
     def save_model_pkl(self, model_path="modelo_entrenado.pkl"):
-            # ================= GUARDAR LOS PESOS Y BIASES DE LA RED EN UN PKL ======================
-            model_data = {
-                "weights": self.weights,
-                "biases": self.biases
-            }
-            with open(model_path, "wb") as f:
-                pickle.dump(model_data, f)
-            # =======================================================================================
+        # ================= GUARDAR LOS PESOS Y BIASES DE LA RED EN UN PKL ======================
+        model_data = {
+            "weights": self.weights,
+            "biases": self.biases
+        }
+        with open(model_path, "wb") as f:
+            pickle.dump(model_data, f)
+        # =======================================================================================
 
     def load_model_pkl(self, model_path, id):
         # =============== CARGAR LOS PESOS Y BIASES DE UNA RED GUARDADA =========================
@@ -149,4 +149,5 @@ class NeuralNetwork:
                 self.biases = individual_data["biases"]
             else:
                 raise ValueError(f"Individual with id {id} not found in the model data.")
+        # =======================================================================================
         # =======================================================================================

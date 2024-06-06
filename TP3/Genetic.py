@@ -19,48 +19,50 @@ Funcionamiento:
 def updateNetwork(population):
     # ============= ESTA FUNCIÓN RECIBE UNA POBLACIÓN A LA QUE SE DEBEN APLICAR MECANISMOS DE SELECCIÓN, ==============
     # =============== CRUCE Y MUTACIÓN. LA ACTUALIZACIÓN DE LA POBLACIÓN SE APLICA EN LA MISMA VARIABLE ===============
-    # Ordenamos a la población en función de su score
-    fittest = select_fittest(population)
+    
+    if population[0].flag_train:
+        # Ordenamos a la población en función de su score
+        fittest = select_fittest(population)
 
-    # Determinamos el número de individuos en la élite (10% de la población) y aseguramos que sea un número par
-    elite_count = max(1, len(population) // 10)  # Al menos un individuo en la élite
-    if elite_count % 2 != 0:
-        elite_count += 1
+        # Determinamos el número de individuos en la élite (10% de la población) y aseguramos que sea un número par
+        elite_count = max(1, len(population) // 10)  # Al menos un individuo en la élite
+        if elite_count % 2 != 0:
+            elite_count += 1
 
-    # Generamos la nueva población, incluyendo a los individuos de la élite
-    elite = fittest[:elite_count]
-    new_population_data = [(ind.weights, ind.biases) for ind in elite]
-
-
-    # Se asigna probabilidad a cada individuo de la población en función de su score. La probabilidad de selección
-    # de cada individuo es la representación proporcional de su puntaje respecto al puntaje total de la población.
-    scores = np.array([ind.score for ind in population])
-    probabilities = scores / scores.sum()
+        # Generamos la nueva población, incluyendo a los individuos de la élite
+        elite = fittest[:elite_count]
+        new_population_data = [(ind.weights, ind.biases) for ind in elite]
 
 
-    # Generar hijos por cruces aleatorios entre todos los individuos
-    while len(new_population_data) < len(population):
+        # Se asigna probabilidad a cada individuo de la población en función de su score. La probabilidad de selección
+        # de cada individuo es la representación proporcional de su puntaje respecto al puntaje total de la población.
+        scores = np.array([ind.score for ind in population])
+        probabilities = scores / scores.sum()
 
-        parent1 = select_parent(population, probabilities)
-        parent2 = select_parent(population, probabilities)
-        
-        # Asegurarse de que los padres no sean el mismo individuo
-        while parent1 == parent2:
+
+        # Generar hijos por cruces aleatorios entre todos los individuos
+        while len(new_population_data) < len(population):
+
+            parent1 = select_parent(population, probabilities)
             parent2 = select_parent(population, probabilities)
-        
-        # Crear dos hijos
-        child1_weights, child1_biases, child2_weights, child2_biases = evolve(parent1, parent2)
-        new_population_data.append((child1_weights, child1_biases))
-        if len(new_population_data) < len(population):
-            new_population_data.append((child2_weights, child2_biases))
+            
+            # Asegurarse de que los padres no sean el mismo individuo
+            while parent1 == parent2:
+                parent2 = select_parent(population, probabilities)
+            
+            # Crear dos hijos
+            child1_weights, child1_biases, child2_weights, child2_biases = evolve(parent1, parent2)
+            new_population_data.append((child1_weights, child1_biases))
+            if len(new_population_data) < len(population):
+                new_population_data.append((child2_weights, child2_biases))
 
-    # Reemplazar la población antigua con la nueva
-    for i in range(len(population)):
-        population[i].weights, population[i].biases = new_population_data[i]
+        # Reemplazar la población antigua con la nueva
+        for i in range(len(population)):
+            population[i].weights, population[i].biases = new_population_data[i]
 
 
-    # Guardar el modelo de la red neuronal
-    save_population_data(population, population[0].model_name)
+        # Guardar el modelo de la red neuronal
+        save_population_data(population, population[0].model_name)
     # =================================================================================================================
 
 

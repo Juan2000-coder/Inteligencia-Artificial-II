@@ -14,12 +14,14 @@ import numpy as np
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 
 # Bring images from assets
-RUNNING = [os.path.join("TP3/Assets/Dino", "DinoRun1.png"),
-           os.path.join("TP3/Assets/Dino", "DinoRun2.png")]
-JUMPING = [os.path.join("TP3/Assets/Dino", "DinoJump.png")]
-DUCKING = [os.path.join("TP3/Assets/Dino", "DinoDuck1.png"),
-           os.path.join("TP3/Assets/Dino", "DinoDuck2.png")]
-CLASSES = ["JUMP", "DUCK", "RIGHT"]
+RUNNING = [os.path.join("Assets/Dino", "DinoRun1.png"),
+           os.path.join("Assets/Dino", "DinoRun2.png")]
+JUMPING = [os.path.join("Assets/Dino", "DinoJump.png")]
+DUCKING = [os.path.join("Assets/Dino", "DinoDuck1.png"),
+           os.path.join("Assets/Dino", "DinoDuck2.png")]
+#CLASSES = ["JUMP", "DUCK", "RIGHT"]
+CLASSES = ["DUCK", "RIGHT", "JUMP"]
+#CLASSES = ["RIGHT", "DUCK", "JUMP"]
 
 class Dinosaur(NeuralNetwork):
     # Define as global the starting position for the dinosaur
@@ -99,13 +101,13 @@ class Dinosaur(NeuralNetwork):
                 self.dino_run = False
                 self.dino_jump = True
             elif userInput == "DUCK":
-                self.dino_duck = True
                 self.dino_run = False
                 self.dino_jump = False
+                self.dino_duck = True
             elif not (self.dino_jump or userInput == "DUCK"):
                 self.dino_duck = False
-                self.dino_run = True
                 self.dino_jump = False
+                self.dino_run = True
         else:
             if userInput[pygame.K_UP] and not self.dino_jump:
                 self.dino_duck = False
@@ -171,7 +173,7 @@ class Dinosaur(NeuralNetwork):
         
         # Take a screenshot and arrange the image
         # ===================== ARREGLAR TAMAÑO DE IMAGEN, NORMALIZACIÓN Y CANTIDAD DE CLASES PREDICHAS DE SER NECESARIO ===============
-        img = load_img("./images/live/temp.png", color_mode='grayscale', target_size=(600,400))
+        img = load_img("./images/live/temp.png", color_mode='grayscale', target_size=(128,128))
         img_array = img_to_array(img)
         img_array = img_array / 255.0  # Normaliza los valores de píxeles entre 0 y 1
         img_array = np.expand_dims(img_array, axis=0)  # Agrega una dimensión extra para el batch
@@ -179,6 +181,9 @@ class Dinosaur(NeuralNetwork):
         # Use the model to make a decision based on the screenshot
         predictions = self.model.predict(img_array)
         predicted_class_index = np.argmax(predictions)
+        
+        print("Predicciones:", predictions)
+        print("Clase predicha:", CLASSES[predicted_class_index])
         # ==============================================================================================================================
 
         # Call the update method with the result

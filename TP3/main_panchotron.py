@@ -30,7 +30,7 @@ X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, r
 
 # Parámetros a probar
 learning_rates = [0.001, 0.01, 0.1]
-activation_functions = ['relu', 'sigmoid', 'tanh', 'leakyrelu', 'swish', 'elu']
+activation_functions = ['relu', 'sigmoid', 'tanh', 'leakyrelu', 'swish','elu']
 neurons_options = [2, 3, 4, 5]
 
 # Variables para almacenar los mejores parámetros
@@ -74,7 +74,7 @@ X_train_val = np.vstack((X_train, X_val))
 y_train_val = np.vstack((y_train, y_val))
 
 #perceptron = Perceptron(learning_rate=best_lr, n_iters=50, activation=best_activation, neuronas=best_neurons) # COMENTAR SI NO SE HIZO UNA VALIDACION. LOS PARAMETROS DE AQUI SALEN DE VALIDACION
-perceptron = Perceptron(learning_rate=0.01, n_iters=100, activation='relu', neuronas=3)
+perceptron = Perceptron(learning_rate=0.01, n_iters=500, activation='relu', neuronas=3)
 perceptron.fit(X_train_val, y_train_val)
 
 # Predicciones en el conjunto de prueba

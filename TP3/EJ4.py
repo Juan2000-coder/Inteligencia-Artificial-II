@@ -11,7 +11,7 @@ import os
 import random
 from Dinosaur import Dinosaur
 from Cloud import Cloud
-from Bird import Bird
+from Bird import Bird 
 from SmallCactus import SmallCactus
 from LargeCactus import LargeCactus
 from Genetic import updateNetwork
@@ -32,7 +32,7 @@ playMode = "X"
 
 imageCapture = ImageCapture(screen_spawn_position)
 
-BG = pygame.image.load(os.path.join("TP3/Assets/Other", "Track.png"))
+BG = pygame.image.load(os.path.join("Assets/Other", "Track.png"))
 
 def populate(population_size):
     population = []
@@ -112,7 +112,7 @@ def gameScreen():
         cloud.update()
         SCREEN.blit(player.image, (player.dino_rect.x, player.dino_rect.y))
         SCREEN.blit(obstacle.image[obstacle.type], (obstacle_params.x, obstacle_params.y))
-        pygame.draw.rect(SCREEN, (255, 0, 0), player.dino_rect, 2)
+        pygame.draw.rect(SCREEN, (255, 0, 0), player.dino_rect, 2)  
         pygame.draw.rect(SCREEN, (0, 0, 255), obstacle_params, 2)
         pygame.display.update()
         pygame.time.delay(1000)
@@ -136,7 +136,7 @@ def gameScreen():
             player.update(userInput)
             if playMode == 'c':
                 imageCapture.capture(userInput)
-
+ 
         elif playMode == 'a':
             if player.alive:
                 player.draw(SCREEN)
@@ -161,7 +161,7 @@ def gameScreen():
                 obstacles.append(SmallCactus(SCREEN_WIDTH, game_speed, obstacles))
             elif random.randint(0, 2) == 1:
                 obstacles.append(LargeCactus(SCREEN_WIDTH, game_speed, obstacles))
-            elif random.randint(0, 2) == 2:
+            elif random.randint(0, 2) == 2: 
                 obstacles.append(Bird(SCREEN_WIDTH, game_speed, obstacles))
         
 
@@ -202,7 +202,7 @@ def gameScreen():
             countSurviving()
             currentGeneration()
 
-        clock.tick(30)
+        clock.tick(120)
         pygame.display.update()
 
 def menu():
@@ -252,7 +252,7 @@ def menu():
         SCREEN.blit(text, textRect)
         pygame.display.update()
 
-        gameScreen()
+        #gameScreen()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:

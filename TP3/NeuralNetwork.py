@@ -38,9 +38,9 @@ import pickle
 class NeuralNetwork:
     def __init__(self, id):
 
-        flag_model = True            # Encender si se pretende usar un modelo ya entrenado
-        self.model_name = "modelo_entrenado_2.pkl"    # Nombre del modelo a cargar/gaurdar
-        self.flag_train = False        # Encender si se pretende entrenar la red
+        flag_model = False            # Encender si se pretende usar un modelo ya entrenado
+        self.model_name = "modelo_entrenado.pkl"    # Nombre del modelo a cargar/gaurdar
+        self.flag_train = True        # Encender si se pretende entrenar la red
 
         if flag_model:
             # Implementación de cargar un modelo ya entrenado
@@ -63,8 +63,8 @@ class NeuralNetwork:
         # ====================== INITIALIZE NETWORK WEIGTHS AND BIASES ===========================
                
         for i in range(len(self.red_neuronal) - 1):
-            weight_matrix = np.random.rand(self.red_neuronal[i], self.red_neuronal[i + 1])
-            bias_vector = np.random.rand(self.red_neuronal[i + 1])
+            weight_matrix = np.random.rand(self.red_neuronal[i], self.red_neuronal[i + 1])  #Vector Fila
+            bias_vector = np.random.rand(self.red_neuronal[i + 1])                          #Vector Fila
             
             self.weights.append(weight_matrix)
             self.biases.append(bias_vector)
@@ -122,10 +122,6 @@ class NeuralNetwork:
         #elif (action == 2):
         #    return "RUN"
         # =========================================================================================
-
-
-
-
 
 
     def save_model_pkl(self, model_path="modelo_entrenado.pkl"):

@@ -7,8 +7,50 @@ except ImportError as err:
     import tensorflow as tf
 
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
+from tensorflow.keras.callbacks import EarlyStopping
 import os
 import random
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Función para visualizar los filtros de una capa convolucional
+def visualize_filters(model, layer_name):
+    # Obtener la capa convolucional por nombre
+    layer = model.get_layer(name=layer_name)
+    
+    # Obtener los pesos de la capa
+    filters, biases = layer.get_weights()
+    
+    # Normalizar los filtros para visualización
+    f_min, f_max = filters.min(), filters.max()
+    filters = (filters - f_min) / (f_max - f_min)
+    
+    # Número de filtros
+    n_filters = filters.shape[3]
+    
+    # Número de filas y columnas para la visualización
+    n_columns = 8
+    n_rows = int(np.ceil(n_filters / n_columns))
+    
+    # Crear una figura para los filtros
+    fig, axes = plt.subplots(n_rows, n_columns, figsize=(n_columns, n_rows))
+    
+    for i in range(n_filters):
+        # Obtener el filtro i-ésimo
+        f = filters[:, :, 0, i]
+        
+        # Ejes para el filtro i-ésimo
+        ax = axes[i // n_columns, i % n_columns]
+        
+        # Visualizar el filtro
+        ax.imshow(f, cmap='gray')
+        ax.axis('off')
+    
+    # Quitar los ejes para filtros vacíos
+    for j in range(i + 1, n_rows * n_columns):
+        axes[j // n_columns, j % n_columns].axis('off')
+    plt.show()
+
 
 # Rutas de las carpetas
 source_dir = "images"
@@ -27,16 +69,12 @@ os.makedirs(test_dir, exist_ok=True)
 os.makedirs(train_dir + classes[0], exist_ok=True)
 os.makedirs(train_dir + classes[1], exist_ok=True)
 os.makedirs(train_dir + classes[2], exist_ok=True)
-os.makedirs(test_dir + classes[0], exist_ok=True)
-os.makedirs(test_dir + classes[1], exist_ok=True)
-os.makedirs(test_dir + classes[2], exist_ok=True)
 
 # Proporción de imágenes para entrenamiento y prueba
-train_ratio = 0.8
+train_ratio = 1
 
-# Parámetros para el modelo
-batch_size = 32
-image_size = (600, 400)
+
+image_size = (128, 128)
 input_shape = image_size + (1,)  # Tamaño de la imagen con un solo canal para escala de grises
 
 # Función para cargar imágenes y convertirlas a escala de grises
@@ -79,8 +117,13 @@ for class_name in classes:
         img_array = load_and_preprocess_image(src_img_path, image_size)
         tf.keras.preprocessing.image.save_img(dest_train_path, img_array)
 
+
+# Parámetros para el modelo
+batch_size = 16
+
 # Crear generadores de datos
 train_datagen = ImageDataGenerator(rescale=1./255)
+
 train_generator = train_datagen.flow_from_directory(
     train_dir,
     target_size=image_size,
@@ -96,33 +139,44 @@ validation_generator = validation_datagen.flow_from_directory(
     class_mode='categorical',
     color_mode='grayscale')  # Se especifica el modo de color escala de grises
 
+
+data_aux = 3
 # ========================== Construir el modelo ==========================================
 model = tf.keras.models.Sequential([
-    tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=input_shape),
+    tf.keras.layers.Conv2D(32, (data_aux, data_aux), activation='relu', input_shape=input_shape, name = 'conv1'),
     tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+    tf.keras.layers.Conv2D(64, (data_aux, data_aux), activation='relu', name = 'conv2'),
     tf.keras.layers.MaxPooling2D((2, 2)),
-    tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
+    tf.keras.layers.Conv2D(128, (data_aux, data_aux), activation='relu', name = 'conv3'),
     tf.keras.layers.MaxPooling2D((2, 2)),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
+    tf.keras.layers.Dense(16, activation='relu'),
+    tf.keras.layers.Dropout(0.5),
     tf.keras.layers.Dense(len(classes), activation='softmax')
 ])
 # ==========================================================================================
 
 # Compilar el modelo
-model.compile(optimizer='adam',
-              loss='categorical_crossentropy',
-              metrics=['accuracy'])
-
+#model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=0.00001, decay=1e-6),loss='categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer= tf.keras.optimizers.Adam(learning_rate=0.00001),loss='categorical_crossentropy', metrics=['accuracy'])
 print("Número total de muestras de entrenamiento:", train_generator.samples)
 print("Número total de muestras de validación:", validation_generator.samples)
+# Callbacks
+es = tf.keras.callbacks.EarlyStopping(min_delta=0.00005, patience=10, verbose=1, restore_best_weights=True)
+#es = EarlyStopping(monitor='loss', baseline=0.0001, patience=10, restore_best_weights=True)
+rlr = tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=3, min_lr=1e-10, verbose=1)
+
 # Entrenar el modelo
-model.fit(train_generator, epochs=10, validation_data=validation_generator)
+model.fit(train_generator, epochs=100, callbacks=[es,rlr], verbose=1, validation_data=validation_generator)
 
-import os
+# Visualizacion de filtros
+visualize_filters(model, 'conv1')
+visualize_filters(model, 'conv2')
+visualize_filters(model, 'conv3')
 
-print("Current Working Directory:", os.getcwd())
 # Guardar el modelo
 model.save('tensorflow_nn.h5')

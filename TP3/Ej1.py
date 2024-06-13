@@ -1,88 +1,238 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import time
+from IPython.display import clear_output
+import random
 
-# Función de activación Sigmoid y su derivada
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+def random_indices_selection(vec1, vec2, n):
+    if n > len(vec1) or n > len(vec2):
+        raise ValueError("n debe ser menor o igual a la longitud de los vectores")
 
-def sigmoid_derivative(x):
-    return x * (1 - x)
+    # Seleccionar índices aleatorios únicos
+    indices = random.sample(range(len(vec1)), n)
 
-# Función de pérdida cuadrática media y su derivada
-def mse_loss(y_true, y_pred):
-    return np.mean((y_true - y_pred) ** 2)
+    # Crear nuevos vectores con los valores seleccionados
+    selected_values_vec1 = [vec1[i] for i in indices]
+    selected_values_vec2 = [vec2[i] for i in indices]
 
-def mse_loss_derivative(y_true, y_pred):
-    return y_pred - y_true
+    # Crear nuevos vectores sin los valores seleccionados
+    remaining_vec1 = [vec1[i] for i in range(len(vec1)) if i not in indices]
+    remaining_vec2 = [vec2[i] for i in range(len(vec2)) if i not in indices]
 
-# Inicialización de pesos y sesgos
-def initialize_parameters(n_x, n_h, n_y):
-    W1 = np.random.randn(n_h, n_x) * 0.01
-    b1 = np.zeros((n_h, 1))
-    W2 = np.random.randn(n_y, n_h) * 0.01
-    b2 = np.zeros((n_y, 1))
-    return W1, b1, W2, b2
+    return selected_values_vec1, selected_values_vec2, remaining_vec1, remaining_vec2
 
-# Propagación hacia adelante
-def forward_propagation(X, W1, b1, W2, b2):
-    Z1 = np.dot(W1, X) + b1
-    A1 = sigmoid(Z1)
-    Z2 = np.dot(W2, A1) + b2
-    A2 = Z2  # Sin activación para la capa de salida en regresión
-    return Z1, A1, Z2, A2
-
-# Propagación hacia atrás
-def backward_propagation(X, Y, Z1, A1, A2, W2):
-    m = X.shape[1]
-    dZ2 = mse_loss_derivative(Y, A2)
-    dW2 = (1 / m) * np.dot(dZ2, A1.T)
-    db2 = (1 / m) * np.sum(dZ2, axis=1, keepdims=True)
-    dA1 = np.dot(W2.T, dZ2)
-    dZ1 = dA1 * sigmoid_derivative(A1)
-    dW1 = (1 / m) * np.dot(dZ1, X.T)
-    db1 = (1 / m) * np.sum(dZ1, axis=1, keepdims=True)
-    return dW1, db1, dW2, db2
-
-# Actualización de parámetros
-def update_parameters(W1, b1, W2, b2, dW1, db1, dW2, db2, learning_rate):
-    W1 = W1 - learning_rate * dW1
-    b1 = b1 - learning_rate * db1
-    W2 = W2 - learning_rate * dW2
-    b2 = b2 - learning_rate * db2
-    return W1, b1, W2, b2
-
-# Entrenamiento de la red neuronal
-def train_neural_network(X, Y, n_h, num_iterations, learning_rate):
-    n_x = X.shape[0]
-    n_y = Y.shape[0]
-    W1, b1, W2, b2 = initialize_parameters(n_x, n_h, n_y)
+def normalizar_datos(datos):
+    # Convertimos los datos a un arreglo de NumPy
+    datos = np.array(datos, dtype=float)
     
-    for i in range(num_iterations):
-        Z1, A1, Z2, A2 = forward_propagation(X, W1, b1, W2, b2)
-        dW1, db1, dW2, db2 = backward_propagation(X, Y, Z1, A1, A2, W2)
-        W1, b1, W2, b2 = update_parameters(W1, b1, W2, b2, dW1, db1, dW2, db2, learning_rate)
-        
-        if i % 1000 == 0:
-            loss = mse_loss(Y, A2)
-            print(f"Iteración {i}, Pérdida: {loss}")
+    # Encontramos el valor mínimo y máximo de los datos
+    min_val = np.min(datos)
+    max_val = np.max(datos)
     
-    return W1, b1, W2, b2
+    # Aplicamos la fórmula de normalización
+    datos_normalizados = (datos - min_val) / (max_val - min_val)
+    
+    return datos_normalizados
+def sigmoid(x, deriv = False):
+	R = 1/(1+np.e**(-x))
+	if deriv:
+		return R*(1-R)
+	else:
+		return R
+def tanh(x, deriv = False):
+	R = (np.e**x-np.e**(-x))/(np.e**x+np.e**(-x))
+	if deriv:
+		return (1 - R**2)
+	return R
+def ReLu(x, deriv = False):
+	if deriv:
+		x[x<=0] = 0
+		x[x>0] = 1
+		return x
+	return np.maximum(x, 0)
 
-# Prueba de la red neuronal
-def predict(X, W1, b1, W2, b2):
-    _, _, _, A2 = forward_propagation(X, W1, b1, W2, b2)
-    return A2
+def leaky_ReLU(x, alpha=0.01, deriv=False):
+	if deriv:
+		x[x<=0] = alpha
+		x[x>0] = 1
+		return x
+	return np.where(x<=0, alpha*x,x)
+   
 
-# Datos de entrenamiento (ejemplo sencillo)
-X_train = np.random.rand(2, 500)  # 2 características, 500 ejemplos
-Y_train = np.sum(X_train, axis=0, keepdims=True)  # La salida es la suma de las dos características
+def identidad(x, deriv=False):
+	
+	if deriv:
+		x[x<=0] = 1
+		x[x>0] = 1
+		return x  # Derivada de la función identidad es siempre 1
+	return x
 
-# Entrenamiento del modelo
-n_h = 5  # Número de neuronas en la capa oculta
-num_iterations = 10000
-learning_rate = 0.01
-W1, b1, W2, b2 = train_neural_network(X_train, Y_train, n_h, num_iterations, learning_rate)
+def MSE(Yp, Yr , deriv = False):
+	if deriv:
+		return 2*(Yp-Yr)
+	return np.mean((Yp-Yr)**2)
 
-# Predicción
-X_test = np.random.rand(2, 10)
-Y_pred = predict(X_test, W1, b1, W2, b2)
-print("Predicciones:", Y_pred)
+class Layer:
+	def __init__(self, con, neuron):
+		'''
+		    con:    el numero de conexiones de la capa con la anterior (numero de salidas de la capa anterior)
+			neuron: el numero de neuronas en la capa
+		'''
+		self.b = np.random.rand(1, neuron) * 2 - 1 #Genera una matriz de 1 x neuron, con valores entre [-1,1)
+		self.w = np.random.rand(con, neuron) * 2 - 1
+class NeuralNetwork:
+	def __init__(self, top = [], act_fun = []):
+		'''
+		    top:     la topologia de la red [entradas, neuron(capa1), neuron(capa2), ..., salidas (neuron ultima capa)]
+			act_fun: función de activación
+		'''
+		self.top = top
+		self.act_fun = act_fun
+		self.model = self.define_model()
+
+	def define_model(self):
+		'''
+		Define la red neuronal como una lista de capas de neuronas.
+		'''
+		NeuralNetwork = []
+		
+		
+		for i in range(len(self.top)-1): # Crea las capas
+			'''El numero de conexiones de una capa es el numero de neuronas de la
+			capa anterior'''
+			NeuralNetwork.append(Layer(self.top[i], self.top[i+1]))
+		return NeuralNetwork
+
+	def predict(self, X = []):
+		'''
+		    Función que a partir de las entradas obtiene la salida de la red neuronal.
+		    X: Es una matriz que tiene como filas las entradas para cada ejemplo
+		'''
+		out = X
+
+		for i in range(len(self.model)): # Recorre las capas del modelo aplicando la función de activación
+			z = self.act_fun[i](out @ self.model[i].w + self.model[i].b) # Aplica la función de activación de la capa.
+			out = z # Actualiza el valor de out como las entradas para la siguiente capa.
+		return out
+	def fit(self, X = [], Y = [], X_t= [], Y_t= [],epochs = 100, learning_rate = 0.5):
+		
+		plt.ion()
+		fig, ax = plt.subplots()
+		line, = ax.plot([], [],label='Error de validacion',color='red')
+		line_t, = ax.plot([], [],label='Error de test',color='blue')
+		error = []
+		error_t = []
+		print(X)
+		
+		print(X)
+		for k in range(epochs):
+			'''
+			    out: Una lista de tuplas que tienen como primer elemento
+    			los z (suma ponderada por los pesos de las neuronas de las entradas a la capa mas los bias)
+	    		y como segundo elemento las salidas de la capa
+			'''
+			
+			out = [(None, X)]
+
+			for i in range(len(self.model)): # Recorre las capas calculando los z y a(salidas)
+				z = out[-1][1] @ self.model[i].w + self.model[i].b
+				a = self.act_fun[i](z, deriv = False)
+				out.append((z,a))
+			print(MSE(a, Y))
+
+			deltas = []
+
+			for i in reversed(range(len(self.model))):
+				z = out[i + 1][0]
+				a = out[i + 1][1]
+
+				if i == len(self.model) - 1:
+					deltas.insert(0, MSE(a, Y, deriv = True) * self.act_fun[i](a, deriv = True))
+				else:
+					deltas.insert(0, deltas[0] @ _W.T * self.act_fun[i](a, deriv = True))
+				_W = self.model[i].w
+				
+				self.model[i].b = self.model[i].b - np.mean(deltas[0], axis = 0, keepdims = True) * learning_rate
+				self.model[i].w = self.model[i].w - out[i][1].T @ deltas[0] * learning_rate
+			print(k)
+			error.append(MSE(self.predict(X),Y,))
+			error_t.append(MSE(self.predict(X_t),Y_t))
+
+
+			line.set_xdata(range(len(error)))
+			line.set_ydata(error)
+			line_t.set_xdata(range(len(error_t)))
+			line_t.set_ydata(error_t)
+			ax.relim()
+			ax.autoscale_view()
+			fig.canvas.draw()
+			fig.canvas.flush_events()
+			#time.sleep(0.001)  
+		plt.ioff()
+		plt.show()
+		print('NeuralNetwork Successfully Trained')
+
+def main():
+	
+    # Número de puntos a generar
+	num_puntos = 1000
+	
+    # Generar valores de x
+	x = np.linspace(0, 10, num_puntos)
+
+    # Calcular valores de y para la parte positiva de la parábola y = x^2
+	y = x**2
+    
+
+    # Añadir algo de ruido a los puntos para hacer la nube más realista
+    #[10,0.2]
+	ruido = np.random.normal(0,10, num_puntos)
+ 
+	y_ruidoso = y + ruido
+	n = round(0.2*1000)
+	x_t, y_ruidoso_t,x, y_ruidoso = random_indices_selection(x,y_ruidoso, n)
+	
+	x_t = np.array(x_t)
+	y_ruidoso_t = np.array(y_ruidoso_t)
+	x = np.array(x)
+	y_ruidoso = np.array(y_ruidoso)
+
+    # Filtrar para solo tener la parte positiva
+	x_positivos = normalizar_datos(np.array(x[y_ruidoso >= 0]).reshape(-1, 1))
+	y_positivos = normalizar_datos(np.array(y_ruidoso[y_ruidoso >= 0]).reshape(-1, 1))
+
+	x_positivos_t = normalizar_datos(np.array(x_t[y_ruidoso_t >= 0]).reshape(-1, 1))
+	y_positivos_t = normalizar_datos(np.array(y_ruidoso_t[y_ruidoso_t >= 0]).reshape(-1, 1))
+	
+    #Funcion de salidad identidad
+	#NN = NeuralNetwork(top = [1, 30,20,10, 1], act_fun = [leaky_ReLU,leaky_ReLU,leaky_ReLU,identidad])	
+	#NN.fit(X = x_positivos, Y = y_positivos,X_t = x_positivos_t, Y_t = y_positivos_t, epochs = 700, learning_rate = 0.000005)
+	#Funcion de salida Sigmoide
+	NN = NeuralNetwork(top = [1, 50,10, 1], act_fun = [leaky_ReLU,leaky_ReLU,sigmoid])
+	NN.fit(X = x_positivos, Y = y_positivos,X_t = x_positivos_t, Y_t = y_positivos_t, epochs = 750, learning_rate = 0.0005)
+ 
+	#x_test = random_points(n = 5000)
+	#y_test = brain_xor.predict(x_test)
+	yy = []
+	xx = []
+	for i in range(len(x_positivos)):
+		yy.append(NN.predict(x_positivos[i])[0][0])
+		xx.append(x_positivos[i][0])
+		
+	#print(x_positivos)
+	# Graficar
+	plt.scatter(x_positivos, y_positivos,color='blue', alpha=0.5, s=10)
+	plt.scatter(xx, yy,color='red', alpha=0.5, s=10)
+	plt.title('Nube de puntos con forma de parábola positiva centrada en 0')
+	plt.xlabel('x')
+	plt.ylabel('y')
+	plt.grid(True)
+	plt.show()
+	#print(brain_xor.predict([0,0,0,1]))
+	#plt.scatter(x_test[:, 0], x_test[:, 1], c = y_test, s = 25, cmap = 'GnBu')
+	#plt.show()
+	
+
+
+if __name__ == '__main__':
+	main()

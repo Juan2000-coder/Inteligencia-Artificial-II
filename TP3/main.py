@@ -32,7 +32,7 @@ playMode = "X"
 
 imageCapture = ImageCapture(screen_spawn_position)
 
-BG = pygame.image.load(os.path.join("TP3/Assets/Other", "Track.png"))
+BG = pygame.image.load(os.path.join("Assets/Other", "Track.png"))
 
 def populate(population_size):
     population = []
